@@ -9,3 +9,4 @@ messages:
   water_protection_status_success_change: '&2You have %status% the underwater protection in %world%'
   invalid_worldname: '&cThis world name is invalid'
   plugin_success_reloaded: '&2Plugin successfully reloaded'
+  water_protection_status_already: '&cThe underwater protection in %world% is already %status%'

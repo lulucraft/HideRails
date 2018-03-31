@@ -11,3 +11,4 @@ messages:
     redstone sous l''eau pour le monde %world%'
   invalid_worldname: '&cMonde invalide'
   plugin_success_reloaded: '&2Plugin rechargé avec succès !'
+  water_protection_status_already: '&cLa protection de la redstone et des rails sous l''eau dans le monde %world% est déja définit sur %status%'

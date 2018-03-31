@@ -8,7 +8,6 @@ package fr.lulucraft321.hiderails.utils;
 
 public enum Messages
 {
-	HELP_COMMANDS("aide"),
 	SENDER_TYPE_ERROR("tu n'es pas un joueur"),
 	PLAYER_NO_ENOUGH_PERMISSION("tu n'as pas la permission pour cela"),
 	MATERIAL_TYPE_ERROR("bloc invalide"),
