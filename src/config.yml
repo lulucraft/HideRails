@@ -1,0 +1,4 @@
+language: EN
+hideRails: true
+redstoneWaterProtection:
+  _all_: true
