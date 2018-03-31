@@ -1,0 +1,13 @@
+messages:
+  sender_type_error: '&cSeul un joueur peut executer cette commande !'
+  player_no_enough_permission: '&cVous n''avez pas la permission d''éxécuter cette
+    commande !'
+  rail_success_change: '&2Vous avez remplacé les rails par %blocktype%'
+  material_type_error: '&cCe bloc n''existe pas !'
+  rail_error: '&cLe bloc que vous visez n''est pas un rail !'
+  rail_success_break: '&2Vous avez cassé un rail masqué !'
+  rail_success_unhide: '&2Vous avez fait re apparaitre les rails !'
+  water_protection_status_success_change: '&2Vous avez %status% la protection de la
+    redstone sous l''eau pour le monde %world%'
+  invalid_worldname: '&cMonde invalide'
+  plugin_success_reloaded: '&2Plugin rechargé avec succès !'
