@@ -183,7 +183,7 @@ public class HideRailsManager
 				if(entry.getKey().equals(hRail.getLocation()))
 				{
 					Block rail = Bukkit.getWorld(worldName).getBlockAt(entry.getKey());
-					rail.setType(Material.RAILS);
+					rail.setType(rail.getType());
 					rail.setData(entry.getValue());
 
 					hRails.add(hRail);
