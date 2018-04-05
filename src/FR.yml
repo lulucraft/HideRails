@@ -9,6 +9,8 @@ messages:
   rail_success_unhide: '&2Vous avez fait re apparaitre les rails !'
   water_protection_status_success_change: '&2Vous avez %status% la protection de la
     redstone sous l''eau pour le monde %world%'
-  invalid_worldname: '&cMonde invalide'
+  invalid_worldname: '&cMonde invalide !'
   plugin_success_reloaded: '&2Plugin rechargé avec succès !'
   water_protection_status_already: '&cLa protection de la redstone et des rails sous l''eau dans le monde %world% est déja définit sur %status%'
+  no_backup: '&cAucune sauvegarde disponible !"
+  return_backup_success: '&cSauvegarde restorée avec succès !'

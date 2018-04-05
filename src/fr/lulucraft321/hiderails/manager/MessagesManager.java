@@ -29,6 +29,8 @@ public class MessagesManager
 		Messages.WATER_PROTECTION_STATUS_ALREADY.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "water_protection_status_already"));
 		Messages.SUCCESS_CHANGE_WATER_PROTECTION_STATUS.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "water_protection_status_success_change"));
 		Messages.SUCCESS_RELOAD.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "plugin_success_reloaded"));
+		Messages.NO_BACKUP.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "no_backup"));
+		Messages.RETURN_BACKUP_SUCCESS.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "return_backup_success"));
 	}
 
 	public static void sendHelpPluginMessage(CommandSender sender)
@@ -38,6 +40,7 @@ public class MessagesManager
 		sender.sendMessage("§f§l » §6/hiderails help");
 		sender.sendMessage("\n" + "§f§l » §6/hiderails hide \"§oblock§6\"");
 		sender.sendMessage("§f§l » §6/hiderails unhide");
+		sender.sendMessage("§f§l » §6/hiderails return");
 		sender.sendMessage("§f§l » §6/hiderails waterprotection \"§oworld§6\" \"§ovalue§6\"");
 		sender.sendMessage("\n" + "§8§l§m-----------------------------------\n§r§o Plugin by lulucraft321");
 	}

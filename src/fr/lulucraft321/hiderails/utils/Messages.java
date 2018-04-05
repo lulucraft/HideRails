@@ -18,7 +18,9 @@ public enum Messages
 	WATER_PROTECTION_STATUS_ALREADY("la redstone est deja activee sous l'eau"),
 	SUCCESS_CHANGE_WATER_PROTECTION_STATUS("l'activation de la redstone sur la map a ete definit avec succes"),
 	SUCCESS_RELOAD("plugin recharge avec success"),
-	SUCCESS_UNHIDE_RAIL("rail affiche avec succes");
+	SUCCESS_UNHIDE_RAIL("rail affiche avec succes"),
+	NO_BACKUP("aucune sauveguarde"),
+	RETURN_BACKUP_SUCCESS("backup restaure avec succes !");
 
 	private String message;
 

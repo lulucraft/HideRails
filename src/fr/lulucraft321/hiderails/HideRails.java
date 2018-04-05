@@ -98,9 +98,11 @@ public class HideRails extends JavaPlugin
 			frLangConfig.set("messages.rail_success_break", "&2Vous avez cassé un rail masqué !");
 			frLangConfig.set("messages.rail_success_unhide", "&2Vous avez fait re apparaitre les rails !");
 			frLangConfig.set("messages.water_protection_status_success_change", "&2Vous avez %status% la protection de la redstone sous l'eau pour le monde %world%");
-			frLangConfig.set("messages.invalid_worldname", "&cMonde invalide");
+			frLangConfig.set("messages.invalid_worldname", "&cMonde invalide !");
 			frLangConfig.set("messages.plugin_success_reloaded", "&2Plugin rechargé avec succès !");
 			frLangConfig.set("messages.water_protection_status_already", "&cLa protection de la redstone et des rails sous l'eau dans le monde %world% est déja définit sur %status%");
+			frLangConfig.set("messages.no_backup", "&cAucune sauvegarde disponible !");
+			frLangConfig.set("messages.return_backup_success", "&2Sauvegarde restorée avec succès !");
 
 			// Sauveguarde des modifs
 			try {
@@ -111,26 +113,30 @@ public class HideRails extends JavaPlugin
 
 			if(!frLangConfig.contains("messages.sender_type_error"))
 				frLangConfig.set("messages.sender_type_error", "&cSeul un joueur peut executer cette commande !");
-			else if(!frLangConfig.contains("messages.player_no_enough_permission"))
+			if(!frLangConfig.contains("messages.player_no_enough_permission"))
 				frLangConfig.set("messages.player_no_enough_permission", "&cVous n'avez pas la permission d'éxécuter cette commande !");
-			else if(!frLangConfig.contains("messages.rail_success_change"))
+			if(!frLangConfig.contains("messages.rail_success_change"))
 				frLangConfig.set("messages.rail_success_change", "&2Vous avez remplacé les rails par %blocktype%");
-			else if(!frLangConfig.contains("messages.material_type_error"))
+			if(!frLangConfig.contains("messages.material_type_error"))
 				frLangConfig.set("messages.material_type_error", "&cCe bloc n'existe pas !");
-			else if(!frLangConfig.contains("messages.rail_error"))
+			if(!frLangConfig.contains("messages.rail_error"))
 				frLangConfig.set("messages.rail_error", "&cLe bloc que vous visez n'est pas un rail !");
-			else if(!frLangConfig.contains("messages.rail_success_break"))
+			if(!frLangConfig.contains("messages.rail_success_break"))
 				frLangConfig.set("messages.rail_success_break", "&2Vous avez cassé un rail masqué !");
-			else if(!frLangConfig.contains("messages.rail_success_unhide"))
+			if(!frLangConfig.contains("messages.rail_success_unhide"))
 				frLangConfig.set("messages.rail_success_unhide", "&2Vous avez fait re apparaitre les rails !");
-			else if(!frLangConfig.contains("messages.water_protection_status_success_change"))
+			if(!frLangConfig.contains("messages.water_protection_status_success_change"))
 				frLangConfig.set("messages.water_protection_status_success_change", "&2Vous avez %status% la protection de la redstone sous l'eau pour le monde %world%");
-			else if(!frLangConfig.contains("messages.invalid_worldname"))
-				frLangConfig.set("messages.invalid_worldname", "&cMonde invalide");
-			else if(!frLangConfig.contains("messages.plugin_success_reloaded"))
+			if(!frLangConfig.contains("messages.invalid_worldname"))
+				frLangConfig.set("messages.invalid_worldname", "&cMonde invalide !");
+			if(!frLangConfig.contains("messages.plugin_success_reloaded"))
 				frLangConfig.set("messages.plugin_success_reloaded", "&2Plugin rechargé avec succès !");
-			else if(!frLangConfig.contains("messages.water_protection_status_already"))
+			if(!frLangConfig.contains("messages.water_protection_status_already"))
 				frLangConfig.set("messages.water_protection_status_already", "&cLa protection de la redstone et des rails sous l'eau dans le monde %world% est déja définit sur %status%");
+			if(!frLangConfig.contains("messages.no_backup"))
+				frLangConfig.set("messages.no_backup", "&cAucune sauvegarde disponible !");
+			if(!frLangConfig.contains("messages.return_backup_success"))
+				frLangConfig.set("messages.return_backup_success", "&cSauvegarde restorée avec succès !");
 
 			// Sauveguarde des modifs
 			try {
@@ -160,9 +166,11 @@ public class HideRails extends JavaPlugin
 			enLangConfig.set("messages.rail_success_break", "&2You have broken a hidden rail !");
 			enLangConfig.set("messages.rail_success_unhide", "&2You have displayed the rails !");
 			enLangConfig.set("messages.water_protection_status_success_change", "&2You have %status% the under-water protection in %world%");
-			enLangConfig.set("messages.invalid_worldname", "&cThis world name is invalid");
+			enLangConfig.set("messages.invalid_worldname", "&cThis world name is invalid !");
 			enLangConfig.set("messages.plugin_success_reloaded", "&2Plugin successfully reloaded");
 			enLangConfig.set("messages.water_protection_status_already", "&cThe underwater protection in %world% is already %status%");
+			enLangConfig.set("messages.no_backup", "&cNo backup available !");
+			enLangConfig.set("messages.return_backup_success", "&2successfully restored backup !");
 
 			// Sauveguarde des modifs
 			try {
@@ -173,26 +181,30 @@ public class HideRails extends JavaPlugin
 
 			if(!enLangConfig.contains("messages.sender_type_error"))
 				enLangConfig.set("messages.sender_type_error", "&cYou must be a player to execute this command !");
-			else if(!enLangConfig.contains("messages.player_no_enough_permission"))
+			if(!enLangConfig.contains("messages.player_no_enough_permission"))
 				enLangConfig.set("messages.player_no_enough_permission", "&cYou do not have permission to execute this command !");
-			else if(!enLangConfig.contains("messages.rail_success_change"))
+			if(!enLangConfig.contains("messages.rail_success_change"))
 				enLangConfig.set("messages.rail_success_change", "&2You have replaced the rails with %blocktype% !");
-			else if(!enLangConfig.contains("messages.material_type_error"))
+			if(!enLangConfig.contains("messages.material_type_error"))
 				enLangConfig.set("messages.material_type_error", "&cThis bloc does not exist !");
-			else if(!enLangConfig.contains("messages.rail_error"))
+			if(!enLangConfig.contains("messages.rail_error"))
 				enLangConfig.set("messages.rail_error", "&cThe target block is not a rail !");
-			else if(!enLangConfig.contains("messages.rail_success_break"))
+			if(!enLangConfig.contains("messages.rail_success_break"))
 				enLangConfig.set("messages.rail_success_break", "&2You have broken a hidden rail !");
-			else if(!enLangConfig.contains("messages.rail_success_unhide"))
+			if(!enLangConfig.contains("messages.rail_success_unhide"))
 				enLangConfig.set("messages.rail_success_unhide", "&2You have displayed the rails !");
-			else if(!enLangConfig.contains("messages.water_protection_status_success_change"))
+			if(!enLangConfig.contains("messages.water_protection_status_success_change"))
 				enLangConfig.set("messages.water_protection_status_success_change", "&2You have %status% the under-water protection in %world%");
-			else if(!enLangConfig.contains("messages.invalid_worldname"))
-				enLangConfig.set("messages.invalid_worldname", "&cThis world name is invalid");
-			else if(!enLangConfig.contains("messages.plugin_success_reloaded"))
+			if(!enLangConfig.contains("messages.invalid_worldname"))
+				enLangConfig.set("messages.invalid_worldname", "&cThis world name is invalid !");
+			if(!enLangConfig.contains("messages.plugin_success_reloaded"))
 				enLangConfig.set("messages.plugin_success_reloaded", "&2Plugin successfully reloaded");
-			else if(!enLangConfig.contains("messages.water_protection_status_already"))
+			if(!enLangConfig.contains("messages.water_protection_status_already"))
 				enLangConfig.set("messages.water_protection_status_already", "&cThe underwater protection in %world% is already %status%");
+			if(!enLangConfig.contains("messages.no_backup"))
+				enLangConfig.set("messages.no_backup", "&cNo backup available !");
+			if(!enLangConfig.contains("messages.return_backup_success"))
+				enLangConfig.set("messages.return_backup_success", "&2successfully restored backup !");
 
 			// Sauveguarde des modifs
 			try {
