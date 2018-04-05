@@ -12,5 +12,5 @@ messages:
   invalid_worldname: '&cMonde invalide !'
   plugin_success_reloaded: '&2Plugin rechargé avec succès !'
   water_protection_status_already: '&cLa protection de la redstone et des rails sous l''eau dans le monde %world% est déja définit sur %status%'
-  no_backup: '&cAucune sauvegarde disponible !"
+  no_backup: '&cAucune sauvegarde disponible !'
   return_backup_success: '&cSauvegarde restorée avec succès !'
