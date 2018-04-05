@@ -10,5 +10,5 @@ messages:
   invalid_worldname: '&cThis world name is invalid !'
   plugin_success_reloaded: '&2Plugin successfully reloaded'
   water_protection_status_already: '&cThe underwater protection in %world% is already %status%'
-  no_backup: '&cNo backup available !"
+  no_backup: '&cNo backup available !'
   return_backup_success: '&2successfully restored backup !'
