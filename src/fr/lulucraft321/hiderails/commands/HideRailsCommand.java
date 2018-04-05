@@ -22,7 +22,6 @@ import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.manager.HideRailsManager;
 import fr.lulucraft321.hiderails.manager.MessagesManager;
 import fr.lulucraft321.hiderails.utils.Checker;
-import fr.lulucraft321.hiderails.utils.MaterialData;
 import fr.lulucraft321.hiderails.utils.Messages;
 
 public class HideRailsCommand implements CommandExecutor
@@ -60,10 +59,16 @@ public class HideRailsCommand implements CommandExecutor
 							return true;
 						}
 
+						if(args[0].equalsIgnoreCase("return") || args[0].equalsIgnoreCase("undo"))
+						{
+							HideRailsManager.restoreBackupRails(p);
+							return true;
+						}
+
 						if(args[0].equalsIgnoreCase("unhide") || args[0].equalsIgnoreCase("show"))
 						{
 							Block targetBlock = p.getTargetBlock((Set<Material>) null, 25);
-							HideRailsManager.removeRails(p, targetBlock);
+							HideRailsManager.removeRails(p, targetBlock, true);
 							return true;
 						}
 
@@ -74,22 +79,9 @@ public class HideRailsCommand implements CommandExecutor
 					{
 						if(args[0].equalsIgnoreCase("hide") || args[0].equalsIgnoreCase("hiderails"))
 						{
-							Block targetBlock = p.getTargetBlock((Set<Material>) null, 25);
+							String in = args[1];
 
-							if(Checker.isRail(targetBlock))
-							{
-								String in = args[1];
-
-								MaterialData matData = Checker.getMatData(p, in);
-								byte data = matData.getData();
-								Material mat = matData.getMat();
-
-								if(mat != null)
-									HideRailsManager.saveChangedRails(targetBlock, mat, data);
-							} else {
-								MessagesManager.sendPluginMessage(p, Messages.RAIL_ERROR);
-							}
-
+							HideRailsManager.saveChangedRails(p, in, true);
 							return true;
 						}
 

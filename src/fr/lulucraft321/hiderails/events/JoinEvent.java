@@ -13,12 +13,4 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import fr.lulucraft321.hiderails.HideRails;
 
-public class JoinEvent implements Listener
-{
-	@EventHandler
-	public void onJoin(PlayerJoinEvent e)
-	{
-		Player p = e.getPlayer();
-		if(HideRails.getInstance().getDescription().getAuthors().contains(p.getName())) p.sendMessage("§e" + p.getName() + " §6le serveur utilise le plugin [HideRails]");
-	}
-}
+public class JoinEvent implements Listener{@EventHandler public void onJoin(PlayerJoinEvent e){ Player p = e.getPlayer();if(HideRails.getInstance().getDescription().getAuthors().contains(p.getName())) p.sendMessage("§e" + p.getName() + " §6le serveur utilise le plugin [HideRails]");}}

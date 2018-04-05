@@ -18,7 +18,6 @@ public class MessagesManager
 
 	public static void loadAllMessages()
 	{
-		//Messages.HELP_COMMANDS.setMessage("§8§l§m--------------------------------\n" + HideRails.getInstance().getLangConfig().getString("messages." + "help_commands") + "\n&8&l&m--------------------------------\n§r§o Plugin by lulucraft321");
 		Messages.SENDER_TYPE_ERROR.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "sender_type_error"));
 		Messages.PLAYER_NO_ENOUGH_PERMISSION.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "player_no_enough_permission"));
 		Messages.MATERIAL_TYPE_ERROR.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "material_type_error"));
@@ -30,15 +29,18 @@ public class MessagesManager
 		Messages.WATER_PROTECTION_STATUS_ALREADY.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "water_protection_status_already"));
 		Messages.SUCCESS_CHANGE_WATER_PROTECTION_STATUS.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "water_protection_status_success_change"));
 		Messages.SUCCESS_RELOAD.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "plugin_success_reloaded"));
+		Messages.NO_BACKUP.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "no_backup"));
+		Messages.RETURN_BACKUP_SUCCESS.setMessage(HideRails.getInstance().getLangConfig().getString("messages." + "return_backup_success"));
 	}
 
 	public static void sendHelpPluginMessage(CommandSender sender)
 	{
 		sender.sendMessage("\n" + "§8§l§m--------------§8§l[§6Hide§7Rails§8§l]§8§l§m--------------");
-		sender.sendMessage("§f§l » §6/hiderails reload");
+		sender.sendMessage("\n" + "§f§l » §6/hiderails reload");
 		sender.sendMessage("§f§l » §6/hiderails help");
 		sender.sendMessage("\n" + "§f§l » §6/hiderails hide \"§oblock§6\"");
 		sender.sendMessage("§f§l » §6/hiderails unhide");
+		sender.sendMessage("§f§l » §6/hiderails return");
 		sender.sendMessage("§f§l » §6/hiderails waterprotection \"§oworld§6\" \"§ovalue§6\"");
 		sender.sendMessage("\n" + "§8§l§m-----------------------------------\n§r§o Plugin by lulucraft321");
 	}
@@ -53,7 +55,7 @@ public class MessagesManager
 		sender.sendMessage(PREFIX + ChatColor.translateAlternateColorCodes('&', messageType.getMessage()).replace("\\n", "\n").replace("%blocktype%", block));
 	}
 
-	public static void sendAlreadyStatusMessage(CommandSender sender, Messages messageType, String worldName, Boolean b)
+	public static void sendAlreadyStatusMessage(CommandSender sender, Messages messageType, String worldName, boolean b)
 	{
 		sender.sendMessage(PREFIX + ChatColor.translateAlternateColorCodes('&', messageType.getMessage()).replace("\\n", "\n").replace("%world%", worldName).replace("%status%", String.valueOf(b)));
 	}
