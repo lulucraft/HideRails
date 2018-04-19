@@ -5,7 +5,7 @@
  * @author ProCZ
  */
 
-package fr.lulucraft321.hiderails.utils.backuputility;
+package fr.lulucraft321.hiderails.enums;
 
 public enum BackupType
 {

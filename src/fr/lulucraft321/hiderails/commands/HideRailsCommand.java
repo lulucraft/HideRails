@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.manager.HideRailsManager;
 import fr.lulucraft321.hiderails.manager.MessagesManager;
+import fr.lulucraft321.hiderails.manager.PlayerCommandBackupManager;
 import fr.lulucraft321.hiderails.utils.Checker;
 import fr.lulucraft321.hiderails.utils.Messages;
 
@@ -61,14 +62,32 @@ public class HideRailsCommand implements CommandExecutor
 
 						if(args[0].equalsIgnoreCase("return") || args[0].equalsIgnoreCase("undo"))
 						{
-							HideRailsManager.restoreBackupRails(p);
+							PlayerCommandBackupManager.restoreBackupRails(p);
 							return true;
 						}
 
+
+						/* UnHide single Rail */
 						if(args[0].equalsIgnoreCase("unhide") || args[0].equalsIgnoreCase("show"))
 						{
 							Block targetBlock = p.getTargetBlock((Set<Material>) null, 25);
-							HideRailsManager.removeRails(p, targetBlock, true);
+							HideRailsManager.removeBlocks(p, targetBlock, true, false);
+							return true;
+						}
+
+						/* UnHide Rails */
+						if(args[0].equalsIgnoreCase("singleunhide")
+								|| args[0].equalsIgnoreCase("solounhide")
+								|| args[0].equalsIgnoreCase("unhideone")
+								|| args[0].equalsIgnoreCase("unhidesingle")
+								|| args[0].equalsIgnoreCase("unhidesolo")
+								|| args[0].equalsIgnoreCase("showsingle")
+								|| args[0].equalsIgnoreCase("showsolo")
+								|| args[0].equalsIgnoreCase("singleshow")
+								|| args[0].equalsIgnoreCase("soloshow"))
+						{
+							Block targetBlock = p.getTargetBlock((Set<Material>) null, 25);
+							HideRailsManager.removeBlocks(p, targetBlock, true, true);
 							return true;
 						}
 
@@ -77,11 +96,23 @@ public class HideRailsCommand implements CommandExecutor
 
 					if(args.length == 2)
 					{
+						/* Hide Rails */
 						if(args[0].equalsIgnoreCase("hide") || args[0].equalsIgnoreCase("hiderails"))
 						{
 							String in = args[1];
+							HideRailsManager.saveChangedBlocks(p, in, true, false);
+							return true;
+						}
 
-							HideRailsManager.saveChangedRails(p, in, true);
+						/* Hide single Rail */
+						if(args[0].equalsIgnoreCase("hidesingle")
+								|| args[0].equalsIgnoreCase("hidesolo")
+								|| args[0].equalsIgnoreCase("hideone")
+								|| args[0].equalsIgnoreCase("singlehide")
+								|| args[0].equalsIgnoreCase("solohide"))
+						{
+							String in = args[1];
+							HideRailsManager.saveChangedBlocks(p, in, true, true);
 							return true;
 						}
 

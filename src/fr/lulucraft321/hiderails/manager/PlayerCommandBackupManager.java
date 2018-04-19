@@ -15,8 +15,10 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import fr.lulucraft321.hiderails.enums.BackupType;
+import fr.lulucraft321.hiderails.enums.BlockReplacementType;
+import fr.lulucraft321.hiderails.utils.Checker;
 import fr.lulucraft321.hiderails.utils.Messages;
-import fr.lulucraft321.hiderails.utils.backuputility.BackupType;
 import fr.lulucraft321.hiderails.utils.backuputility.BlocksBackup;
 import fr.lulucraft321.hiderails.utils.backuputility.PlayerCommandBackup;
 
@@ -75,26 +77,42 @@ public class PlayerCommandBackupManager
 	public static void restoreBackup(Player p)
 	{
 		BlocksBackup backup = getLatestBlocksBackup(p);
+		Block bl = null;
+
+		boolean single;
+		int i = 0;
 
 		if(backup.getType() == BackupType.HIDE)
 		{
 			for(String block : backup.getChangedBlocks()) {
-				Location deserLoc = HideRailsManager.deserializeLoc(block);
-				Block bl = Bukkit.getWorld(deserLoc.getWorld().getName()).getBlockAt(deserLoc);
-				bl.setTypeIdAndData(bl.getTypeId(), bl.getData(), true);
-				HideRailsManager.removeRails(p, bl, false);
+				Location deserLoc = LocationsManager.deserializeLoc(block);
+				bl = Bukkit.getWorld(deserLoc.getWorld().getName()).getBlockAt(deserLoc);
+				bl.setType(bl.getType());
+				bl.setData(Byte.valueOf(bl.getData()));
+				bl.getState().update(true);
+
+				i++;
 			}
+
+			if(i > 1) single = false;
+			else single = true;
+			HideRailsManager.removeBlocks(p, bl, false, single);
 		}
 
 		else if(backup.getType() == BackupType.UNHIDE)
 		{
-			Block bl = null;
 			for(String block : backup.getChangedBlocks()) {
-				Location deserLoc = HideRailsManager.deserializeLoc(block);
+				Location deserLoc = LocationsManager.deserializeLoc(block);
 				bl = Bukkit.getWorld(deserLoc.getWorld().getName()).getBlockAt(deserLoc);
+
+				i++;
 			}
 
-			HideRailsManager.saveChangedRails(p, bl, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false);
+			if(i > 1) single = false;
+			else single = true;
+
+			BlockReplacementType blockType = Checker.getBlockReplacementType(p, bl);
+			HideRailsManager.saveChangedBlocks(p, bl, blockType, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false, single);
 		}
 
 		// Supression du backup restore
@@ -103,5 +121,21 @@ public class PlayerCommandBackupManager
 		playerCommandBackups.put(p, pBackup);
 
 		MessagesManager.sendPluginMessage(p, Messages.RETURN_BACKUP_SUCCESS);
+	}
+
+
+	/*
+	 * Backup replacement command
+	 */
+	public static void restoreBackupRails(Player p)
+	{
+		BlocksBackup backup = PlayerCommandBackupManager.getLatestBlocksBackup(p);
+
+		if(backup != null)
+		{
+			PlayerCommandBackupManager.restoreBackup(p);
+		} else {
+			MessagesManager.sendPluginMessage(p, Messages.NO_BACKUP);
+		}
 	}
 }

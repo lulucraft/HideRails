@@ -6,6 +6,7 @@
 
 package fr.lulucraft321.hiderails.events;
 
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -24,9 +25,11 @@ public class RailBreakEvent implements Listener
 	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBreak(BlockBreakEvent e)
 	{
-		if(e.getBlock() == null) return;
-		if(!Checker.isRail(e.getBlock())) return;
-		String worldName = e.getBlock().getWorld().getName();
+		Block b = e.getBlock();
+
+		if(b == null) return;
+		if(!Checker.isRail(b) && !Checker.isIronBar(b)) return;
+		String worldName = b.getWorld().getName();
 		if(!HideRails.getInstance().getHiddenRailsConfig().contains(HideRailsManager.path + "." + worldName)) return;
 		if(HideRailsManager.getRailsToWorld(worldName) == null) return;
 
@@ -34,7 +37,7 @@ public class RailBreakEvent implements Listener
 
 		for(HiddenRail hRail : HideRailsManager.getRailsToWorld(worldName))
 		{
-			if(e.getBlock().getLocation().equals(hRail.getLocation()))
+			if(b.getLocation().equals(hRail.getLocation()))
 			{
 				world.getHiddenRails().remove(hRail);
 				HideRailsManager.saveWorld(worldName);

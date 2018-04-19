@@ -7,6 +7,7 @@
 package fr.lulucraft321.hiderails.manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -15,22 +16,21 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
+import fr.lulucraft321.hiderails.BlockChangeRunner;
 import fr.lulucraft321.hiderails.HideRails;
+import fr.lulucraft321.hiderails.enums.BackupType;
+import fr.lulucraft321.hiderails.enums.BlockReplacementType;
 import fr.lulucraft321.hiderails.events.RedstoneInWaterEvents;
-import fr.lulucraft321.hiderails.utils.BlockChangeRunner;
 import fr.lulucraft321.hiderails.utils.Checker;
 import fr.lulucraft321.hiderails.utils.HiddenRail;
 import fr.lulucraft321.hiderails.utils.HiddenRailsWorld;
 import fr.lulucraft321.hiderails.utils.MaterialData;
 import fr.lulucraft321.hiderails.utils.Messages;
-import fr.lulucraft321.hiderails.utils.backuputility.BackupType;
 import fr.lulucraft321.hiderails.utils.backuputility.BlocksBackup;
 
 public class HideRailsManager
@@ -40,6 +40,9 @@ public class HideRailsManager
 
 	// Path to hiddenRails in HiddenRails.yml
 	public static String path = "hiddenRails";
+
+	public static boolean hb;
+	public static boolean hr;
 
 	/*
 	 * Config
@@ -59,8 +62,8 @@ public class HideRailsManager
 
 			for(String loc : config.getStringList(path + "." + keys))
 			{
-				HiddenRail rail = new HiddenRail(deserializeMatInSerializedLoc(loc), deserializeDataInSerializedLoc(loc));
-				rail.setLocation(deserializeLoc(loc));
+				HiddenRail rail = new HiddenRail(LocationsManager.deserializeMatInSerializedLoc(loc), LocationsManager.deserializeDataInSerializedLoc(loc));
+				rail.setLocation(LocationsManager.deserializeLoc(loc));
 				hiddenRails.add(rail);
 				world = rail.getLocation().getWorld();
 			}
@@ -70,8 +73,8 @@ public class HideRailsManager
 					new HiddenRailsWorld(world, hiddenRails);
 		}
 
-		// Activation du changement des rails
-		if(HideRails.getInstance().getConfig().getBoolean("hideRails")) {
+		// Activation du changement des rails ou des barreaux
+		if(hr || hb) {
 			new BlockChangeRunner().runTaskTimer(HideRails.getInstance(), 20 * HideRails.getInstance().getConfig().getInt("hideRails.time"), 100L);
 		}
 	}
@@ -100,73 +103,16 @@ public class HideRailsManager
 	}
 
 
-	/*
-	 * Get all connected rails
-	 */
-	private static List<Location> getConnectedRails(Location startLoc)
-	{
-		boolean checkFinished = false;
-		int next = 0;
-		int finishCheckCurrentBlock = 0;
-		List<Location> checked = new ArrayList<>();
-		final BlockFace[] faces = new BlockFace[]{ BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST };
-
-		checked.add(startLoc);
-
-		while(!checkFinished)
-		{
-			if(next < checked.size())
-			{
-				Block newBlock = (Block) checked.get(next).getBlock();
-
-				for(BlockFace blockFace : faces)
-				{
-					Block newCheckBlock = newBlock.getRelative(blockFace);
-
-					if(newCheckBlock == null) continue;
-					if(checked.contains(newCheckBlock.getLocation())) continue;
-					if(checked.contains(newCheckBlock)) continue;
-
-					if(Checker.isRail(newCheckBlock))
-					{
-						checked.add(newCheckBlock.getLocation());
-						newCheckBlock.getLocation().getWorld().spawnParticle(Particle.HEART, newCheckBlock.getLocation(), 5);
-
-						finishCheckCurrentBlock = 0;
-					} else {
-						finishCheckCurrentBlock+=1;
-					}
-
-					if(finishCheckCurrentBlock == 4){
-						checkFinished = true;
-						next = 0;
-						break;
-					}
-				}
-
-				// Fin du check si toutes les faces du newBlockCheck == null
-				if(finishCheckCurrentBlock == 4){
-					checkFinished = true;
-					next = 0;
-					break;
-				}
-			} else {
-				finishCheckCurrentBlock = 0;
-				checkFinished = true;
-				next = 0;
-				break;
-			}
-
-			next++;
-		}
-
-		return checked;
-	}
-
 	@SuppressWarnings("deprecation")
-	public static void removeRails(Player player, Block targetBlock, boolean backup)
+	public static void removeBlocks(Player player, Block targetBlock, boolean backup, boolean single)
 	{
-		List<Location> railsLocs = getConnectedRails(targetBlock.getLocation());
+		BlockReplacementType blockType = Checker.getBlockReplacementType(player, targetBlock);
+
+		List<Location> railsLocs = null;
+		if(!single)
+			railsLocs = LocationsManager.getConnectedBlocks(targetBlock.getLocation(), blockType);
+		else
+			railsLocs = Arrays.asList(targetBlock.getLocation());
 		HashMap<Location, Byte> railsAndData = new HashMap<>();
 		String worldName = targetBlock.getWorld().getName();
 
@@ -193,7 +139,8 @@ public class HideRailsManager
 					Block rail = Bukkit.getWorld(worldName).getBlockAt(entry.getKey());
 
 					rail.setType(rail.getType());
-					rail.setData(entry.getValue());
+					rail.setData(entry.getValue().byteValue());
+					rail.getState().update(true);
 
 					hRails.add(hRail);
 				}
@@ -204,7 +151,7 @@ public class HideRailsManager
 			hiddenRails.delHiddenRail(rail);
 
 			// Sauveguarde des blocs changés dans le nouveau backup pour pouvoir retourner en arriere apres /hiderails undo
-			bBackup.addChangedBlocks(serialize(rail.getLocation()));
+			bBackup.addChangedBlocks(LocationsManager.serialize(rail.getLocation()));
 			bBackup.setUnHideBlocksType(new MaterialData(rail.getMaterial(), rail.getData()));
 		}
 
@@ -219,28 +166,31 @@ public class HideRailsManager
 	}
 
 
-	public static void saveChangedRails(Player player, String input, boolean backup)
+	public static void saveChangedBlocks(Player player, String input, boolean backup, boolean single)
 	{
 		Block targetBlock = player.getTargetBlock((Set<Material>) null, 25);
 
-		if(Checker.isRail(targetBlock))
-		{
-			String in = input;
-			MaterialData matData = Checker.getMatData(player, in);
-			byte data = matData.getData();
-			Material mat = matData.getMat();
-
-			if(mat != null)
-				HideRailsManager.saveChangedRails(player, targetBlock, mat, data, backup);
-		} else {
-			MessagesManager.sendPluginMessage(player, Messages.RAIL_ERROR);
-			return;
-		}
+		e(player, targetBlock, Checker.getBlockReplacementType(player, targetBlock), input, backup, single);
 	}
 
-	protected static void saveChangedRails(Player player, Block targetBlock, Material mat, byte data, boolean backup)
+	private static void e(Player player, Block targetBlock, BlockReplacementType blockType, String input, boolean backup, boolean single)
 	{
-		List<Location> railsLocs = getConnectedRails(targetBlock.getLocation());
+		String in = input;
+		MaterialData matData = Checker.getMatData(player, in);
+		byte data = matData.getData();
+		Material mat = matData.getMat();
+
+		if(mat != null)
+			HideRailsManager.saveChangedBlocks(player, targetBlock, blockType, mat, data, backup, single);
+	}
+
+	protected static void saveChangedBlocks(Player player, Block targetBlock, BlockReplacementType blockType, Material mat, byte data, boolean backup, boolean single)
+	{
+		List<Location> railsLocs = null;
+		if(!single)
+			railsLocs = LocationsManager.getConnectedBlocks(targetBlock.getLocation(), blockType);
+		else
+			railsLocs = Arrays.asList(targetBlock.getLocation());
 		List<HiddenRail> railsList = new ArrayList<>();
 		World world = targetBlock.getWorld();
 
@@ -254,7 +204,7 @@ public class HideRailsManager
 			railsList.add(rail);
 
 			// Sauveguarde des blocs changés dans le nouveau backup pour pouvoir retourner en arriere apres /hiderails undo
-			bBackup.addChangedBlocks(serialize(loc));
+			bBackup.addChangedBlocks(LocationsManager.serialize(loc));
 		}
 
 		if(backup) {
@@ -270,9 +220,15 @@ public class HideRailsManager
 			railsWorld = getWorldHiddenRails(world.getName());
 		}
 		for(int i = 0; i < railsList.size(); i++) railsWorld.addHiddenRails(railsList.get(i));
+
 		saveWorld(world.getName());
 	}
 
+
+
+	/*
+	 * Save all changed blocks and changed rails in world "worldName"
+	 */
 	public static void saveWorld(String worldName)
 	{
 		HiddenRailsWorld railsWorld = getWorldHiddenRails(worldName);
@@ -282,49 +238,13 @@ public class HideRailsManager
 		HideRails.getInstance().getHiddenRailsConfig().options().copyDefaults(true);
 
 		for(HiddenRail rails : railsList) {
-			railsLocs.add(serialize(rails.getLocation()) + ";" + rails.getMaterial() + ";" + rails.getData());
+			railsLocs.add(LocationsManager.serialize(rails.getLocation()) + ";" + rails.getMaterial() + ";" + rails.getData());
 		}
 
 		HideRails.getInstance().getHiddenRailsConfig().set(path + "." + worldName, railsLocs);
 		HideRails.getInstance().saveConfigs();
 	}
 
-
-	/*
-	 * Serialisation
-	 */
-	public static String serialize(Location loc)
-	{
-		String splitter = ",";
-		return loc.getWorld().getName() + splitter  + loc.getX() + splitter + loc.getY() + splitter + loc.getZ() + splitter + loc.getYaw() + splitter + loc.getPitch();
-	}
-
-	protected static Location deserializeLoc(String loc)
-	{
-		String[] split = loc.split(",");
-		String[] last = split[5].split(";");
-		World world = Bukkit.getServer().getWorld(split[0]);
-		double x = Double.parseDouble(split[1]);
-		double y = Double.parseDouble(split[2]);
-		double z = Double.parseDouble(split[3]);
-		float yaw = Float.parseFloat(split[4]);
-		float pitch = Float.parseFloat(last[0]);
-		return new Location(world, x, y, z, yaw, pitch);
-	}
-
-	private static Material deserializeMatInSerializedLoc(String loc)
-	{
-		String[] split = loc.split(",");
-		String[] last = split[5].split(";");
-		return Material.getMaterial(last[1]);
-	}
-
-	private static byte deserializeDataInSerializedLoc(String loc)
-	{
-		String[] split = loc.split(",");
-		String[] last = split[5].split(";");
-		return Byte.parseByte(last[2]);
-	}
 
 
 	/*
@@ -348,21 +268,5 @@ public class HideRailsManager
 			MessagesManager.sendChangeStatusMessage(p, Messages.SUCCESS_CHANGE_WATER_PROTECTION_STATUS, worldName, b);
 		}
 		HideRails.getInstance().saveConfig();
-	}
-
-
-	/*
-	 * Backup replacement command
-	 */
-	public static void restoreBackupRails(Player p)
-	{
-		BlocksBackup backup = PlayerCommandBackupManager.getLatestBlocksBackup(p);
-
-		if(backup != null)
-		{
-			PlayerCommandBackupManager.restoreBackup(p);
-		} else {
-			MessagesManager.sendPluginMessage(p, Messages.NO_BACKUP);
-		}
 	}
 }

@@ -61,6 +61,16 @@ public class HideRails extends JavaPlugin
 			saveDefaultConfig();
 		}
 
+		FileConfiguration configConf = YamlConfiguration.loadConfiguration(config);
+		if(!configConf.contains("hideRails")) {
+			getConfig().set("hideRails", true);
+			saveConfig();
+		}
+		if(!configConf.contains("hideIronBars")) {
+			getConfig().set("hideIronBars", true);
+			saveConfig();
+		}
+
 		if(!langFolder.exists())
 			langFolder.mkdirs();
 
@@ -294,6 +304,9 @@ public class HideRails extends JavaPlugin
 	{
 		instance = this;
 		language = getConfig().getString("language");
+
+		HideRailsManager.hb = HideRails.getInstance().getConfig().getBoolean("hideIronBars");
+		HideRailsManager.hr = HideRails.getInstance().getConfig().getBoolean("hideRails");
 
 		setupConfig();
 		saveConfigs();

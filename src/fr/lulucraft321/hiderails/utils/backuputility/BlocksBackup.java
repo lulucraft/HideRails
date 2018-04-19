@@ -10,6 +10,7 @@ package fr.lulucraft321.hiderails.utils.backuputility;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.utils.MaterialData;
 
 public class BlocksBackup

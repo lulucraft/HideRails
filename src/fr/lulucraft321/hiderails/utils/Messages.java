@@ -12,7 +12,7 @@ public enum Messages
 	PLAYER_NO_ENOUGH_PERMISSION("tu n'as pas la permission pour cela"),
 	MATERIAL_TYPE_ERROR("bloc invalide"),
 	SUCCESS_CHANGE_RAIL("rail remplace avec succes"),
-	RAIL_ERROR("le bloc cible n'est pas un rail"),
+	RAIL_ERROR("le bloc cible n'est pas un rail ou des barreaux"),
 	SUCCESS_BREAK_RAIL("rail supprime avec succes"),
 	INVALID_WORLDNAME("ce monde n'existe pas"),
 	WATER_PROTECTION_STATUS_ALREADY("la redstone est deja activee sous l'eau"),

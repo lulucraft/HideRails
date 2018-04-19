@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import fr.lulucraft321.hiderails.enums.BlockReplacementType;
 import fr.lulucraft321.hiderails.manager.MessagesManager;
 
 public class Checker
@@ -38,6 +39,33 @@ public class Checker
 	{
 		return (matCheck.getType() == Material.RAILS || matCheck.getType() == Material.LADDER || matCheck.getType() == Material.DETECTOR_RAIL || matCheck.getType() == Material.POWERED_RAIL);
 	}
+
+	public static boolean isIronBar(Block matCheck)
+	{
+		return matCheck.getType() == Material.IRON_FENCE;
+	}
+
+	public static BlockReplacementType getBlockReplacementType(Player player, Block targetBlock)
+	{
+		BlockReplacementType blockType;
+
+		if(Checker.isRail(targetBlock))
+		{
+			blockType = BlockReplacementType.RAILS;
+		}
+		else if(Checker.isIronBar(targetBlock))
+		{
+			blockType = BlockReplacementType.IRON_BARS;
+		}
+		// If Material is not valid
+		else {
+			MessagesManager.sendPluginMessage(player, Messages.RAIL_ERROR);
+			return null;
+		}
+
+		return blockType;
+	}
+
 
 	@SuppressWarnings("deprecation")
 	public static MaterialData getMatData(Player p, String input)

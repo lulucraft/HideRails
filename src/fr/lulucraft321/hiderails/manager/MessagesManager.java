@@ -38,9 +38,11 @@ public class MessagesManager
 		sender.sendMessage("\n" + "§8§l§m--------------§8§l[§6Hide§7Rails§8§l]§8§l§m--------------");
 		sender.sendMessage("\n" + "§f§l » §6/hiderails reload");
 		sender.sendMessage("§f§l » §6/hiderails help");
-		sender.sendMessage("\n" + "§f§l » §6/hiderails hide \"§oblock§6\"");
+		sender.sendMessage("\n" + "§f§l » §6/hiderails hideone \"§oblock§6\"");
+		sender.sendMessage("§f§l » §6/hiderails hide \"§oblock§6\"");
+		sender.sendMessage("§f§l » §6/hiderails unhideone");
 		sender.sendMessage("§f§l » §6/hiderails unhide");
-		sender.sendMessage("§f§l » §6/hiderails return");
+		sender.sendMessage("\n" + "§f§l » §6/hiderails return");
 		sender.sendMessage("§f§l » §6/hiderails waterprotection \"§oworld§6\" \"§ovalue§6\"");
 		sender.sendMessage("\n" + "§8§l§m-----------------------------------\n§r§o Plugin by lulucraft321");
 	}
