@@ -50,7 +50,7 @@ public class BlockChangeRunner extends BukkitRunnable
 							}
 						}
 						// Si le masquage des rails est active -> continue sinon return
-						else if(b.getType() == Material.RAILS || b.getType() == Material.ACTIVATOR_RAIL || b.getType() == Material.DETECTOR_RAIL || b.getType() == Material.POWERED_RAIL) {
+						else if(b.getType() == Material.RAILS || b.getType() == Material.ACTIVATOR_RAIL || b.getType() == Material.DETECTOR_RAIL || b.getType() == Material.POWERED_RAIL || b.getType() == Material.LADDER) {
 							if(HideRailsManager.hr) {
 								BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), railLoc.getBlockX(), railLoc.getBlockY(), railLoc.getBlockZ());
 							}
