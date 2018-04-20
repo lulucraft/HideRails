@@ -13,7 +13,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -24,6 +23,7 @@ import fr.lulucraft321.hiderails.utils.Checker;
 public class LocationsManager
 {
 	protected final static BlockFace[] faces = new BlockFace[]{ BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST };
+	protected final static BlockFace[] ladderFaces = new BlockFace[]{ BlockFace.UP, BlockFace.DOWN };
 
 	/**
 	 * Get connected Blocks
@@ -60,7 +60,6 @@ public class LocationsManager
 						if(Checker.isRail(newCheckBlock))
 						{
 							checked.add(newCheckBlock.getLocation());
-							newCheckBlock.getLocation().getWorld().spawnParticle(Particle.HEART, newCheckBlock.getLocation(), 5);
 
 							finishCheckCurrentBlock = 0;
 						} else {
@@ -72,7 +71,6 @@ public class LocationsManager
 						if(Checker.isIronBar(newCheckBlock))
 						{
 							checked.add(newCheckBlock.getLocation());
-							newCheckBlock.getLocation().getWorld().spawnParticle(Particle.VILLAGER_ANGRY, newCheckBlock.getLocation(), 5);
 
 							finishCheckCurrentBlock = 0;
 						} else {

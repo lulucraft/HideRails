@@ -13,7 +13,10 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+
+import com.sk89q.worldedit.bukkit.selections.Selection;
 
 import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
@@ -30,8 +33,8 @@ public class PlayerCommandBackupManager
 	// Get backup command to player
 	public static PlayerCommandBackup getPlayerCommandBackups(Player player)
 	{
-		for(Entry<Player, PlayerCommandBackup> backup : PlayerCommandBackupManager.playerCommandBackups.entrySet()) {
-			if(backup.getKey().equals(player)) {
+		for (Entry<Player, PlayerCommandBackup> backup : PlayerCommandBackupManager.playerCommandBackups.entrySet()) {
+			if (backup.getKey().equals(player)) {
 				return backup.getValue();
 			}
 		}
@@ -44,13 +47,13 @@ public class PlayerCommandBackupManager
 	{
 		PlayerCommandBackup backup = getPlayerCommandBackups(player);
 
-		if(backup != null)
+		if (backup != null)
 		{
-			if(backup.getPlayerBackups().size() > 0)
+			if (backup.getPlayerBackups().size() > 0)
 			{
 				BlocksBackup back = backup.getPlayerBackups().get(backup.getPlayerBackups().size()-1);
 
-				if(back != null)
+				if (back != null)
 				{
 					return back;
 				}
@@ -65,7 +68,7 @@ public class PlayerCommandBackupManager
 	{
 		PlayerCommandBackup backup = getPlayerCommandBackups(player);
 
-		if(backup == null)
+		if (backup == null)
 			backup = new PlayerCommandBackup();
 
 		backup.addPlayerBackups(blBackup);
@@ -77,42 +80,67 @@ public class PlayerCommandBackupManager
 	public static void restoreBackup(Player p)
 	{
 		BlocksBackup backup = getLatestBlocksBackup(p);
+		Selection sel = backup.getWeSelection();
 		Block bl = null;
 
 		boolean single;
 		int i = 0;
 
-		if(backup.getType() == BackupType.HIDE)
+		if (backup.getType() == BackupType.HIDE)
 		{
-			for(String block : backup.getChangedBlocks()) {
-				Location deserLoc = LocationsManager.deserializeLoc(block);
-				bl = Bukkit.getWorld(deserLoc.getWorld().getName()).getBlockAt(deserLoc);
-				bl.setType(bl.getType());
-				bl.setData(Byte.valueOf(bl.getData()));
-				bl.getState().update(true);
+			if (sel == null)
+			{
+				for (String block : backup.getChangedBlocks()) {
+					Location deserLoc = LocationsManager.deserializeLoc(block);
+					bl = Bukkit.getWorld(deserLoc.getWorld().getName()).getBlockAt(deserLoc);
+					BlockState state = bl.getState();
+					bl.setType(bl.getType());
+					bl.setData(Byte.valueOf(bl.getData()));
+					state.update(true);
 
-				i++;
+					i++;
+				}
+
+				if (i > 1) single = false;
+				else single = true;
+				HideRailsManager.removeBlocks(p, bl, false, single);
 			}
+			else
+			{
+				// Si le backup contient une worldedit selection
+				for (Location blockLoc : Checker.getAllValidRails(backup.getWeSelection())) {
+					bl = Bukkit.getWorld(blockLoc.getWorld().getName()).getBlockAt(blockLoc);
+					BlockState state = bl.getState();
+					bl.setType(state.getType());
+					bl.setData(state.getData().getData());
+					state.update(true);
+				}
 
-			if(i > 1) single = false;
-			else single = true;
-			HideRailsManager.removeBlocks(p, bl, false, single);
+				HideRailsManager.removeSelectionBlocks(p, backup.getWeSelection(), false);
+			}
 		}
 
-		else if(backup.getType() == BackupType.UNHIDE)
+		else if (backup.getType() == BackupType.UNHIDE)
 		{
-			for(String block : backup.getChangedBlocks()) {
-				Location deserLoc = LocationsManager.deserializeLoc(block);
-				bl = Bukkit.getWorld(deserLoc.getWorld().getName()).getBlockAt(deserLoc);
+			if (sel == null)
+			{
+				for (String block : backup.getChangedBlocks()) {
+					Location deserLoc = LocationsManager.deserializeLoc(block);
+					bl = Bukkit.getWorld(deserLoc.getWorld().getName()).getBlockAt(deserLoc);
 
-				i++;
+					i++;
+				}
+
+				if (i > 1) single = false;
+				else single = true;
+
+				BlockReplacementType blockType = Checker.getBlockReplacementType(p, bl);
+				HideRailsManager.saveChangedBlocks(p, bl, blockType, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false, single);
 			}
-
-			if(i > 1) single = false;
-			else single = true;
-
-			BlockReplacementType blockType = Checker.getBlockReplacementType(p, bl);
-			HideRailsManager.saveChangedBlocks(p, bl, blockType, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false, single);
+			else
+			{
+				HideRailsManager.hideSelectionBlocks(p, sel, (backup.getUnHideBlocksType().getMat().toString()+":"+backup.getUnHideBlocksType().getData()), false);
+			}
 		}
 
 		// Supression du backup restore

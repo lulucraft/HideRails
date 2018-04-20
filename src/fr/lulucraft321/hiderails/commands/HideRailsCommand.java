@@ -18,6 +18,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.sk89q.worldedit.bukkit.selections.Selection;
+
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.manager.HideRailsManager;
 import fr.lulucraft321.hiderails.manager.MessagesManager;
@@ -67,6 +69,20 @@ public class HideRailsCommand implements CommandExecutor
 						}
 
 
+						/* UnHide Rails with WorldEdit selection */
+						if(args[0].equalsIgnoreCase("unhideselect") || args[0].equalsIgnoreCase("unhideselection"))
+						{
+							Selection sel = Checker.getWorldeditSelection(p);
+							if (sel == null) {
+								MessagesManager.sendPluginMessage(p, Messages.WORLDEDIT_NO_SELECTION);
+								return true;
+							}
+
+							HideRailsManager.removeSelectionBlocks(p, sel, true);
+							return true;
+						}
+
+
 						/* UnHide single Rail */
 						if(args[0].equalsIgnoreCase("unhide") || args[0].equalsIgnoreCase("show"))
 						{
@@ -96,6 +112,22 @@ public class HideRailsCommand implements CommandExecutor
 
 					if(args.length == 2)
 					{
+
+						/* Hide Rails with WorldEdit selection */
+						if(args[0].equalsIgnoreCase("hideselect") || args[0].equalsIgnoreCase("hideselection"))
+						{
+							String in = args[1];
+							Selection sel = Checker.getWorldeditSelection(p);
+							if (sel == null) {
+								MessagesManager.sendPluginMessage(p, Messages.WORLDEDIT_NO_SELECTION);
+								return true;
+							}
+
+							HideRailsManager.hideSelectionBlocks(p, sel, in, true);
+							return true;
+						}
+
+
 						/* Hide Rails */
 						if(args[0].equalsIgnoreCase("hide") || args[0].equalsIgnoreCase("hiderails"))
 						{
@@ -108,8 +140,10 @@ public class HideRailsCommand implements CommandExecutor
 						if(args[0].equalsIgnoreCase("hidesingle")
 								|| args[0].equalsIgnoreCase("hidesolo")
 								|| args[0].equalsIgnoreCase("hideone")
+								|| args[0].equalsIgnoreCase("hideone")
 								|| args[0].equalsIgnoreCase("singlehide")
-								|| args[0].equalsIgnoreCase("solohide"))
+								|| args[0].equalsIgnoreCase("solohide")
+								|| args[0].equalsIgnoreCase("showone"))
 						{
 							String in = args[1];
 							HideRailsManager.saveChangedBlocks(p, in, true, true);

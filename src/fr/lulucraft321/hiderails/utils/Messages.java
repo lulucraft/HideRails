@@ -20,7 +20,9 @@ public enum Messages
 	SUCCESS_RELOAD("plugin recharge avec success"),
 	SUCCESS_UNHIDE_RAIL("rail affiche avec succes"),
 	NO_BACKUP("aucune sauveguarde"),
-	RETURN_BACKUP_SUCCESS("backup restaure avec succes !");
+	RETURN_BACKUP_SUCCESS("backup restaure avec succes !"),
+	WORLDEDIT_NOT_INSTALLED("le plugin worldedit n'est pas installé sur le serveur !"),
+	WORLDEDIT_NO_SELECTION("vous devez d'abord sélectionner un region avec worldedit !");
 
 	private String message;
 

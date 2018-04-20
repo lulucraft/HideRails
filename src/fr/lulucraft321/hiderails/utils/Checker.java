@@ -6,10 +6,20 @@
 
 package fr.lulucraft321.hiderails.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
+import com.sk89q.worldedit.bukkit.selections.Selection;
+
+import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
 import fr.lulucraft321.hiderails.manager.MessagesManager;
 
@@ -143,5 +153,69 @@ public class Checker
 			return "false";
 		}
 		return null;
+	}
+
+
+	/*
+	 * Check and get Worldedit if plugin is installed
+	 */
+	private static WorldEditPlugin getWorldedit(Player player)
+	{
+		WorldEditPlugin we = HideRails.getInstance().getWorldEdit();
+		if(we == null) {
+			MessagesManager.sendPluginMessage(player, Messages.WORLDEDIT_NOT_INSTALLED);
+			return null;
+		}
+
+		return we;
+	}
+
+	public static Selection getWorldeditSelection(Player player)
+	{
+		WorldEditPlugin we = Checker.getWorldedit(player);
+		if(we != null) {
+			Selection sel = we.getSelection(player);
+			if(sel instanceof CuboidSelection) { // Eviter de confondre avec un cuboid (region protegee)
+				return sel;
+			}
+		}
+		return null;
+	}
+
+	private static List<Location> getAllBlocksLocationInWeSelection(Selection selection)
+	{
+		Location min = selection.getMinimumPoint(); // Minimum point of Worldedit Selection
+		Location max = selection.getMaximumPoint(); // Maximum point of Worldedit Selection
+
+		List<Location> railsLocsTemp = new ArrayList<>(); // Temporary storage of all blocks Location in Worldedit Selection
+
+		for (int x = min.getBlockX(); x <= max.getBlockX(); x++)
+		{
+			for (int y = min.getBlockY(); y <= max.getBlockY(); y++)
+			{
+				for (int z = min.getBlockZ(); z <= max.getBlockZ(); z++)
+				{
+					railsLocsTemp.add(new Location(min.getWorld(), x, y, z));
+				}
+			}
+		}
+
+		return railsLocsTemp;
+	}
+
+	public static List<Location> getAllValidRails(Selection selection)
+	{
+		List<Location> railsLocsTemp = Checker.getAllBlocksLocationInWeSelection(selection);
+		List<Location> railsLocs = new ArrayList<>();
+
+		for (Location blockLoc : railsLocsTemp) {
+			Block bl = Bukkit.getWorld(blockLoc.getWorld().getName()).getBlockAt(blockLoc);
+
+			if (Checker.isRail(bl) || Checker.isIronBar(bl)) {
+				railsLocs.add(blockLoc);
+			}
+		}
+
+		return railsLocs;
 	}
 }

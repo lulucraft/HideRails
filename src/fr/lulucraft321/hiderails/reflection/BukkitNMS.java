@@ -92,7 +92,7 @@ public class BukkitNMS
 	}
 
 
-	public static void sendPacket(Player player, Object packet) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException
+	private static void sendPacket(Player player, Object packet) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException
 	{
 		Object handle = NMSClass.getMethod(player.getClass(), "getHandle").invoke(player);
 		Object playerConnection = NMSClass.getField(

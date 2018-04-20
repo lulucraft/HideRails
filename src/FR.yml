@@ -14,3 +14,5 @@ messages:
   water_protection_status_already: '&cLa protection de la redstone et des rails sous l''eau dans le monde %world% est déja définit sur %status%'
   no_backup: '&cAucune sauvegarde disponible !'
   return_backup_success: '&cSauvegarde restorée avec succès !'
+  worldedit_not_installed: '&cLe plugin worldedit n''est pas installé sur le serveur !'
+  worldedit_no_selection: '&cVous devez d''abord sélectionner une région avec worldedit !'

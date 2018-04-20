@@ -19,9 +19,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.lulucraft321.hiderails.manager.HideRailsManager;
 import fr.lulucraft321.hiderails.reflection.BukkitNMS;
-import fr.lulucraft321.hiderails.utils.HiddenRail;
-import fr.lulucraft321.hiderails.utils.HiddenRailsWorld;
 import fr.lulucraft321.hiderails.utils.MaterialData;
+import fr.lulucraft321.hiderails.utils.railsdata.HiddenRail;
+import fr.lulucraft321.hiderails.utils.railsdata.HiddenRailsWorld;
 
 public class BlockChangeRunner extends BukkitRunnable
 {

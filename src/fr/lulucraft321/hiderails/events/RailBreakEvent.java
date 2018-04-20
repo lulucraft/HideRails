@@ -16,9 +16,9 @@ import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.manager.HideRailsManager;
 import fr.lulucraft321.hiderails.manager.MessagesManager;
 import fr.lulucraft321.hiderails.utils.Checker;
-import fr.lulucraft321.hiderails.utils.HiddenRail;
-import fr.lulucraft321.hiderails.utils.HiddenRailsWorld;
 import fr.lulucraft321.hiderails.utils.Messages;
+import fr.lulucraft321.hiderails.utils.railsdata.HiddenRail;
+import fr.lulucraft321.hiderails.utils.railsdata.HiddenRailsWorld;
 
 public class RailBreakEvent implements Listener
 {

@@ -12,3 +12,5 @@ messages:
   water_protection_status_already: '&cThe underwater protection in %world% is already %status%'
   no_backup: '&cNo backup available !'
   return_backup_success: '&2successfully restored backup !'
+  worldedit_not_installed: '&cWorldedit plugin is not installed on this server !'
+  worldedit_no_selection: '&cYou must first select region with Worldedit !'

@@ -16,11 +16,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 import fr.lulucraft321.hiderails.commands.HideRailsCommand;
 import fr.lulucraft321.hiderails.commands.TabComplete;
@@ -53,6 +57,8 @@ public class HideRails extends JavaPlugin
 	private FileConfiguration frLangConfig;
 	private FileConfiguration enLangConfig;
 	private FileConfiguration langConfig;
+
+	public final String msgPath = "messages.";
 
 	public void setupConfig()
 	{
@@ -100,19 +106,21 @@ public class HideRails extends JavaPlugin
 			}
 
 			frLangConfig = YamlConfiguration.loadConfiguration(frLangFile);
-			frLangConfig.set("messages.sender_type_error", "&cSeul un joueur peut executer cette commande !");
-			frLangConfig.set("messages.player_no_enough_permission", "&cVous n'avez pas la permission d'éxécuter cette commande !");
-			frLangConfig.set("messages.rail_success_change", "&2Vous avez remplacé les rails par %blocktype%");
-			frLangConfig.set("messages.material_type_error", "&cCe bloc n'existe pas !");
-			frLangConfig.set("messages.rail_error", "&cLe bloc que vous visez n'est pas un rail !");
-			frLangConfig.set("messages.rail_success_break", "&2Vous avez cassé un rail masqué !");
-			frLangConfig.set("messages.rail_success_unhide", "&2Vous avez fait re apparaitre les rails !");
-			frLangConfig.set("messages.water_protection_status_success_change", "&2Vous avez %status% la protection de la redstone sous l'eau pour le monde %world%");
-			frLangConfig.set("messages.invalid_worldname", "&cMonde invalide !");
-			frLangConfig.set("messages.plugin_success_reloaded", "&2Plugin rechargé avec succès !");
-			frLangConfig.set("messages.water_protection_status_already", "&cLa protection de la redstone et des rails sous l'eau dans le monde %world% est déja définit sur %status%");
-			frLangConfig.set("messages.no_backup", "&cAucune sauvegarde disponible !");
-			frLangConfig.set("messages.return_backup_success", "&2Sauvegarde restorée avec succès !");
+			frLangConfig.set(msgPath + "sender_type_error", "&cSeul un joueur peut executer cette commande !");
+			frLangConfig.set(msgPath + "player_no_enough_permission", "&cVous n'avez pas la permission d'éxécuter cette commande !");
+			frLangConfig.set(msgPath + "rail_success_change", "&2Vous avez remplacé les rails par %blocktype%");
+			frLangConfig.set(msgPath + "material_type_error", "&cCe bloc n'existe pas !");
+			frLangConfig.set(msgPath + "rail_error", "&cLe bloc que vous visez n'est pas un rail !");
+			frLangConfig.set(msgPath + "rail_success_break", "&2Vous avez cassé un rail masqué !");
+			frLangConfig.set(msgPath + "rail_success_unhide", "&2Vous avez fait re apparaitre les rails !");
+			frLangConfig.set(msgPath + "water_protection_status_success_change", "&2Vous avez %status% la protection de la redstone sous l'eau pour le monde %world%");
+			frLangConfig.set(msgPath + "invalid_worldname", "&cMonde invalide !");
+			frLangConfig.set(msgPath + "plugin_success_reloaded", "&2Plugin rechargé avec succès !");
+			frLangConfig.set(msgPath + "water_protection_status_already", "&cLa protection de la redstone et des rails sous l'eau dans le monde %world% est déja définit sur %status%");
+			frLangConfig.set(msgPath + "no_backup", "&cAucune sauvegarde disponible !");
+			frLangConfig.set(msgPath + "return_backup_success", "&2Sauvegarde restorée avec succès !");
+			frLangConfig.set(msgPath + "worldedit_not_installed", "&cLe plugin worldedit n'est pas installé sur le serveur !");
+			frLangConfig.set(msgPath + "worldedit_no_selection", "&cVous devez d'abord sélectionner une région avec worldedit !");
 
 			// Sauveguarde des modifs
 			try {
@@ -120,33 +128,21 @@ public class HideRails extends JavaPlugin
 			} catch (IOException e1) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + frLangConfig.getName().toString() + "\" !"); }
 		} else {
 			frLangConfig = YamlConfiguration.loadConfiguration(frLangFile);
-
-			if(!frLangConfig.contains("messages.sender_type_error"))
-				frLangConfig.set("messages.sender_type_error", "&cSeul un joueur peut executer cette commande !");
-			if(!frLangConfig.contains("messages.player_no_enough_permission"))
-				frLangConfig.set("messages.player_no_enough_permission", "&cVous n'avez pas la permission d'éxécuter cette commande !");
-			if(!frLangConfig.contains("messages.rail_success_change"))
-				frLangConfig.set("messages.rail_success_change", "&2Vous avez remplacé les rails par %blocktype%");
-			if(!frLangConfig.contains("messages.material_type_error"))
-				frLangConfig.set("messages.material_type_error", "&cCe bloc n'existe pas !");
-			if(!frLangConfig.contains("messages.rail_error"))
-				frLangConfig.set("messages.rail_error", "&cLe bloc que vous visez n'est pas un rail !");
-			if(!frLangConfig.contains("messages.rail_success_break"))
-				frLangConfig.set("messages.rail_success_break", "&2Vous avez cassé un rail masqué !");
-			if(!frLangConfig.contains("messages.rail_success_unhide"))
-				frLangConfig.set("messages.rail_success_unhide", "&2Vous avez fait re apparaitre les rails !");
-			if(!frLangConfig.contains("messages.water_protection_status_success_change"))
-				frLangConfig.set("messages.water_protection_status_success_change", "&2Vous avez %status% la protection de la redstone sous l'eau pour le monde %world%");
-			if(!frLangConfig.contains("messages.invalid_worldname"))
-				frLangConfig.set("messages.invalid_worldname", "&cMonde invalide !");
-			if(!frLangConfig.contains("messages.plugin_success_reloaded"))
-				frLangConfig.set("messages.plugin_success_reloaded", "&2Plugin rechargé avec succès !");
-			if(!frLangConfig.contains("messages.water_protection_status_already"))
-				frLangConfig.set("messages.water_protection_status_already", "&cLa protection de la redstone et des rails sous l'eau dans le monde %world% est déja définit sur %status%");
-			if(!frLangConfig.contains("messages.no_backup"))
-				frLangConfig.set("messages.no_backup", "&cAucune sauvegarde disponible !");
-			if(!frLangConfig.contains("messages.return_backup_success"))
-				frLangConfig.set("messages.return_backup_success", "&cSauvegarde restorée avec succès !");
+			checkConfContains(frLangConfig, "sender_type_error", "&cSeul un joueur peut executer cette commande !");
+			checkConfContains(frLangConfig, "player_no_enough_permission", "&cVous n'avez pas la permission d'éxécuter cette commande !");
+			checkConfContains(frLangConfig, "rail_success_change", "&2Vous avez remplacé les rails par %blocktype%");
+			checkConfContains(frLangConfig, "material_type_error", "&cCe bloc n'existe pas !");
+			checkConfContains(frLangConfig, "rail_error", "&cLe bloc que vous visez n'est pas un rail !");
+			checkConfContains(frLangConfig, "rail_success_break", "&2Vous avez cassé un rail masqué !");
+			checkConfContains(frLangConfig, "rail_success_unhide", "&2Vous avez fait re apparaitre les rails !");
+			checkConfContains(frLangConfig, "water_protection_status_success_change", "&2Vous avez %status% la protection de la redstone sous l'eau pour le monde %world%");
+			checkConfContains(frLangConfig, "invalid_worldname", "&cMonde invalide !");
+			checkConfContains(frLangConfig, "plugin_success_reloaded", "&2Plugin rechargé avec succès !");
+			checkConfContains(frLangConfig, "water_protection_status_already", "&cLa protection de la redstone et des rails sous l'eau dans le monde %world% est déja définit sur %status%");
+			checkConfContains(frLangConfig, "no_backup", "&cAucune sauvegarde disponible !");
+			checkConfContains(frLangConfig, "return_backup_success", "&cSauvegarde restorée avec succès !");
+			checkConfContains(frLangConfig, "worldedit_not_installed", "&cLe plugin worldedit n'est pas installé sur le serveur !");
+			checkConfContains(frLangConfig, "worldedit_no_selection", "&cVous devez d'abord sélectionner une région avec worldedit !");
 
 			// Sauveguarde des modifs
 			try {
@@ -168,19 +164,21 @@ public class HideRails extends JavaPlugin
 			}
 
 			enLangConfig = YamlConfiguration.loadConfiguration(enLangFile);
-			enLangConfig.set("messages.sender_type_error", "&cYou must be a player to execute this command !");
-			enLangConfig.set("messages.player_no_enough_permission", "&cYou do not have permission to execute this command !");
-			enLangConfig.set("messages.rail_success_change", "&2You have replaced the rails with %blocktype% !");
-			enLangConfig.set("messages.material_type_error", "&cThis bloc does not exist !");
-			enLangConfig.set("messages.rail_error", "&cThe target block is not a rail !");
-			enLangConfig.set("messages.rail_success_break", "&2You have broken a hidden rail !");
-			enLangConfig.set("messages.rail_success_unhide", "&2You have displayed the rails !");
-			enLangConfig.set("messages.water_protection_status_success_change", "&2You have %status% the under-water protection in %world%");
-			enLangConfig.set("messages.invalid_worldname", "&cThis world name is invalid !");
-			enLangConfig.set("messages.plugin_success_reloaded", "&2Plugin successfully reloaded");
-			enLangConfig.set("messages.water_protection_status_already", "&cThe underwater protection in %world% is already %status%");
-			enLangConfig.set("messages.no_backup", "&cNo backup available !");
-			enLangConfig.set("messages.return_backup_success", "&2successfully restored backup !");
+			enLangConfig.set(msgPath + "sender_type_error", "&cYou must be a player to execute this command !");
+			enLangConfig.set(msgPath + "player_no_enough_permission", "&cYou do not have permission to execute this command !");
+			enLangConfig.set(msgPath + "rail_success_change", "&2You have replaced the rails with %blocktype% !");
+			enLangConfig.set(msgPath + "material_type_error", "&cThis bloc does not exist !");
+			enLangConfig.set(msgPath + "rail_error", "&cThe target block is not a rail !");
+			enLangConfig.set(msgPath + "rail_success_break", "&2You have broken a hidden rail !");
+			enLangConfig.set(msgPath + "rail_success_unhide", "&2You have displayed the rails !");
+			enLangConfig.set(msgPath + "water_protection_status_success_change", "&2You have %status% the under-water protection in %world%");
+			enLangConfig.set(msgPath + "invalid_worldname", "&cThis world name is invalid !");
+			enLangConfig.set(msgPath + "plugin_success_reloaded", "&2Plugin successfully reloaded");
+			enLangConfig.set(msgPath + "water_protection_status_already", "&cThe underwater protection in %world% is already %status%");
+			enLangConfig.set(msgPath + "no_backup", "&cNo backup available !");
+			enLangConfig.set(msgPath + "return_backup_success", "&2successfully restored backup !");
+			enLangConfig.set(msgPath + "worldedit_not_installed", "&cWorldedit plugin is not installed on this server !");
+			enLangConfig.set(msgPath + "worldedit_no_selection", "&cYou must first select region with Worldedit !");
 
 			// Sauveguarde des modifs
 			try {
@@ -188,33 +186,21 @@ public class HideRails extends JavaPlugin
 			} catch (IOException e1) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + enLangConfig.getName().toString() + "\" !"); }
 		} else {
 			enLangConfig = YamlConfiguration.loadConfiguration(enLangFile);
-
-			if(!enLangConfig.contains("messages.sender_type_error"))
-				enLangConfig.set("messages.sender_type_error", "&cYou must be a player to execute this command !");
-			if(!enLangConfig.contains("messages.player_no_enough_permission"))
-				enLangConfig.set("messages.player_no_enough_permission", "&cYou do not have permission to execute this command !");
-			if(!enLangConfig.contains("messages.rail_success_change"))
-				enLangConfig.set("messages.rail_success_change", "&2You have replaced the rails with %blocktype% !");
-			if(!enLangConfig.contains("messages.material_type_error"))
-				enLangConfig.set("messages.material_type_error", "&cThis bloc does not exist !");
-			if(!enLangConfig.contains("messages.rail_error"))
-				enLangConfig.set("messages.rail_error", "&cThe target block is not a rail !");
-			if(!enLangConfig.contains("messages.rail_success_break"))
-				enLangConfig.set("messages.rail_success_break", "&2You have broken a hidden rail !");
-			if(!enLangConfig.contains("messages.rail_success_unhide"))
-				enLangConfig.set("messages.rail_success_unhide", "&2You have displayed the rails !");
-			if(!enLangConfig.contains("messages.water_protection_status_success_change"))
-				enLangConfig.set("messages.water_protection_status_success_change", "&2You have %status% the under-water protection in %world%");
-			if(!enLangConfig.contains("messages.invalid_worldname"))
-				enLangConfig.set("messages.invalid_worldname", "&cThis world name is invalid !");
-			if(!enLangConfig.contains("messages.plugin_success_reloaded"))
-				enLangConfig.set("messages.plugin_success_reloaded", "&2Plugin successfully reloaded");
-			if(!enLangConfig.contains("messages.water_protection_status_already"))
-				enLangConfig.set("messages.water_protection_status_already", "&cThe underwater protection in %world% is already %status%");
-			if(!enLangConfig.contains("messages.no_backup"))
-				enLangConfig.set("messages.no_backup", "&cNo backup available !");
-			if(!enLangConfig.contains("messages.return_backup_success"))
-				enLangConfig.set("messages.return_backup_success", "&2successfully restored backup !");
+			checkConfContains(enLangConfig, "sender_type_error", "&cYou must be a player to execute this command !");
+			checkConfContains(enLangConfig, "player_no_enough_permission", "&cYou do not have permission to execute this command !");
+			checkConfContains(enLangConfig, "rail_success_change", "&2You have replaced the rails with %blocktype% !");
+			checkConfContains(enLangConfig, "material_type_error", "&cThis bloc does not exist !");
+			checkConfContains(enLangConfig, "rail_error", "&cThe target block is not a rail !");
+			checkConfContains(enLangConfig, "rail_success_break", "&2You have broken a hidden rail !");
+			checkConfContains(enLangConfig, "rail_success_unhide", "&2You have displayed the rails !");
+			checkConfContains(enLangConfig, "water_protection_status_success_change", "&2You have %status% the under-water protection in %world%");
+			checkConfContains(enLangConfig, "invalid_worldname", "&cThis world name is invalid !");
+			checkConfContains(enLangConfig, "plugin_success_reloaded", "&2Plugin successfully reloaded");
+			checkConfContains(enLangConfig, "water_protection_status_already", "&cThe underwater protection in %world% is already %status%");
+			checkConfContains(enLangConfig, "no_backup", "&cNo backup available !");
+			checkConfContains(enLangConfig, "return_backup_success", "&2successfully restored backup !");
+			checkConfContains(enLangConfig, "worldedit_not_installed", "&cWorldedit plugin is not installed on this server !");
+			checkConfContains(enLangConfig, "worldedit_no_selection", "&cYou must first select region with Worldedit !");
 
 			// Sauveguarde des modifs
 			try {
@@ -270,6 +256,16 @@ public class HideRails extends JavaPlugin
 		MessagesManager.loadAllMessages();
 		//
 	}
+
+	/*
+	 * Verification de chaque ligne a cause du changement de version
+	 */
+	private void checkConfContains(FileConfiguration langConfig, String path, String value) {
+		String finPath = msgPath + path;
+		if(!langConfig.contains(finPath))
+			langConfig.set(finPath, value);
+	}
+
 
 	public void saveConfigs()
 	{
@@ -338,5 +334,15 @@ public class HideRails extends JavaPlugin
 	{
 		getCommand("hiderails").setExecutor(new HideRailsCommand());
 		getCommand("hiderails").setTabCompleter(new TabComplete());
+	}
+
+
+	/*
+	 * GetWordedit if plugin is installed
+	 */
+	public WorldEditPlugin getWorldEdit() {
+		Plugin we = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
+		if(we instanceof WorldEditPlugin) return (WorldEditPlugin) we;
+		else return null;
 	}
 }
