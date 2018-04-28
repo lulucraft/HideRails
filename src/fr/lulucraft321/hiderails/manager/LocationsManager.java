@@ -55,20 +55,10 @@ public class LocationsManager
 					if(checked.contains(newCheckBlock.getLocation())) continue;
 					if(checked.contains(newCheckBlock)) continue;
 
-					if(blockType == BlockReplacementType.RAILS)
+					if(blockType == BlockReplacementType.RAILS || blockType == BlockReplacementType.IRON_BARS || blockType == BlockReplacementType.COMMAND_BLOCK || blockType == BlockReplacementType.REDSTONE
+							|| blockType == BlockReplacementType.SIGN)
 					{
-						if(Checker.isRail(newCheckBlock))
-						{
-							checked.add(newCheckBlock.getLocation());
-
-							finishCheckCurrentBlock = 0;
-						} else {
-							finishCheckCurrentBlock+=1;
-						}
-					}
-					else if(blockType == BlockReplacementType.IRON_BARS)
-					{
-						if(Checker.isIronBar(newCheckBlock))
+						if(Checker.checkBlockIfActive(newCheckBlock))
 						{
 							checked.add(newCheckBlock.getLocation());
 
@@ -103,6 +93,8 @@ public class LocationsManager
 
 		return checked;
 	}
+
+
 
 	/*
 	 * Serialisation

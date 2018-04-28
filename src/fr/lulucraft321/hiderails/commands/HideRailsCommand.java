@@ -32,6 +32,32 @@ public class HideRailsCommand implements CommandExecutor
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
+		if(args.length == 0)
+		{
+			MessagesManager.sendHelpPluginMessage(sender);
+			return true;
+		}
+
+		if (args.length == 1)
+		{
+			if(args[0].equalsIgnoreCase("reload"))
+			{
+				Bukkit.getServer().getScheduler().cancelTasks(HideRails.getInstance());
+
+				HideRails.getInstance().reloadConfig();
+				HideRails.getInstance().saveConfig();
+				HideRails.getInstance().setupConfig();
+				HideRails.getInstance().saveConfigs();
+
+				HideRailsManager.initHideBlocksType();
+				HideRailsManager.loadHideRails();
+
+				MessagesManager.sendPluginMessage(sender, Messages.SUCCESS_RELOAD);
+				return true;
+			}
+		}
+
+
 		if(sender instanceof Player)
 		{
 			Player p = (Player) sender;
@@ -40,25 +66,11 @@ public class HideRailsCommand implements CommandExecutor
 			{
 				if(cmd.getName().equalsIgnoreCase("hiderails"))
 				{
-					if(args.length == 0)
-					{
-						MessagesManager.sendHelpPluginMessage(p);
-					}
-
 					if(args.length == 1)
 					{
-						if(args[0].equalsIgnoreCase("reload"))
+						if(args[0].equalsIgnoreCase("display"))
 						{
-							Bukkit.getServer().getScheduler().cancelTasks(HideRails.getInstance());
-
-							HideRails.getInstance().reloadConfig();
-							HideRails.getInstance().saveConfig();
-							HideRails.getInstance().setupConfig();
-							HideRails.getInstance().saveConfigs();
-
-							HideRailsManager.loadHideRails();
-
-							MessagesManager.sendPluginMessage(p, Messages.SUCCESS_RELOAD);
+							HideRailsManager.displayBlocks(p);
 							return true;
 						}
 
@@ -182,7 +194,9 @@ public class HideRailsCommand implements CommandExecutor
 			} else {
 				MessagesManager.sendPluginMessage(p, Messages.PLAYER_NO_ENOUGH_PERMISSION);
 			}
-		} else {
+		}
+		else
+		{
 			MessagesManager.sendPluginMessage(sender, Messages.SENDER_TYPE_ERROR);
 		}
 

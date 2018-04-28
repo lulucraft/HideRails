@@ -14,3 +14,4 @@ messages:
   return_backup_success: '&2successfully restored backup !'
   worldedit_not_installed: '&cWorldedit plugin is not installed on this server !'
   worldedit_no_selection: '&cYou must first select region with Worldedit !'
+  display_hidden_blocks: '&2You have %hide% the hidden blocks for you !'

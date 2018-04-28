@@ -21,6 +21,7 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
+import fr.lulucraft321.hiderails.manager.HideRailsManager;
 import fr.lulucraft321.hiderails.manager.MessagesManager;
 
 public class Checker
@@ -47,7 +48,7 @@ public class Checker
 
 	public static boolean isRail(Block matCheck)
 	{
-		return (matCheck.getType() == Material.RAILS || matCheck.getType() == Material.LADDER || matCheck.getType() == Material.DETECTOR_RAIL || matCheck.getType() == Material.POWERED_RAIL);
+		return (matCheck.getType() == Material.RAILS || matCheck.getType() == Material.LADDER || matCheck.getType() == Material.ACTIVATOR_RAIL || matCheck.getType() == Material.DETECTOR_RAIL || matCheck.getType() == Material.POWERED_RAIL);
 	}
 
 	public static boolean isIronBar(Block matCheck)
@@ -55,17 +56,84 @@ public class Checker
 		return matCheck.getType() == Material.IRON_FENCE;
 	}
 
+	public static boolean isCommandBlock(Block matCheck)
+	{
+		return (matCheck.getType() == Material.COMMAND || matCheck.getType() == Material.COMMAND_CHAIN || matCheck.getType() == Material.COMMAND_REPEATING);
+	}
+
+	public static boolean isRedstone(Block matCheck)
+	{
+		return (matCheck.getType() == Material.REDSTONE_WIRE || matCheck.getType() == Material.REDSTONE || matCheck.getType() == Material.REDSTONE_BLOCK
+				|| matCheck.getType() == Material.REDSTONE_COMPARATOR || matCheck.getType() == Material.REDSTONE_COMPARATOR_OFF || matCheck.getType() == Material.REDSTONE_COMPARATOR_ON
+				|| matCheck.getType() == Material.REDSTONE_TORCH_OFF || matCheck.getType() == Material.REDSTONE_TORCH_ON
+				|| matCheck.getType() == Material.DIODE || matCheck.getType() == Material.DIODE_BLOCK_OFF || matCheck.getType() == Material.DIODE_BLOCK_ON);
+	}
+
+	public static boolean isSign(Block matCheck)
+	{
+		return (matCheck.getType() == Material.SIGN || matCheck.getType() == Material.SIGN_POST || matCheck.getType() == Material.WALL_SIGN);
+	}
+
+
+	public static boolean checkBlockIfActive(Block newCheckBlock)
+	{
+		if (Checker.isRail(newCheckBlock)) {
+			if (HideRailsManager.hr) {
+				return true;
+			}
+		}
+
+		else if (Checker.isIronBar(newCheckBlock)) {
+			if (HideRailsManager.hb) {
+				return true;
+			}
+		}
+
+		else if (Checker.isCommandBlock(newCheckBlock)) {
+			if (HideRailsManager.hc) {
+				return true;
+			}
+		}
+
+		else if (Checker.isRedstone(newCheckBlock)) {
+			if (HideRailsManager.hd) {
+				return true;
+			}
+		}
+
+		else if (Checker.isSign(newCheckBlock)) {
+			if (HideRailsManager.hs) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
 	public static BlockReplacementType getBlockReplacementType(Player player, Block targetBlock)
 	{
 		BlockReplacementType blockType;
 
-		if(Checker.isRail(targetBlock))
+		if(checkBlockIfActive(targetBlock))
 		{
 			blockType = BlockReplacementType.RAILS;
 		}
-		else if(Checker.isIronBar(targetBlock))
+		else if(checkBlockIfActive(targetBlock))
 		{
 			blockType = BlockReplacementType.IRON_BARS;
+		}
+		else if(checkBlockIfActive(targetBlock))
+		{
+			blockType = BlockReplacementType.COMMAND_BLOCK;
+		}
+		else if(checkBlockIfActive(targetBlock))
+		{
+			blockType = BlockReplacementType.REDSTONE;
+		}
+		else if(checkBlockIfActive(targetBlock))
+		{
+			blockType = BlockReplacementType.SIGN;
 		}
 		// If Material is not valid
 		else {
@@ -145,11 +213,11 @@ public class Checker
 
 	public static String getBoolean(String input)
 	{
-		if(input.contains("true") || input.contains("allow")) {
+		if(input.contains("true") || input.contains("allow") || input.contains("yes")) {
 			return "true";
 		}
 
-		if(input.contains("false") || input.contains("deny")) {
+		if(input.contains("false") || input.contains("deny") || input.contains("no")) {
 			return "false";
 		}
 		return null;
@@ -211,8 +279,34 @@ public class Checker
 		for (Location blockLoc : railsLocsTemp) {
 			Block bl = Bukkit.getWorld(blockLoc.getWorld().getName()).getBlockAt(blockLoc);
 
-			if (Checker.isRail(bl) || Checker.isIronBar(bl)) {
-				railsLocs.add(blockLoc);
+			if (Checker.isRail(bl)) {
+				if (HideRailsManager.hr) {
+					railsLocs.add(blockLoc);
+				}
+			}
+
+			if (Checker.isIronBar(bl)) {
+				if (HideRailsManager.hb) {
+					railsLocs.add(blockLoc);
+				}
+			}
+
+			if (Checker.isCommandBlock(bl)) {
+				if (HideRailsManager.hc) {
+					railsLocs.add(blockLoc);
+				}
+			}
+
+			if (Checker.isRedstone(bl)) {
+				if (HideRailsManager.hd) {
+					railsLocs.add(blockLoc);
+				}
+			}
+
+			if (Checker.isSign(bl)) {
+				if (HideRailsManager.hs) {
+					railsLocs.add(blockLoc);
+				}
 			}
 		}
 

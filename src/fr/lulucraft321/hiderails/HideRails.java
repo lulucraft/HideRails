@@ -44,7 +44,6 @@ public class HideRails extends JavaPlugin
 	public static String getLanguage() { return language; }
 
 
-	//
 	private String path = "plugins/HideRails/Languages";
 	private File langFolder = new File(path);
 	private File config = new File("plugins/HideRails", "config.yml");
@@ -57,6 +56,11 @@ public class HideRails extends JavaPlugin
 	private FileConfiguration frLangConfig;
 	private FileConfiguration enLangConfig;
 	private FileConfiguration langConfig;
+
+	public FileConfiguration getHiddenRailsConfig() { return hiddenRailsConfig; }
+	public FileConfiguration getFrLangConfig() { return frLangConfig; }
+	public FileConfiguration getEnLangConfig() { return enLangConfig; }
+	public FileConfiguration getLangConfig() { return langConfig; }
 
 	public final String msgPath = "messages.";
 
@@ -73,7 +77,19 @@ public class HideRails extends JavaPlugin
 			saveConfig();
 		}
 		if(!configConf.contains("hideIronBars")) {
-			getConfig().set("hideIronBars", true);
+			getConfig().set("hideIronBars", false);
+			saveConfig();
+		}
+		if(!configConf.contains("hideCommandBlock")) {
+			getConfig().set("hideCommandBlock", false);
+			saveConfig();
+		}
+		if(!configConf.contains("hideRedstone")) {
+			getConfig().set("hideRedstone", false);
+			saveConfig();
+		}
+		if(!configConf.contains("hideSigns")) {
+			getConfig().set("hideSigns", false);
 			saveConfig();
 		}
 
@@ -121,6 +137,7 @@ public class HideRails extends JavaPlugin
 			frLangConfig.set(msgPath + "return_backup_success", "&2Sauvegarde restorée avec succès !");
 			frLangConfig.set(msgPath + "worldedit_not_installed", "&cLe plugin worldedit n'est pas installé sur le serveur !");
 			frLangConfig.set(msgPath + "worldedit_no_selection", "&cVous devez d'abord sélectionner une région avec worldedit !");
+			frLangConfig.set(msgPath + "display_hidden_blocks", "&2Vous avez %hide% le masquage des blocks pour vous !");
 
 			// Sauveguarde des modifs
 			try {
@@ -143,6 +160,7 @@ public class HideRails extends JavaPlugin
 			checkConfContains(frLangConfig, "return_backup_success", "&cSauvegarde restorée avec succès !");
 			checkConfContains(frLangConfig, "worldedit_not_installed", "&cLe plugin worldedit n'est pas installé sur le serveur !");
 			checkConfContains(frLangConfig, "worldedit_no_selection", "&cVous devez d'abord sélectionner une région avec worldedit !");
+			checkConfContains(frLangConfig, "display_hidden_blocks", "&2Vous avez %hide% le masquage des blocks pour vous !");
 
 			// Sauveguarde des modifs
 			try {
@@ -179,6 +197,7 @@ public class HideRails extends JavaPlugin
 			enLangConfig.set(msgPath + "return_backup_success", "&2successfully restored backup !");
 			enLangConfig.set(msgPath + "worldedit_not_installed", "&cWorldedit plugin is not installed on this server !");
 			enLangConfig.set(msgPath + "worldedit_no_selection", "&cYou must first select region with Worldedit !");
+			enLangConfig.set(msgPath + "display_hidden_blocks", "&2You have %hide% the hidden blocks for you !");
 
 			// Sauveguarde des modifs
 			try {
@@ -201,6 +220,7 @@ public class HideRails extends JavaPlugin
 			checkConfContains(enLangConfig, "return_backup_success", "&2successfully restored backup !");
 			checkConfContains(enLangConfig, "worldedit_not_installed", "&cWorldedit plugin is not installed on this server !");
 			checkConfContains(enLangConfig, "worldedit_no_selection", "&cYou must first select region with Worldedit !");
+			checkConfContains(enLangConfig, "display_hidden_blocks", "&2You have %hide% the hidden blocks for you !");
 
 			// Sauveguarde des modifs
 			try {
@@ -287,11 +307,6 @@ public class HideRails extends JavaPlugin
 			System.out.println("Erreur lors de la sauveguarde du fichier de configuration \"" + enLangConfig.getName().toString() + "\"");
 		}
 	}
-
-	public FileConfiguration getHiddenRailsConfig() { return hiddenRailsConfig; }
-	public FileConfiguration getFrLangConfig() { return frLangConfig; }
-	public FileConfiguration getEnLangConfig() { return enLangConfig; }
-	public FileConfiguration getLangConfig() { return langConfig; }
 	//
 
 
@@ -301,8 +316,8 @@ public class HideRails extends JavaPlugin
 		instance = this;
 		language = getConfig().getString("language");
 
-		HideRailsManager.hb = HideRails.getInstance().getConfig().getBoolean("hideIronBars");
-		HideRailsManager.hr = HideRails.getInstance().getConfig().getBoolean("hideRails");
+		// Init Enabled and Disabled blocksType to hide
+		HideRailsManager.initHideBlocksType();
 
 		setupConfig();
 		saveConfigs();

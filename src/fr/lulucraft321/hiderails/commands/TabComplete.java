@@ -21,7 +21,7 @@ import fr.lulucraft321.hiderails.utils.Checker;
 
 public class TabComplete implements TabCompleter
 {
-	private static final String[] COMMANDS1 = { "help", "reload", "hide", "hideselection", "unhideselection", "show", "unhide", "hideone", "unhideone", "waterprotection", "waterprotect", "return", "undo" }; // /hiderails "COMMANDS1"
+	private static final String[] COMMANDS1 = { "help", "reload", "hide", "hideselection", "unhideselection", "show", "unhide", "hideone", "unhideone", "waterprotection", "waterprotect", "display", "return", "undo" }; // /hiderails "COMMANDS1"
 	private static final String[] COMMANDS2 = { "hide", "hideselection", "unhideselection", "show", "unhide", "showone", "waterprotection", "waterprotect" }; // /hiderails "COMMANDS2" "materialType"
 	private static final String[] COMMANDS3 = { "waterprotection", "waterprotect" }; // /hiderails "COMMANDS3" "world" "value"
 

@@ -38,6 +38,7 @@ public class MessagesManager
 		Messages.RETURN_BACKUP_SUCCESS.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "return_backup_success"));
 		Messages.WORLDEDIT_NOT_INSTALLED.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "worldedit_not_installed"));
 		Messages.WORLDEDIT_NO_SELECTION.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "worldedit_no_selection"));
+		Messages.DISPLAY_HIDDEN_BLOCKS.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "display_hidden_blocks"));
 	}
 
 	public static void sendHelpPluginMessage(CommandSender sender)
@@ -66,21 +67,46 @@ public class MessagesManager
 
 	public static void sendPluginMessage(CommandSender sender, Messages messageType)
 	{
-		sender.sendMessage(PREFIX + ChatColor.translateAlternateColorCodes('&', messageType.getMessage()).replace("\\n", "\n"));
+		sender.sendMessage(getColoredMessage(messageType));
 	}
 
 	public static void sendRailChangeMessage(CommandSender sender, Messages messageType, String block)
 	{
-		sender.sendMessage(PREFIX + ChatColor.translateAlternateColorCodes('&', messageType.getMessage()).replace("\\n", "\n").replace("%blocktype%", block));
+		sender.sendMessage(getColoredMessage(messageType, block));
 	}
 
 	public static void sendAlreadyStatusMessage(CommandSender sender, Messages messageType, String worldName, boolean b)
 	{
-		sender.sendMessage(PREFIX + ChatColor.translateAlternateColorCodes('&', messageType.getMessage()).replace("\\n", "\n").replace("%world%", worldName).replace("%status%", String.valueOf(b)));
+		sendChangeStatusMessage(sender, messageType, worldName, b);
 	}
 
 	public static void sendChangeStatusMessage(CommandSender sender, Messages messageType, String worldName, boolean b)
 	{
-		sender.sendMessage(PREFIX + ChatColor.translateAlternateColorCodes('&', messageType.getMessage()).replace("\\n", "\n").replace("%world%", worldName).replace("%status%", String.valueOf(b)));
+		sender.sendMessage(getColoredMessage(messageType, worldName, b));
+	}
+
+	public static void sendDisplayChangeMessage(CommandSender sender, Messages messageType, boolean b) {
+		sender.sendMessage(getColoredMessage(messageType, b));
+	}
+
+
+	private static String getColoredMessage(Messages messageType)
+	{
+		return PREFIX + ChatColor.translateAlternateColorCodes('&', messageType.getMessage()).replace("\\n", "\n");
+	}
+
+	private static String getColoredMessage(Messages messageType, String block)
+	{
+		return getColoredMessage(messageType).replace("%blocktype%", block);
+	}
+
+	private static String getColoredMessage(Messages messageType, String worldName, boolean b)
+	{
+		return getColoredMessage(messageType).replace("%world%", worldName).replace("%status%", String.valueOf(b));
+	}
+
+	private static String getColoredMessage(Messages messageType, boolean b)
+	{
+		return getColoredMessage(messageType).replace("%hide%", String.valueOf(b));
 	}
 }

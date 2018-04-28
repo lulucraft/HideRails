@@ -5,8 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.bukkit.Bukkit;
-
 public class NMSClass
 {
 	private static String version;
@@ -37,7 +35,6 @@ public class NMSClass
 	 */
 	public static Class<?> getOBCClass(String className)
 	{
-		String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 		try {
 			return Class.forName("org.bukkit.craftbukkit." + version + "." + className);
 		} catch (ClassNotFoundException e) {

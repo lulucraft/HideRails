@@ -22,7 +22,8 @@ public enum Messages
 	NO_BACKUP("aucune sauveguarde"),
 	RETURN_BACKUP_SUCCESS("backup restaure avec succes !"),
 	WORLDEDIT_NOT_INSTALLED("le plugin worldedit n'est pas installé sur le serveur !"),
-	WORLDEDIT_NO_SELECTION("vous devez d'abord sélectionner un region avec worldedit !");
+	WORLDEDIT_NO_SELECTION("vous devez d'abord sélectionner un region avec worldedit !"),
+	DISPLAY_HIDDEN_BLOCKS("vous avez %status% le masquage des rails seulement poour vous");
 
 	private String message;
 

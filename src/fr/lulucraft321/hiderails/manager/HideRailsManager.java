@@ -25,11 +25,13 @@ import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.bukkit.selections.Selection;
 
-import fr.lulucraft321.hiderails.BlockChangeRunner;
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
 import fr.lulucraft321.hiderails.events.RedstoneInWaterEvents;
+import fr.lulucraft321.hiderails.reflection.BukkitNMS;
+import fr.lulucraft321.hiderails.runnables.BlockChangeRunner;
+import fr.lulucraft321.hiderails.runnables.PlayerDisplayBlocks;
 import fr.lulucraft321.hiderails.utils.Checker;
 import fr.lulucraft321.hiderails.utils.MaterialData;
 import fr.lulucraft321.hiderails.utils.Messages;
@@ -42,13 +44,46 @@ public class HideRailsManager
 	// List of HiddenRails per world
 	public static List<HiddenRailsWorld> rails = new ArrayList<>();
 
+	// List of players who unhide hidden blocks
+	private static List<Player> displayBlocksPlayers = new ArrayList<>();
+	public static List<Player> getPlayersWhoDisplayedBlocks() { return displayBlocksPlayers; }
+	public static boolean isInPlayerWhoDisplayedBlocks(Player p) { return displayBlocksPlayers.contains(p); }
+
 	// Path to hiddenRails in HiddenRails.yml
 	public static String path = "hiddenRails";
 
-	// HideIronBars enable
+	/**
+	 * HideIronBars enable
+	 */
 	public static boolean hb;
-	// HideRails enable
+	/**
+	 * HideRails enable
+	 */
 	public static boolean hr;
+	/**
+	 * HideCommandsBlock enable
+	 */
+	public static boolean hc;
+	/**
+	 * HideRedstone enable
+	 */
+	public static boolean hd;
+	/**
+	 * HideSigns enable
+	 */
+	public static boolean hs;
+
+
+	/*
+	 * Enabled or Disabled hide blockType
+	 */
+	public static void initHideBlocksType() {
+		HideRailsManager.hb = HideRails.getInstance().getConfig().getBoolean("hideIronBars");
+		HideRailsManager.hr = HideRails.getInstance().getConfig().getBoolean("hideRails");
+		HideRailsManager.hc = HideRails.getInstance().getConfig().getBoolean("hideCommandBlock");
+		HideRailsManager.hd = HideRails.getInstance().getConfig().getBoolean("hideRedstone");
+		HideRailsManager.hs = HideRails.getInstance().getConfig().getBoolean("hideSigns");
+	}
 
 
 	/*
@@ -80,8 +115,8 @@ public class HideRailsManager
 					new HiddenRailsWorld(world, hiddenRails);
 		}
 
-		// Activation du changement des rails ou des barreaux
-		if (hr || hb) {
+		// Activation du changement des rails, des barreaux, des commandBlock ou de la redstone
+		if (hr || hb || hc || hd || hs) {
 			new BlockChangeRunner().runTaskTimer(HideRails.getInstance(), 20 * HideRails.getInstance().getConfig().getInt("hideRails.time"), 100L);
 		}
 	}
@@ -135,12 +170,47 @@ public class HideRailsManager
 
 
 	/*
+	 * Display hidden blocks (admin only)
+	 */
+	public static void displayBlocks(Player p)
+	{
+		if (HideRailsManager.displayBlocksPlayers.contains(p)) {
+			HideRailsManager.displayBlocksPlayers.remove(p);
+		} else {
+			HideRailsManager.displayBlocksPlayers.add(p);
+
+			// Spawn particle for see hidden blocks for others players
+			if (!PlayerDisplayBlocks.run) {
+				new PlayerDisplayBlocks().runTaskTimer(HideRails.getInstance(), 1L, 32L);
+				PlayerDisplayBlocks.run = true;
+			}
+
+			// Unhide hiddenBlocks only for player
+			String worldName = p.getWorld().getName();
+			for (HiddenRailsWorld hWorld : HideRailsManager.rails)
+			{
+				for (HiddenRail rail : hWorld.getHiddenRails())
+				{
+					Block b = Bukkit.getWorld(worldName).getBlockAt(rail.getLocation());
+					Location loc = b.getLocation();
+					@SuppressWarnings("deprecation")
+					MaterialData mats = new MaterialData(b.getType(), b.getData());
+					BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+				}
+			}
+		}
+
+		MessagesManager.sendDisplayChangeMessage(p, Messages.DISPLAY_HIDDEN_BLOCKS, HideRailsManager.displayBlocksPlayers.contains(p));
+	}
+
+
+	/*
 	 * UnHide Rails with command
 	 */
 	@SuppressWarnings("deprecation")
 	public static void removeBlocks(Player player, Block targetBlock, boolean backup, boolean single)
 	{
-		if (!Checker.isRail(targetBlock) && !Checker.isIronBar(targetBlock)) {
+		if (!Checker.isRail(targetBlock) && !Checker.isIronBar(targetBlock) && !Checker.isCommandBlock(targetBlock) && !Checker.isRedstone(targetBlock) && !Checker.isSign(targetBlock)) {
 			MessagesManager.sendPluginMessage(player, Messages.RAIL_ERROR);
 			return;
 		}
@@ -211,7 +281,7 @@ public class HideRailsManager
 	{
 		Block targetBlock = player.getTargetBlock((Set<Material>) null, 25);
 
-		if (!Checker.isRail(targetBlock) && !Checker.isIronBar(targetBlock)) {
+		if (!Checker.isRail(targetBlock) && !Checker.isIronBar(targetBlock) && !Checker.isCommandBlock(targetBlock) && !Checker.isRedstone(targetBlock) && !Checker.isSign(targetBlock)) {
 			MessagesManager.sendPluginMessage(player, Messages.RAIL_ERROR);
 			return;
 		}
@@ -265,6 +335,9 @@ public class HideRailsManager
 				// Spawn particle for see where is replacement
 				if (blockType == BlockReplacementType.RAILS) world.spawnParticle(Particle.HEART, loc, 5);
 				else if (blockType == BlockReplacementType.IRON_BARS) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
+				else if (blockType == BlockReplacementType.COMMAND_BLOCK) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
+				else if (blockType == BlockReplacementType.REDSTONE) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
+				else if (blockType == BlockReplacementType.SIGN) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
 			}
 		}
 
