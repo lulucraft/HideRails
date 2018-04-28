@@ -61,6 +61,7 @@ public class MessagesManager
 		sender.sendMessage(weColor1 + "§l » " + weColor2 + "/hiderails hideselection" + required);
 		sender.sendMessage(weColor1 + "§l » " + weColor2 + "/hiderails unhideselection" + required);
 		sender.sendMessage("\n" + "§f§l » §6/hiderails return");
+		sender.sendMessage("§f§l » §6/hiderails display");
 		sender.sendMessage("§f§l » §6/hiderails waterprotection \"§oworld§6\" \"§ovalue§6\"");
 		sender.sendMessage("\n" + "§8§l§m-----------------------------------\n§r§o Plugin by lulucraft321");
 	}
