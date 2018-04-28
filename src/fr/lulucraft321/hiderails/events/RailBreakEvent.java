@@ -28,7 +28,7 @@ public class RailBreakEvent implements Listener
 		Block b = e.getBlock();
 
 		if(b == null) return;
-		if(!Checker.isRail(b) && !Checker.isIronBar(b)) return;
+		if(!Checker.isRail(b) && !Checker.isIronBar(b) && !Checker.isCommandBlock(b) && !Checker.isRedstone(b) && !Checker.isSign(b)) return;
 		String worldName = b.getWorld().getName();
 		if(!HideRails.getInstance().getHiddenRailsConfig().contains(HideRailsManager.path + "." + worldName)) return;
 		if(HideRailsManager.getRailsToWorld(worldName) == null) return;
