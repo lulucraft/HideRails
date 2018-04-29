@@ -10,7 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import fr.lulucraft321.hiderails.HideRails;
-import fr.lulucraft321.hiderails.utils.Messages;
+import fr.lulucraft321.hiderails.enums.Messages;
 
 public class MessagesManager
 {
@@ -39,6 +39,7 @@ public class MessagesManager
 		Messages.WORLDEDIT_NOT_INSTALLED.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "worldedit_not_installed"));
 		Messages.WORLDEDIT_NO_SELECTION.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "worldedit_no_selection"));
 		Messages.DISPLAY_HIDDEN_BLOCKS.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "display_hidden_blocks"));
+		Messages.INVALID_PLAYER.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "invalid_player"));
 	}
 
 	public static void sendHelpPluginMessage(CommandSender sender)
@@ -63,6 +64,7 @@ public class MessagesManager
 		sender.sendMessage("\n" + "§f§l » §6/hiderails return");
 		sender.sendMessage("§f§l » §6/hiderails display");
 		sender.sendMessage("§f§l » §6/hiderails waterprotection \"§oworld§6\" \"§ovalue§6\"");
+		sender.sendMessage("§7§l » §6§o/hiderails display [\"player\"] §8(Command Block only)");
 		sender.sendMessage("\n" + "§8§l§m-----------------------------------\n§r§o Plugin by lulucraft321");
 	}
 

@@ -20,8 +20,8 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 
 import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
+import fr.lulucraft321.hiderails.enums.Messages;
 import fr.lulucraft321.hiderails.utils.Checker;
-import fr.lulucraft321.hiderails.utils.Messages;
 import fr.lulucraft321.hiderails.utils.backuputility.BlocksBackup;
 import fr.lulucraft321.hiderails.utils.backuputility.PlayerCommandBackup;
 

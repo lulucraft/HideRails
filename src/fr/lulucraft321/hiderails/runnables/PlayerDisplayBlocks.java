@@ -38,8 +38,10 @@ public class PlayerDisplayBlocks extends BukkitRunnable
 				for (HiddenRail rail : hWorld.getHiddenRails())
 				{
 					Location loc = rail.getLocation();
+					Location loc1 = loc.add(0, 0.3, 0);
 					try {
-						BukkitNMS.summonParticle(p, loc, ParticleName.VILLAGER_ANGRY, 1, 1);
+						BukkitNMS.summonParticle(p, loc1, ParticleName.VILLAGER_ANGRY, 1, 1);
+						loc1.subtract(0, 0.3, 0);
 					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
 						e.printStackTrace();
 					}

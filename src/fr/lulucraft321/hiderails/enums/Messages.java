@@ -4,7 +4,7 @@
  *
  */
 
-package fr.lulucraft321.hiderails.utils;
+package fr.lulucraft321.hiderails.enums;
 
 public enum Messages
 {
@@ -23,7 +23,8 @@ public enum Messages
 	RETURN_BACKUP_SUCCESS("backup restaure avec succes !"),
 	WORLDEDIT_NOT_INSTALLED("le plugin worldedit n'est pas installé sur le serveur !"),
 	WORLDEDIT_NO_SELECTION("vous devez d'abord sélectionner un region avec worldedit !"),
-	DISPLAY_HIDDEN_BLOCKS("vous avez %status% le masquage des rails seulement poour vous");
+	DISPLAY_HIDDEN_BLOCKS("vous avez %status% le masquage des rails seulement poour vous"),
+	INVALID_PLAYER("le joueur entré est invalide");
 
 	private String message;
 

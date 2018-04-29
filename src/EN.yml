@@ -15,3 +15,4 @@ messages:
   worldedit_not_installed: '&cWorldedit plugin is not installed on this server !'
   worldedit_no_selection: '&cYou must first select region with Worldedit !'
   display_hidden_blocks: '&2You have %hide% the hidden blocks for you !'
+  invalid_player: '&cThe player cannot be found !'

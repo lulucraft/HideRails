@@ -28,13 +28,13 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
+import fr.lulucraft321.hiderails.enums.Messages;
 import fr.lulucraft321.hiderails.events.RedstoneInWaterEvents;
 import fr.lulucraft321.hiderails.reflection.BukkitNMS;
 import fr.lulucraft321.hiderails.runnables.BlockChangeRunner;
 import fr.lulucraft321.hiderails.runnables.PlayerDisplayBlocks;
 import fr.lulucraft321.hiderails.utils.Checker;
 import fr.lulucraft321.hiderails.utils.MaterialData;
-import fr.lulucraft321.hiderails.utils.Messages;
 import fr.lulucraft321.hiderails.utils.backuputility.BlocksBackup;
 import fr.lulucraft321.hiderails.utils.railsdata.HiddenRail;
 import fr.lulucraft321.hiderails.utils.railsdata.HiddenRailsWorld;
@@ -45,7 +45,7 @@ public class HideRailsManager
 	public static List<HiddenRailsWorld> rails = new ArrayList<>();
 
 	// List of players who unhide hidden blocks
-	private static List<Player> displayBlocksPlayers = new ArrayList<>();
+	public static List<Player> displayBlocksPlayers = new ArrayList<>();
 	public static List<Player> getPlayersWhoDisplayedBlocks() { return displayBlocksPlayers; }
 	public static boolean isInPlayerWhoDisplayedBlocks(Player p) { return displayBlocksPlayers.contains(p); }
 
@@ -73,6 +73,11 @@ public class HideRailsManager
 	 */
 	public static boolean hs;
 
+	/**
+	 * Particles who spawned in hiddenBlocks if player execute /hr display command
+	 */
+	public static boolean hiddingBlocksParticles;
+
 
 	/*
 	 * Enabled or Disabled hide blockType
@@ -83,6 +88,8 @@ public class HideRailsManager
 		HideRailsManager.hc = HideRails.getInstance().getConfig().getBoolean("hideCommandBlock");
 		HideRailsManager.hd = HideRails.getInstance().getConfig().getBoolean("hideRedstone");
 		HideRailsManager.hs = HideRails.getInstance().getConfig().getBoolean("hideSigns");
+
+		HideRailsManager.hiddingBlocksParticles = HideRails.getInstance().getConfig().getBoolean("hiddingBlocksParticles");
 	}
 
 
@@ -144,6 +151,17 @@ public class HideRailsManager
 		return null;
 	}
 
+	public static HiddenRail getHiddenRail(Location location)
+	{
+		for (HiddenRail hRail : getRailsToWorld(location.getWorld().getName())) {
+			if (hRail.getLocation().equals(location)) {
+				return hRail;
+			}
+		}
+
+		return null;
+	}
+
 
 	/*
 	 * Water redstone protection
@@ -181,8 +199,11 @@ public class HideRailsManager
 
 			// Spawn particle for see hidden blocks for others players
 			if (!PlayerDisplayBlocks.run) {
-				new PlayerDisplayBlocks().runTaskTimer(HideRails.getInstance(), 1L, 32L);
-				PlayerDisplayBlocks.run = true;
+				// If particles enabled
+				if (HideRailsManager.hiddingBlocksParticles) {
+					new PlayerDisplayBlocks().runTaskTimer(HideRails.getInstance(), 1L, 32L);
+					PlayerDisplayBlocks.run = true;
+				}
 			}
 
 			// Unhide hiddenBlocks only for player

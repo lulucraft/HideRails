@@ -21,11 +21,11 @@ import org.bukkit.entity.Player;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 
 import fr.lulucraft321.hiderails.HideRails;
+import fr.lulucraft321.hiderails.enums.Messages;
 import fr.lulucraft321.hiderails.manager.HideRailsManager;
 import fr.lulucraft321.hiderails.manager.MessagesManager;
 import fr.lulucraft321.hiderails.manager.PlayerCommandBackupManager;
 import fr.lulucraft321.hiderails.utils.Checker;
-import fr.lulucraft321.hiderails.utils.Messages;
 
 public class HideRailsCommand implements CommandExecutor
 {
@@ -40,7 +40,7 @@ public class HideRailsCommand implements CommandExecutor
 
 		if (args.length == 1)
 		{
-			if(args[0].equalsIgnoreCase("reload"))
+			if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rel") || args[0].equalsIgnoreCase("rl"))
 			{
 				Bukkit.getServer().getScheduler().cancelTasks(HideRails.getInstance());
 
@@ -68,12 +68,15 @@ public class HideRailsCommand implements CommandExecutor
 				{
 					if(args.length == 1)
 					{
+						/* Hide/Show hidden blocks (only for player p) */
 						if(args[0].equalsIgnoreCase("display"))
 						{
 							HideRailsManager.displayBlocks(p);
 							return true;
 						}
 
+
+						/* restore backup */
 						if(args[0].equalsIgnoreCase("return") || args[0].equalsIgnoreCase("undo"))
 						{
 							PlayerCommandBackupManager.restoreBackupRails(p);
@@ -124,7 +127,6 @@ public class HideRailsCommand implements CommandExecutor
 
 					if(args.length == 2)
 					{
-
 						/* Hide Rails with WorldEdit selection */
 						if(args[0].equalsIgnoreCase("hideselect") || args[0].equalsIgnoreCase("hideselection"))
 						{
@@ -197,6 +199,22 @@ public class HideRailsCommand implements CommandExecutor
 		}
 		else
 		{
+			if (args.length == 2)
+			{
+				/* Hide/Show hidden blocks (only for player p) */
+				if(args[0].equalsIgnoreCase("display"))
+				{
+					Player pl = Bukkit.getPlayer(String.valueOf(args[1]));
+					if (pl != null) {
+						HideRailsManager.displayBlocks(pl);
+						MessagesManager.sendDisplayChangeMessage(sender, Messages.DISPLAY_HIDDEN_BLOCKS, HideRailsManager.displayBlocksPlayers.contains(pl));
+					} else {
+						MessagesManager.sendPluginMessage(sender, Messages.INVALID_PLAYER);
+					}
+					return true;
+				}
+			}
+
 			MessagesManager.sendPluginMessage(sender, Messages.SENDER_TYPE_ERROR);
 		}
 

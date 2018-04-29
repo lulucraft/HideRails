@@ -52,9 +52,9 @@ public class BukkitNMS
 			block_change_pos_field.setAccessible(true);
 
 			// Get "IBlockData fromLegacy(int i)" method
-			fromLegacyData_method = block_class.getMethod("fromLegacyData", int.class);
+			fromLegacyData_method = NMSClass.getMethod(block_class, "fromLegacyData", int.class);
 			// Get Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
-			craftMagicNumbers_method = craftMagicNumbersClass.getMethod("getBlock", Material.class);
+			craftMagicNumbers_method = NMSClass.getMethod(craftMagicNumbersClass, "getBlock", Material.class);
 
 			block_field = NMSClass.getField(block_change_class, "block");
 			// ------------------------------------------------------------------------------------------------------------------- //
@@ -68,7 +68,7 @@ public class BukkitNMS
 						enum_particle_class, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class, int[].class);
 
 				// Get Method a() in Paticle Class
-				particles_method = enum_particle_class.getDeclaredMethod("a", String.class);
+				particles_method = NMSClass.getMethod(enum_particle_class, "a", String.class);
 			} catch (NoSuchMethodException | SecurityException e) {
 				e.printStackTrace();
 			}
@@ -109,9 +109,9 @@ public class BukkitNMS
 			 * Replace "CraftMagicNumbers.getBlock(material).fromLegacyData(data)"
 			 */
 			// Invoke Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
-			Object craftMagicNumber = craftMagicNumbers_method.invoke(fromLegacyData_method, material);
+			Object craftMagicNumber = NMSClass.invokeMethod(craftMagicNumbers_method, fromLegacyData_method, material);
 			// Get final IBlockData
-			Object block_data = fromLegacyData_method.invoke(craftMagicNumber, data);
+			Object block_data = NMSClass.invokeMethod(fromLegacyData_method, craftMagicNumber, data);
 
 
 			/*
@@ -151,7 +151,7 @@ public class BukkitNMS
 		Object packet =
 				NMSClass.newInstance(
 						packet_particles_constructor,
-						particles_method.invoke(enum_particle_class, particleName.getParticleName()),
+						NMSClass.invokeMethod(particles_method, enum_particle_class, particleName.getParticleName()),
 						true,
 						(float) loc.getX(), (float) loc.getY(), (float) loc.getZ(),
 						0f, 0f, 0f,

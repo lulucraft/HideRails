@@ -51,7 +51,7 @@ public class TabComplete implements TabCompleter
 					}
 				}
 
-				if(args.length == 2)
+				if (args.length == 2)
 				{
 					for(String list : commands2)
 					{
@@ -70,6 +70,14 @@ public class TabComplete implements TabCompleter
 								completions.add(world.getName());
 							}
 							return completions;
+						}
+					}
+
+					if (args[0].startsWith("display"))
+					{
+						for (Player pls : Bukkit.getOnlinePlayers())
+						{
+							completions.add(pls.getName());
 						}
 					}
 				}

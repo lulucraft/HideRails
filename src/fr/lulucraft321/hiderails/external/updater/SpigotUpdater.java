@@ -1,4 +1,4 @@
-package fr.lulucraft321.hiderails.updater;
+package fr.lulucraft321.hiderails.external.updater;
 
 import java.io.BufferedReader;
 import java.io.File;
