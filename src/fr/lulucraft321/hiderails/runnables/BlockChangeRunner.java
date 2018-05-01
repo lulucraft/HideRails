@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.lulucraft321.hiderails.HideRails;
-import fr.lulucraft321.hiderails.manager.HideRailsManager;
+import fr.lulucraft321.hiderails.managers.HideRailsManager;
 import fr.lulucraft321.hiderails.reflection.BukkitNMS;
 import fr.lulucraft321.hiderails.utils.MaterialData;
 import fr.lulucraft321.hiderails.utils.railsdata.HiddenRail;

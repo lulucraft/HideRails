@@ -19,10 +19,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 
-import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.Messages;
-import fr.lulucraft321.hiderails.manager.HideRailsManager;
-import fr.lulucraft321.hiderails.manager.MessagesManager;
+import fr.lulucraft321.hiderails.managers.FileConfigurationManager;
+import fr.lulucraft321.hiderails.managers.HideRailsManager;
+import fr.lulucraft321.hiderails.managers.MessagesManager;
 import fr.lulucraft321.hiderails.reflection.BukkitNMS;
 import fr.lulucraft321.hiderails.utils.Checker;
 import fr.lulucraft321.hiderails.utils.railsdata.HiddenRail;
@@ -42,7 +42,7 @@ public class RailBreakEvent implements Listener
 		if (b == null) return;
 		if (!Checker.isRail(b) && !Checker.isIronBar(b) && !Checker.isCommandBlock(b) && !Checker.isRedstone(b) && !Checker.isSign(b)) return;
 		String worldName = b.getWorld().getName();
-		if (!HideRails.getInstance().getHiddenRailsConfig().contains(HideRailsManager.path + "." + worldName)) return;
+		if (!FileConfigurationManager.getHiddenRailsConfig().contains(HideRailsManager.path + "." + worldName)) return;
 		if (HideRailsManager.getRailsToWorld(worldName) == null) return;
 
 		final BlockFace[] faces = new BlockFace[]{ BlockFace.UP, BlockFace.DOWN, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST };

@@ -5,7 +5,7 @@
  * @author lulucraft321
  */
 
-package fr.lulucraft321.hiderails.manager;
+package fr.lulucraft321.hiderails.managers;
 
 import java.util.ArrayList;
 import java.util.List;

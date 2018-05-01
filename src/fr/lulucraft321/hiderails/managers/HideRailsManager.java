@@ -4,7 +4,7 @@
  *
  */
 
-package fr.lulucraft321.hiderails.manager;
+package fr.lulucraft321.hiderails.managers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,7 +98,7 @@ public class HideRailsManager
 	 */
 	public static void loadHideRails()
 	{
-		Configuration config = HideRails.getInstance().getHiddenRailsConfig();
+		Configuration config = FileConfigurationManager.getHiddenRailsConfig();
 
 		if (config.getConfigurationSection(path) == null) return;
 
@@ -337,7 +337,7 @@ public class HideRailsManager
 
 		// Stockage de tous les rails serialisés du monde worldName
 		List<String> hiddenRails = new ArrayList<>();
-		hiddenRails = HideRails.getInstance().getHiddenRailsConfig().getStringList(path + "." + worldName);
+		hiddenRails = FileConfigurationManager.getHiddenRailsConfig().getStringList(path + "." + worldName);
 		List<Location> hiddenRailsLocs = new ArrayList<>();
 
 		for (String locStr : hiddenRails) {
@@ -409,7 +409,7 @@ public class HideRailsManager
 
 		// Stockage de tous les rails serialisés du monde worldName
 		List<String> hiddenRails = new ArrayList<>();
-		hiddenRails = HideRails.getInstance().getHiddenRailsConfig().getStringList(path + "." + worldName);
+		hiddenRails = FileConfigurationManager.getHiddenRailsConfig().getStringList(path + "." + worldName);
 		List<Location> hiddenRailsLocs = new ArrayList<>();
 
 		for (String locStr : hiddenRails) {
@@ -523,13 +523,13 @@ public class HideRailsManager
 		List<HiddenRail> railsList = new ArrayList<>();
 		railsList = railsWorld.getHiddenRails();
 		List<String> railsLocs = new ArrayList<>();
-		HideRails.getInstance().getHiddenRailsConfig().options().copyDefaults(true);
+		FileConfigurationManager.getHiddenRailsConfig().options().copyDefaults(true);
 
 		for (HiddenRail rails : railsList) {
 			railsLocs.add(LocationsManager.serialize(rails.getLocation()) + ";" + rails.getMaterial() + ";" + rails.getData());
 		}
 
-		HideRails.getInstance().getHiddenRailsConfig().set(path + "." + worldName, railsLocs);
-		HideRails.getInstance().saveConfigs();
+		FileConfigurationManager.getHiddenRailsConfig().set(path + "." + worldName, railsLocs);
+		FileConfigurationManager.saveConfigs();
 	}
 }

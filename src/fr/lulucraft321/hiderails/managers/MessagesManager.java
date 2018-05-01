@@ -4,7 +4,7 @@
  *
  */
 
-package fr.lulucraft321.hiderails.manager;
+package fr.lulucraft321.hiderails.managers;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -18,28 +18,28 @@ public class MessagesManager
 	private static final String MSG_PATH;
 
 	static {
-		MSG_PATH = HideRails.getInstance().msgPath;
+		MSG_PATH = FileConfigurationManager.msgPath;
 	}
 
 	public static void loadAllMessages()
 	{
-		Messages.SENDER_TYPE_ERROR.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "sender_type_error"));
-		Messages.PLAYER_NO_ENOUGH_PERMISSION.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "player_no_enough_permission"));
-		Messages.MATERIAL_TYPE_ERROR.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "material_type_error"));
-		Messages.SUCCESS_CHANGE_RAIL.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "rail_success_change"));
-		Messages.SUCCESS_BREAK_RAIL.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "rail_success_break"));
-		Messages.SUCCESS_UNHIDE_RAIL.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "rail_success_unhide"));
-		Messages.RAIL_ERROR.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "rail_error"));
-		Messages.INVALID_WORLDNAME.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "invalid_worldname"));
-		Messages.WATER_PROTECTION_STATUS_ALREADY.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "water_protection_status_already"));
-		Messages.SUCCESS_CHANGE_WATER_PROTECTION_STATUS.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "water_protection_status_success_change"));
-		Messages.SUCCESS_RELOAD.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "plugin_success_reloaded"));
-		Messages.NO_BACKUP.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "no_backup"));
-		Messages.RETURN_BACKUP_SUCCESS.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "return_backup_success"));
-		Messages.WORLDEDIT_NOT_INSTALLED.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "worldedit_not_installed"));
-		Messages.WORLDEDIT_NO_SELECTION.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "worldedit_no_selection"));
-		Messages.DISPLAY_HIDDEN_BLOCKS.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "display_hidden_blocks"));
-		Messages.INVALID_PLAYER.setMessage(HideRails.getInstance().getLangConfig().getString(MSG_PATH + "invalid_player"));
+		Messages.SENDER_TYPE_ERROR.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "sender_type_error"));
+		Messages.PLAYER_NO_ENOUGH_PERMISSION.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "player_no_enough_permission"));
+		Messages.MATERIAL_TYPE_ERROR.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "material_type_error"));
+		Messages.SUCCESS_CHANGE_RAIL.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "rail_success_change"));
+		Messages.SUCCESS_BREAK_RAIL.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "rail_success_break"));
+		Messages.SUCCESS_UNHIDE_RAIL.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "rail_success_unhide"));
+		Messages.RAIL_ERROR.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "rail_error"));
+		Messages.INVALID_WORLDNAME.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "invalid_worldname"));
+		Messages.WATER_PROTECTION_STATUS_ALREADY.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "water_protection_status_already"));
+		Messages.SUCCESS_CHANGE_WATER_PROTECTION_STATUS.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "water_protection_status_success_change"));
+		Messages.SUCCESS_RELOAD.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "plugin_success_reloaded"));
+		Messages.NO_BACKUP.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "no_backup"));
+		Messages.RETURN_BACKUP_SUCCESS.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "return_backup_success"));
+		Messages.WORLDEDIT_NOT_INSTALLED.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "worldedit_not_installed"));
+		Messages.WORLDEDIT_NO_SELECTION.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "worldedit_no_selection"));
+		Messages.DISPLAY_HIDDEN_BLOCKS.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "display_hidden_blocks"));
+		Messages.INVALID_PLAYER.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "invalid_player"));
 	}
 
 	public static void sendHelpPluginMessage(CommandSender sender)

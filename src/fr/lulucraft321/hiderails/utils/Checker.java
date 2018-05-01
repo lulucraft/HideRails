@@ -22,8 +22,8 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
 import fr.lulucraft321.hiderails.enums.Messages;
-import fr.lulucraft321.hiderails.manager.HideRailsManager;
-import fr.lulucraft321.hiderails.manager.MessagesManager;
+import fr.lulucraft321.hiderails.managers.HideRailsManager;
+import fr.lulucraft321.hiderails.managers.MessagesManager;
 
 public class Checker
 {

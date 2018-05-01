@@ -5,7 +5,7 @@
  * @author ProCZ
  */
 
-package fr.lulucraft321.hiderails.manager;
+package fr.lulucraft321.hiderails.managers;
 
 import java.util.HashMap;
 import java.util.Map.Entry;

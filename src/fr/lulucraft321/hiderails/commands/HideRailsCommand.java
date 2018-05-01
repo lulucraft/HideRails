@@ -22,9 +22,10 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.Messages;
-import fr.lulucraft321.hiderails.manager.HideRailsManager;
-import fr.lulucraft321.hiderails.manager.MessagesManager;
-import fr.lulucraft321.hiderails.manager.PlayerCommandBackupManager;
+import fr.lulucraft321.hiderails.managers.FileConfigurationManager;
+import fr.lulucraft321.hiderails.managers.HideRailsManager;
+import fr.lulucraft321.hiderails.managers.MessagesManager;
+import fr.lulucraft321.hiderails.managers.PlayerCommandBackupManager;
 import fr.lulucraft321.hiderails.utils.Checker;
 
 public class HideRailsCommand implements CommandExecutor
@@ -46,8 +47,8 @@ public class HideRailsCommand implements CommandExecutor
 
 				HideRails.getInstance().reloadConfig();
 				HideRails.getInstance().saveConfig();
-				HideRails.getInstance().setupConfig();
-				HideRails.getInstance().saveConfigs();
+				FileConfigurationManager.setupConfig();
+				FileConfigurationManager.saveConfigs();
 
 				HideRailsManager.initHideBlocksType();
 				HideRailsManager.loadHideRails();
@@ -76,7 +77,7 @@ public class HideRailsCommand implements CommandExecutor
 						}
 
 
-						/* restore backup */
+						/* Restore backup */
 						if(args[0].equalsIgnoreCase("return") || args[0].equalsIgnoreCase("undo"))
 						{
 							PlayerCommandBackupManager.restoreBackupRails(p);

@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.bukkit.World;
 
-import fr.lulucraft321.hiderails.manager.HideRailsManager;
+import fr.lulucraft321.hiderails.managers.HideRailsManager;
 
 public class HiddenRailsWorld
 {
