@@ -180,6 +180,9 @@ public class BukkitNMS
 	private static void sendPacket(Player player, Object packet) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException
 	{
 		Object handle = NMSClass.getMethod(player.getClass(), "getHandle").invoke(player);
+		// Stop console errors (pending player connection)
+		if (!player.isOnline())
+			return;
 		Object playerConnection = NMSClass.getField(
 				handle.getClass(),
 				"playerConnection").get(handle);
