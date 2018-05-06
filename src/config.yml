@@ -1,5 +1,9 @@
 language: EN
 hideRails: true
-hideIronBars: true
+hideIronBars: false
+hideCommandBlock: false
+hideRedstone: false
+hideSigns: false
+hiddingBlocksParticles: false
 redstoneWaterProtection:
   _all_: true
