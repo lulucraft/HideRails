@@ -40,6 +40,8 @@ public class MessagesManager
 		Messages.WORLDEDIT_NO_SELECTION.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "worldedit_no_selection"));
 		Messages.DISPLAY_HIDDEN_BLOCKS.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "display_hidden_blocks"));
 		Messages.INVALID_PLAYER.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "invalid_player"));
+		Messages.UPDATE_FOUND.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "update_found"));
+		Messages.KICK_SPAM_BLOCK.setMessage(FileConfigurationManager.getLangConfig().getString(MSG_PATH + "kick_spam_hidden_block"));
 	}
 
 	public static void sendHelpPluginMessage(CommandSender sender)
@@ -55,11 +57,11 @@ public class MessagesManager
 		sender.sendMessage("\n" + "§8§l§m--------------§8§l[§6Hide§7Rails§8§l]§8§l§m--------------");
 		sender.sendMessage("\n" + "§f§l » §6/hiderails reload");
 		sender.sendMessage("§f§l » §6/hiderails help");
-		sender.sendMessage("\n" + "§f§l » §6/hiderails hideone \"§oblock§6\"");
-		sender.sendMessage("§f§l » §6/hiderails hide \"§oblock§6\"");
+		sender.sendMessage("\n" + "§f§l » §6/hiderails hideone \"§oblock:data§6\"");
+		sender.sendMessage("§f§l » §6/hiderails hide \"§oblock:data§6\"");
 		sender.sendMessage("§f§l » §6/hiderails unhideone");
 		sender.sendMessage("§f§l » §6/hiderails unhide");
-		sender.sendMessage(weColor1 + "§l » " + weColor2 + "/hiderails hideselection" + required);
+		sender.sendMessage(weColor1 + "§l » " + weColor2 + "/hiderails hideselection \"block:data\"" + required);
 		sender.sendMessage(weColor1 + "§l » " + weColor2 + "/hiderails unhideselection" + required);
 		sender.sendMessage("\n" + "§f§l » §6/hiderails return");
 		sender.sendMessage("§f§l » §6/hiderails display");
@@ -88,28 +90,29 @@ public class MessagesManager
 		sender.sendMessage(getColoredMessage(messageType, worldName, b));
 	}
 
-	public static void sendDisplayChangeMessage(CommandSender sender, Messages messageType, boolean b) {
+	public static void sendDisplayChangeMessage(CommandSender sender, Messages messageType, boolean b)
+	{
 		sender.sendMessage(getColoredMessage(messageType, b));
 	}
 
 
-	private static String getColoredMessage(Messages messageType)
-	{
-		return PREFIX + ChatColor.translateAlternateColorCodes('&', messageType.getMessage()).replace("\\n", "\n");
+	public static String getColoredMessage(Messages messageType) {
+		return PREFIX + ChatColor.translateAlternateColorCodes('&', messageType.getMessage())
+		.replace("\\n", "\n")
+		.replace("%link%", "https://www.spigotmc.org/resources/55158/")
+		.replace("%pluginlink%", "https://www.spigotmc.org/resources/55158/")
+		.replace("%plugin_link%", "https://www.spigotmc.org/resources/55158/");
 	}
 
-	private static String getColoredMessage(Messages messageType, String block)
-	{
+	private static String getColoredMessage(Messages messageType, String block) {
 		return getColoredMessage(messageType).replace("%blocktype%", block);
 	}
 
-	private static String getColoredMessage(Messages messageType, String worldName, boolean b)
-	{
+	private static String getColoredMessage(Messages messageType, String worldName, boolean b) {
 		return getColoredMessage(messageType).replace("%world%", worldName).replace("%status%", String.valueOf(b));
 	}
 
-	private static String getColoredMessage(Messages messageType, boolean b)
-	{
+	private static String getColoredMessage(Messages messageType, boolean b) {
 		return getColoredMessage(messageType).replace("%hide%", String.valueOf(b));
 	}
 }

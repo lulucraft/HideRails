@@ -1,5 +1,30 @@
+# ############################################################ #
+#                                                              #
+#               Plugin HideRails by lulucraft321               #
+#                                                              #
+# ############################################################ #
+
+# Language of all messages in plugin
+# You can create your custom language (copy and paste existing language file and remake it)
 language: EN
+
+# Enable block hidding
 hideRails: true
-hideIronBars: true
+hideIronBars: false
+hideCommandBlock: false
+hideRedstone: false
+hideSigns: false
+
+# Particle who spawn in hidden-blocks if player execute /hr display command
+hiddingBlocksParticles: false
+
+# HiddenBlocks view distance
+viewDistance: 100
+
+# Plugin update message sent when a player join the server
+adminsUpdateMessage: true
+
+# Enable or disable water-protection for each world
+# _all_ is waterprotection for all worlds if no world is defined
 redstoneWaterProtection:
   _all_: true

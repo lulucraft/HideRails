@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -26,23 +27,28 @@ import org.bukkit.entity.Player;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 
 import fr.lulucraft321.hiderails.HideRails;
+import fr.lulucraft321.hiderails.commands.TabComplete;
 import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
 import fr.lulucraft321.hiderails.enums.Messages;
-import fr.lulucraft321.hiderails.events.RedstoneInWaterEvents;
+import fr.lulucraft321.hiderails.listeners.RedstoneInWaterEvents;
 import fr.lulucraft321.hiderails.reflection.BukkitNMS;
 import fr.lulucraft321.hiderails.runnables.BlockChangeRunner;
 import fr.lulucraft321.hiderails.runnables.PlayerDisplayBlocks;
-import fr.lulucraft321.hiderails.utils.Checker;
-import fr.lulucraft321.hiderails.utils.MaterialData;
 import fr.lulucraft321.hiderails.utils.backuputility.BlocksBackup;
-import fr.lulucraft321.hiderails.utils.railsdata.HiddenRail;
-import fr.lulucraft321.hiderails.utils.railsdata.HiddenRailsWorld;
+import fr.lulucraft321.hiderails.utils.checkers.BlocksChecker;
+import fr.lulucraft321.hiderails.utils.checkers.WorldeditChecker;
+import fr.lulucraft321.hiderails.utils.data.MaterialData;
+import fr.lulucraft321.hiderails.utils.data.railsdata.HiddenRail;
+import fr.lulucraft321.hiderails.utils.data.railsdata.HiddenRailsWorld;
 
 public class HideRailsManager
 {
 	// List of HiddenRails per world
 	public static List<HiddenRailsWorld> rails = new ArrayList<>();
+
+	// List of chunks who contains hiddenBlocks
+	public static List<Location> chunksLocs = new ArrayList<>();
 
 	// List of players who unhide hidden blocks
 	public static List<Player> displayBlocksPlayers = new ArrayList<>();
@@ -76,25 +82,68 @@ public class HideRailsManager
 	/**
 	 * Particles who spawned in hiddenBlocks if player execute /hr display command
 	 */
-	public static boolean hiddingBlocksParticles;
+	public static boolean hiddingBlocksParticles = true;
+
+	/**
+	 * Join plugin update message (admins only)
+	 * If maj is available
+	 */
+	public static boolean maj_available;
+
+	/**
+	 * Enable or disable update message
+	 */
+	public static boolean maj = true;
+
+	/**
+	 * Max click number before kick player
+	 */
+	public static int max_spam_nbr = 4;
+
+	/**
+	 * If kick spam is enable
+	 */
+	public static boolean spam_kick = true;
 
 
 	/*
 	 * Enabled or Disabled hide blockType
 	 */
 	public static void initHideBlocksType() {
-		HideRailsManager.hb = HideRails.getInstance().getConfig().getBoolean("hideIronBars");
-		HideRailsManager.hr = HideRails.getInstance().getConfig().getBoolean("hideRails");
-		HideRailsManager.hc = HideRails.getInstance().getConfig().getBoolean("hideCommandBlock");
-		HideRailsManager.hd = HideRails.getInstance().getConfig().getBoolean("hideRedstone");
-		HideRailsManager.hs = HideRails.getInstance().getConfig().getBoolean("hideSigns");
+		fr.lulucraft321.hiderails.configurations.specialconfig.Configuration config = FileConfigurationManager.getConfig();
 
-		HideRailsManager.hiddingBlocksParticles = HideRails.getInstance().getConfig().getBoolean("hiddingBlocksParticles");
+		HideRailsManager.hb = config.getBoolean("hideIronBars");
+		HideRailsManager.hr = config.getBoolean("hideRails");
+		HideRailsManager.hc = config.getBoolean("hideCommandBlock");
+		HideRailsManager.hd = config.getBoolean("hideRedstone");
+		HideRailsManager.hs = config.getBoolean("hideSigns");
+
+		TabComplete.BLOCK_TYPE.clear();
+		if (hr) {
+			TabComplete.BLOCK_TYPE.add("RAILS");
+		}
+		if (hs) {
+			TabComplete.BLOCK_TYPE.add("SIGN");
+		}
+		if (hr) {
+			TabComplete.BLOCK_TYPE.add("REDSTONE");
+		}
+		if (hc) {
+			TabComplete.BLOCK_TYPE.add("COMMAND");
+		}
+		if (hb) {
+			TabComplete.BLOCK_TYPE.add("IRON_FENCE");
+		}
+
+		HideRailsManager.maj = config.getBoolean("adminsUpdateMessage");
+		HideRailsManager.hiddingBlocksParticles = config.getBoolean("hiddingBlocksParticles");
+		HideRailsManager.max_spam_nbr = config.getInt("maxSpamNumber");
+		HideRailsManager.spam_kick = config.getBoolean("kickSpamBlock");
 	}
 
 
-	/*
-	 * Load all HiddenRails
+	/**
+	 * Load all HiddenBlocks
 	 */
 	public static void loadHideRails()
 	{
@@ -112,9 +161,22 @@ public class HideRailsManager
 			for (String loc : config.getStringList(path + "." + keys))
 			{
 				HiddenRail rail = new HiddenRail(LocationsManager.deserializeMatInSerializedLoc(loc), LocationsManager.deserializeDataInSerializedLoc(loc));
-				rail.setLocation(LocationsManager.deserializeLoc(loc));
+				Location dLoc = LocationsManager.deserializeLoc(loc);
+				rail.setLocation(dLoc);
 				hiddenRails.add(rail);
 				world = rail.getLocation().getWorld();
+
+				// Save hiddenBlocks chunks
+				Chunk ch = null;
+				if (world != null) {
+					ch = Bukkit.getWorld(world.getName()).getChunkAt(dLoc);
+				}
+				if (ch != null) {
+					ch = dLoc.getChunk();
+					Location cLoc = new Location(world, ch.getX(), 0, ch.getZ());
+					if (!chunksLocs.contains(cLoc))
+						chunksLocs.add(cLoc);
+				}
 			}
 
 			if (world != null)
@@ -129,6 +191,12 @@ public class HideRailsManager
 	}
 
 
+	/**
+	 * Get hiddenRailsWorld class who contains HiddenRails, with name of world
+	 * 
+	 * @param worldName
+	 * @return HiddenRailsWorld
+	 */
 	public static HiddenRailsWorld getWorldHiddenRails(String worldName)
 	{
 		for (HiddenRailsWorld worldHiddenRails : rails) {
@@ -139,6 +207,13 @@ public class HideRailsManager
 		return null;
 	}
 
+
+	/**
+	 * Get list of all hiddenBlocks with name of world
+	 * 
+	 * @param worldName
+	 * @return List of HiddenRails
+	 */
 	public static List<HiddenRail> getRailsToWorld(String worldName)
 	{
 		HiddenRailsWorld world = getWorldHiddenRails(worldName);
@@ -151,9 +226,20 @@ public class HideRailsManager
 		return null;
 	}
 
+
+	/**
+	 * Get hiddenBlock with location
+	 * 
+	 * @param location
+	 * @return HiddenRail
+	 */
 	public static HiddenRail getHiddenRail(Location location)
 	{
-		for (HiddenRail hRail : getRailsToWorld(location.getWorld().getName())) {
+		if (location == null) return null;
+		List<HiddenRail> hRails = getRailsToWorld(location.getWorld().getName());
+		if (hRails == null) return null;
+
+		for (HiddenRail hRail : hRails) {
 			if (hRail.getLocation().equals(location)) {
 				return hRail;
 			}
@@ -163,32 +249,40 @@ public class HideRailsManager
 	}
 
 
-	/*
+
+	/**
 	 * Water redstone protection
+	 * 
+	 * @param player
+	 * @param worldName
+	 * @param boolean
 	 */
 	public static void setWaterProtection(Player p, String worldName, boolean b)
 	{
 		String path = RedstoneInWaterEvents.path + "." + worldName;
 
-		if (HideRails.getInstance().getConfig().contains(path))
+		if (FileConfigurationManager.getConfig().contains(path))
 		{
-			if (HideRails.getInstance().getConfig().getBoolean(path) != b)
+			if (FileConfigurationManager.getConfig().getBoolean(path) != b)
 			{
-				HideRails.getInstance().getConfig().set(path, b);
+				FileConfigurationManager.getConfig().editDefault(path, b);
 				MessagesManager.sendChangeStatusMessage(p, Messages.SUCCESS_CHANGE_WATER_PROTECTION_STATUS, worldName, b);
 			} else {
 				MessagesManager.sendAlreadyStatusMessage(p, Messages.WATER_PROTECTION_STATUS_ALREADY, worldName, b);
 			}
 		} else {
-			HideRails.getInstance().getConfig().set(path, b);
+			FileConfigurationManager.getConfig().addDefault(path, b);
 			MessagesManager.sendChangeStatusMessage(p, Messages.SUCCESS_CHANGE_WATER_PROTECTION_STATUS, worldName, b);
 		}
-		HideRails.getInstance().saveConfig();
+		FileConfigurationManager.getConfig().reloadConfig();
 	}
 
 
-	/*
+
+	/**
 	 * Display hidden blocks (admin only)
+	 * 
+	 * @param player
 	 */
 	public static void displayBlocks(Player p)
 	{
@@ -217,6 +311,7 @@ public class HideRailsManager
 					@SuppressWarnings("deprecation")
 					MaterialData mats = new MaterialData(b.getType(), b.getData());
 					BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+					b.getState().update(true);
 				}
 			}
 		}
@@ -225,18 +320,24 @@ public class HideRailsManager
 	}
 
 
-	/*
-	 * UnHide Rails with command
+
+	/**
+	 * UnHide hiddenBlocks with command
+	 * 
+	 * @param player
+	 * @param targetBlock
+	 * @param backup
+	 * @param single
 	 */
 	@SuppressWarnings("deprecation")
 	public static void removeBlocks(Player player, Block targetBlock, boolean backup, boolean single)
 	{
-		if (!Checker.isRail(targetBlock) && !Checker.isIronBar(targetBlock) && !Checker.isCommandBlock(targetBlock) && !Checker.isRedstone(targetBlock) && !Checker.isSign(targetBlock)) {
+		if (!BlocksChecker.isRail(targetBlock) && !BlocksChecker.isIronBar(targetBlock) && !BlocksChecker.isCommandBlock(targetBlock) && !BlocksChecker.isRedstone(targetBlock) && !BlocksChecker.isSign(targetBlock)) {
 			MessagesManager.sendPluginMessage(player, Messages.RAIL_ERROR);
 			return;
 		}
 
-		BlockReplacementType blockType = Checker.getBlockReplacementType(player, targetBlock);
+		BlockReplacementType blockType = BlocksChecker.getBlockReplacementType(player, targetBlock);
 
 		List<Location> railsLocs = null;
 		if (!single) {
@@ -246,10 +347,6 @@ public class HideRailsManager
 		}
 		HashMap<Location, Byte> railsAndData = new HashMap<>();
 		String worldName = targetBlock.getWorld().getName();
-
-		// Creation d'un nouveau backup
-		BlocksBackup bBackup = new BlocksBackup();
-		bBackup.setType(BackupType.UNHIDE);
 
 		for (Location rail : railsLocs) {
 			railsAndData.put(rail, Bukkit.getWorld(worldName).getBlockAt(rail).getState().getData().getData());
@@ -279,6 +376,10 @@ public class HideRailsManager
 			}
 		}
 
+		// Creation d'un nouveau backup
+		BlocksBackup bBackup = new BlocksBackup();
+		bBackup.setType(BackupType.UNHIDE);
+
 		for (HiddenRail rail : hRails) {
 			hiddenRails.delHiddenRail(rail);
 
@@ -298,21 +399,29 @@ public class HideRailsManager
 	}
 
 
+	/**
+	 * Save all hiddenBlocks (with command)
+	 * 
+	 * @param player
+	 * @param input
+	 * @param backup
+	 * @param single
+	 */
 	public static void saveChangedBlocks(Player player, String input, boolean backup, boolean single)
 	{
 		Block targetBlock = player.getTargetBlock((Set<Material>) null, 25);
 
-		if (!Checker.isRail(targetBlock) && !Checker.isIronBar(targetBlock) && !Checker.isCommandBlock(targetBlock) && !Checker.isRedstone(targetBlock) && !Checker.isSign(targetBlock)) {
+		if (!BlocksChecker.isRail(targetBlock) && !BlocksChecker.isIronBar(targetBlock) && !BlocksChecker.isCommandBlock(targetBlock) && !BlocksChecker.isRedstone(targetBlock) && !BlocksChecker.isSign(targetBlock)) {
 			MessagesManager.sendPluginMessage(player, Messages.RAIL_ERROR);
 			return;
 		}
 
-		e(player, targetBlock, Checker.getBlockReplacementType(player, targetBlock), input, backup, single);
+		e(player, targetBlock, BlocksChecker.getBlockReplacementType(player, targetBlock), input, backup, single);
 	}
 
 	private static void e(Player player, Block targetBlock, BlockReplacementType blockType, String input, boolean backup, boolean single)
 	{
-		MaterialData matData = Checker.getMatData(player, input);
+		MaterialData matData = BlocksChecker.getMatData(player, input);
 		byte data = matData.getData();
 		Material mat = matData.getMat();
 
@@ -320,6 +429,18 @@ public class HideRailsManager
 			HideRailsManager.saveChangedBlocks(player, targetBlock, blockType, mat, data, backup, single);
 	}
 
+
+	/**
+	 * Hide one or more blocks (with command)
+	 * 
+	 * @param player
+	 * @param targetBlock
+	 * @param blockType
+	 * @param mat
+	 * @param data
+	 * @param backup
+	 * @param single
+	 */
 	protected static void saveChangedBlocks(Player player, Block targetBlock, BlockReplacementType blockType, Material mat, byte data, boolean backup, boolean single)
 	{
 		List<Location> railsLocs = null;
@@ -376,35 +497,42 @@ public class HideRailsManager
 		}
 		for (int i = 0; i < railsList.size(); i++) railsWorld.addHiddenRails(railsList.get(i));
 
+		// Save all hiddenBlocks
 		saveWorld(worldName);
 	}
 
 
 
-
-	/*
+	/**
 	 * Hide blocks with Worldedit selection
+	 * 
+	 * @param player
+	 * @param selection
+	 * @param input
+	 * @param backup
+	 * @param types 
 	 */
-	public static void hideSelectionBlocks(Player player, Selection selection, String input, boolean backup)
+	public static void hideSelectionBlocks(Player player, Selection selection, String input, boolean backup, List<Material> types)
 	{
-		MaterialData matData = Checker.getMatData(player, input);
+		MaterialData matData = BlocksChecker.getMatData(player, input);
 		byte data = matData.getData();
 		Material mat = matData.getMat();
 
 		if (mat != null)
-			HideRailsManager.hideSelectionBlocks(player, selection, mat, data, backup);
+			HideRailsManager.hideSelectionBlocks(player, selection, mat, data, backup, types);
 	}
 
-	private static void hideSelectionBlocks(Player player, Selection selection, Material mat, byte data, boolean backup)
+	private static void hideSelectionBlocks(Player player, Selection selection, Material mat, byte data, boolean backup, List<Material> types)
 	{
 		World world = selection.getMinimumPoint().getWorld(); // Get world of blocks
 		String worldName = world.getName(); // Name of blocks replacement world
 
-		List<Location> railsLocs = Checker.getAllValidRails(selection); // Definitly Locations of blocks replacement
+		List<Location> railsLocs = WorldeditChecker.getAllValidRails(selection, types); // Definitly Locations of blocks replacement
 
 		// Creation d'un nouveau backup
 		BlocksBackup bBackup = new BlocksBackup();
 		bBackup.setType(BackupType.HIDE);
+		bBackup.setBlocksType(types);
 		bBackup.setWeSelection(selection);
 
 		// Stockage de tous les rails serialisés du monde worldName
@@ -448,15 +576,24 @@ public class HideRailsManager
 		// Add all created HiddenRail HiddenRailsWorld
 		for (int i = 0; i < railsList.size(); i++) railsWorld.addHiddenRails(railsList.get(i));
 
-		// Save all HiddenRail
+		// Save all HiddenBlocks
 		saveWorld(worldName);
 	}
 
 
+
+	/**
+	 * Remove hiddenBlock with worldedit selection
+	 * 
+	 * @param player
+	 * @param selection
+	 * @param backup
+	 * @param types 
+	 */
 	@SuppressWarnings("deprecation")
-	public static void removeSelectionBlocks(Player player, Selection selection, boolean backup)
+	public static void removeSelectionBlocks(Player player, Selection selection, boolean backup, List<Material> types)
 	{
-		List<Location> railsLocs = Checker.getAllValidRails(selection);
+		List<Location> railsLocs = WorldeditChecker.getAllValidRails(selection, types);
 
 		HashMap<Location, Byte> railsAndData = new HashMap<>();
 		String worldName = selection.getMinimumPoint().getWorld().getName();
@@ -464,6 +601,7 @@ public class HideRailsManager
 		// Creation d'un nouveau backup
 		BlocksBackup bBackup = new BlocksBackup();
 		bBackup.setType(BackupType.UNHIDE);
+		bBackup.setBlocksType(types);
 		bBackup.setWeSelection(selection);
 
 		for (Location rail : railsLocs) {
@@ -506,6 +644,7 @@ public class HideRailsManager
 			PlayerCommandBackupManager.createNewBlocksBackup(player, bBackup);
 		}
 
+		// Save all hiddenBlocks
 		saveWorld(worldName);
 
 		MessagesManager.sendPluginMessage(player, Messages.SUCCESS_UNHIDE_RAIL);
@@ -513,9 +652,10 @@ public class HideRailsManager
 
 
 
-
-	/*
+	/**
 	 * Save all changed blocks and changed rails in world "worldName"
+	 * 
+	 * @param worldName
 	 */
 	public static void saveWorld(String worldName)
 	{

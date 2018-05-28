@@ -17,13 +17,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import fr.lulucraft321.hiderails.utils.Checker;
+import fr.lulucraft321.hiderails.utils.checkers.Checker;
 
 public class TabComplete implements TabCompleter
 {
-	private static final String[] COMMANDS1 = { "help", "reload", "hide", "hideselection", "unhideselection", "show", "unhide", "hideone", "unhideone", "waterprotection", "waterprotect", "display", "return", "undo" }; // /hiderails "COMMANDS1"
-	private static final String[] COMMANDS2 = { "hide", "hideselection", "unhideselection", "show", "unhide", "showone", "waterprotection", "waterprotect" }; // /hiderails "COMMANDS2" "materialType"
-	private static final String[] COMMANDS3 = { "waterprotection", "waterprotect" }; // /hiderails "COMMANDS3" "world" "value"
+	private static final String[] COMMANDS1 = { "help", "reload", "hide", "unhide", "show", "hideone", "unhideone", "hideselection", "unhideselection", "display", "return", "undo", "waterprotection" }; // /hiderails "COMMANDS1"
+	private static final String[] COMMANDS2 = { "hide", "hideselection", "unhideselection", "show", "unhide", "showone", "waterprotection" }; // /hiderails "COMMANDS2" "materialType"
+	private static final String[] COMMANDS3 = { "waterprotection" }; // /hiderails "COMMANDS3" "world" "value"
+	public static final List<String> BLOCK_TYPE = new ArrayList<>();
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args)
@@ -51,7 +52,7 @@ public class TabComplete implements TabCompleter
 					}
 				}
 
-				if (args.length == 2)
+				if(args.length == 2)
 				{
 					for(String list : commands2)
 					{
@@ -73,10 +74,16 @@ public class TabComplete implements TabCompleter
 						}
 					}
 
-					if (args[0].startsWith("display"))
-					{
-						for (Player pls : Bukkit.getOnlinePlayers())
-						{
+					if (args[0].equalsIgnoreCase("hideselection")) {
+						completions.addAll(BLOCK_TYPE);
+					}
+
+					if (args[0].equalsIgnoreCase("unhideselection")) {
+						completions.addAll(BLOCK_TYPE);
+					}
+
+					if (args[0].startsWith("display")) {
+						for (Player pls : Bukkit.getOnlinePlayers()) {
 							completions.add(pls.getName());
 						}
 					}

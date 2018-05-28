@@ -5,7 +5,7 @@
  * @author lulucraft321
  */
 
-package fr.lulucraft321.hiderails.managers.config;
+package fr.lulucraft321.hiderails.configurations.configs;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +13,12 @@ import java.io.IOException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.lulucraft321.hiderails.managers.FileConfigurationManager;
+import fr.lulucraft321.hiderails.utils.abstractclass.AbstractLangConfig;
 
-public class English extends FileConfigurationManager
+public class English extends FileConfigurationManager implements AbstractLangConfig
 {
-	public static void setupENConfig()
+	@Override
+	public void setupConfig()
 	{
 		// EN.yml
 		FileConfigurationManager.enLangFile = new File(FileConfigurationManager.path, "EN.yml");
@@ -48,6 +50,8 @@ public class English extends FileConfigurationManager
 			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "worldedit_no_selection", "&cYou must first select region with Worldedit !");
 			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "display_hidden_blocks", "&2You have %hide% the hidden blocks for you !");
 			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "invalid_player", "&cThe player cannot be found !");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "update_found", "&bNew update Available !\n&o%link%");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "kick_spam_hidden_block", "§cDon't spam blocks please !!");
 
 			// Sauveguarde des modifs
 			try {
@@ -73,11 +77,13 @@ public class English extends FileConfigurationManager
 			checkConfContains(FileConfigurationManager.enLangConfig, "worldedit_no_selection", "&cYou must first select region with Worldedit !");
 			checkConfContains(FileConfigurationManager.enLangConfig, "display_hidden_blocks", "&2You have %hide% the hidden blocks for you !");
 			checkConfContains(FileConfigurationManager.enLangConfig, "invalid_player", "&cThe player cannot be found !");
+			checkConfContains(FileConfigurationManager.enLangConfig, "update_found", "&bNew update Available !\n&o%link%");
+			checkConfContains(FileConfigurationManager.enLangConfig, "kick_spam_hidden_block", "§cDon't spam blocks please !!");
 
 			// Sauveguarde des modifs
 			try {
 				FileConfigurationManager.enLangConfig.save(FileConfigurationManager.enLangFile);
-			} catch (IOException e1) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.enLangConfig.getName().toString() + "\" !"); }
+			} catch (IOException e) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.enLangConfig.getName().toString() + "\" !"); }
 		}
 		FileConfigurationManager.enLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.enLangFile);
 		//

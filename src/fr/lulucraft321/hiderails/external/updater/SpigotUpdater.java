@@ -7,12 +7,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import fr.lulucraft321.hiderails.managers.HideRailsManager;
+import fr.lulucraft321.hiderails.managers.MessagesManager;
+import net.md_5.bungee.api.ChatColor;
 /**
  * @author inventivetalent ( https://inventivetalent.org/ )
  */
@@ -76,7 +81,7 @@ public class SpigotUpdater extends Thread
 		if(this.plugin.isEnabled()) {
 			if(this.enabled) {
 				if(this.log) {
-					this.plugin.getLogger().info("[Updater] Searching for updates.");
+					Bukkit.getServer().getConsoleSender().sendMessage(MessagesManager.PREFIX + ChatColor.GREEN + "[Updater] Searching for updates.");
 				}
 
 				HttpURLConnection connection = null;
@@ -112,17 +117,18 @@ public class SpigotUpdater extends Thread
 					if(currentVersion == null) {
 						if(this.log) {
 							this.plugin.getLogger().warning("[Updater] Invalid response received.");
-							this.plugin.getLogger().warning("[updater] Either the author of this plugin has configured the updater wrong, or the API is experiencing some issues.");
+							this.plugin.getLogger().warning("[Updater] Either the author of this plugin has configured the updater wrong, or the API is experiencing some issues.");
 						}
 
 						return;
 					}
 
 					if(!currentVersion.equals(this.plugin.getDescription().getVersion())) {
-						this.plugin.getLogger().info("[Updater] Found new version: " + currentVersion + "! (Your version is " + this.plugin.getDescription().getVersion() + ")");
-						this.plugin.getLogger().info("[Updater] Download here: http://www.spigotmc.org/resources/" + this.id);
+						HideRailsManager.maj_available = true;
+						Bukkit.getServer().getConsoleSender().sendMessage(MessagesManager.PREFIX + ChatColor.AQUA + "[Updater] Found new version: " + currentVersion + "! (Your version is " + this.plugin.getDescription().getVersion() + ")");
+						Bukkit.getServer().getConsoleSender().sendMessage(MessagesManager.PREFIX + ChatColor.AQUA + "[Updater] Download here: http://www.spigotmc.org/resources/" + this.id);
 					} else if(this.log) {
-						this.plugin.getLogger().info("[Updater] Plugin is up-to-date.");
+						Bukkit.getServer().getConsoleSender().sendMessage(MessagesManager.PREFIX + ChatColor.GREEN + "[Updater] Plugin is up-to-date.");
 					}
 				} catch (IOException var10) {
 					if(this.log) {

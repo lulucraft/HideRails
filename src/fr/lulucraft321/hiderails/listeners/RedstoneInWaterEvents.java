@@ -1,15 +1,15 @@
-package fr.lulucraft321.hiderails.events;
+package fr.lulucraft321.hiderails.listeners;
 
 import java.util.EnumSet;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 
 import fr.lulucraft321.hiderails.HideRails;
+import fr.lulucraft321.hiderails.utils.abstractclass.AbstractEvent;
 
-public class RedstoneInWaterEvents implements Listener
+public class RedstoneInWaterEvents extends AbstractEvent
 {
 	public static String path = "redstoneWaterProtection";
 

@@ -5,7 +5,7 @@
  * @author lulucraft321
  */
 
-package fr.lulucraft321.hiderails.managers.config;
+package fr.lulucraft321.hiderails.configurations.configs;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +13,12 @@ import java.io.IOException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.lulucraft321.hiderails.managers.FileConfigurationManager;
+import fr.lulucraft321.hiderails.utils.abstractclass.AbstractLangConfig;
 
-public class French extends FileConfigurationManager
+public class French extends FileConfigurationManager implements AbstractLangConfig
 {
-	public static void setupFRConfig()
+	@Override
+	public void setupConfig()
 	{
 		// FR.yml
 		FileConfigurationManager.frLangFile = new File(FileConfigurationManager.path, "FR.yml");
@@ -46,13 +48,15 @@ public class French extends FileConfigurationManager
 			FileConfigurationManager.frLangConfig.set(FileConfigurationManager.msgPath + "return_backup_success", "&2Sauvegarde restorée avec succès !");
 			FileConfigurationManager.frLangConfig.set(FileConfigurationManager.msgPath + "worldedit_not_installed", "&cLe plugin worldedit n'est pas installé sur le serveur !");
 			FileConfigurationManager.frLangConfig.set(FileConfigurationManager.msgPath + "worldedit_no_selection", "&cVous devez d'abord sélectionner une région avec worldedit !");
-			FileConfigurationManager.frLangConfig.set(FileConfigurationManager.msgPath + "display_hidden_blocks", "&2Vous avez %hide% le masquage des blocks pour vous !");
+			FileConfigurationManager.frLangConfig.set(FileConfigurationManager.msgPath + "display_hidden_blocks", "&2Vous avez %hide% le masquage des blocs pour vous !");
 			FileConfigurationManager.frLangConfig.set(FileConfigurationManager.msgPath + "invalid_player", "&cLe joueur n'est pas connecté/n'existe pas !");
+			FileConfigurationManager.frLangConfig.set(FileConfigurationManager.msgPath + "update_found", "&bUne nouvelle mise à jour est disponible !\n&o%link%");
+			FileConfigurationManager.frLangConfig.set(FileConfigurationManager.msgPath + "kick_spam_hidden_block", "§cTu veux bien arrêter de spam sur les blocs svp ??!!");
 
 			// Sauveguarde des modifs
 			try {
 				FileConfigurationManager.frLangConfig.save(FileConfigurationManager.frLangFile);
-			} catch (IOException e1) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.frLangConfig.getName().toString() + "\" !"); }
+			} catch (IOException e) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.frLangConfig.getName().toString() + "\" !"); }
 		} else {
 			FileConfigurationManager.frLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.frLangFile);
 			FileConfigurationManager.frLangConfig.options().header("Language by lulucraft321").copyDefaults(true);
@@ -71,13 +75,15 @@ public class French extends FileConfigurationManager
 			checkConfContains(FileConfigurationManager.frLangConfig, "return_backup_success", "&cSauvegarde restorée avec succès !");
 			checkConfContains(FileConfigurationManager.frLangConfig, "worldedit_not_installed", "&cLe plugin worldedit n'est pas installé sur le serveur !");
 			checkConfContains(FileConfigurationManager.frLangConfig, "worldedit_no_selection", "&cVous devez d'abord sélectionner une région avec worldedit !");
-			checkConfContains(FileConfigurationManager.frLangConfig, "display_hidden_blocks", "&2Vous avez %hide% le masquage des blocks pour vous !");
+			checkConfContains(FileConfigurationManager.frLangConfig, "display_hidden_blocks", "&2Vous avez %hide% le masquage des blocs pour vous !");
 			checkConfContains(FileConfigurationManager.frLangConfig, "invalid_player", "&cLe joueur n'est pas connecté/n'existe pas !");
+			checkConfContains(FileConfigurationManager.frLangConfig, "update_found", "&bUne nouvelle mise à jour est disponible !\n&o%link%");
+			checkConfContains(FileConfigurationManager.frLangConfig, "kick_spam_hidden_block", "§cTu veux bien arrêter de spam sur les blocs svp ??!!");
 
 			// Sauveguarde des modifs
 			try {
 				FileConfigurationManager.frLangConfig.save(FileConfigurationManager.frLangFile);
-			} catch (IOException e1) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.frLangConfig.getName().toString() + "\" !"); }
+			} catch (IOException e) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.frLangConfig.getName().toString() + "\" !"); }
 		}
 		FileConfigurationManager.frLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.frLangFile);
 		//

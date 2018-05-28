@@ -1,18 +1,22 @@
 messages:
   sender_type_error: '&cYou must be a player to execute this command !'
-  player_no_enough_permission: '&cYou do not have permission to execute this command !'
+  player_no_enough_permission: '&cYou do not have permission to execute this command
+    !'
   rail_success_change: '&2You have replaced the rails with %blocktype% !'
   material_type_error: '&cThis bloc does not exist !'
   rail_error: '&cThe target block is not a rail !'
   rail_success_break: '&2You have broken a hidden rail !'
   rail_success_unhide: '&2You have displayed the rails !'
-  water_protection_status_success_change: '&2You have %status% the underwater protection in %world%'
+  water_protection_status_success_change: '&2You have %status% the under-water protection
+    in %world%'
   invalid_worldname: '&cThis world name is invalid !'
   plugin_success_reloaded: '&2Plugin successfully reloaded'
-  water_protection_status_already: '&cThe underwater protection in %world% is already %status%'
+  water_protection_status_already: '&cThe underwater protection in %world% is already
+    %status%'
   no_backup: '&cNo backup available !'
   return_backup_success: '&2successfully restored backup !'
   worldedit_not_installed: '&cWorldedit plugin is not installed on this server !'
   worldedit_no_selection: '&cYou must first select region with Worldedit !'
   display_hidden_blocks: '&2You have %hide% the hidden blocks for you !'
   invalid_player: '&cThe player cannot be found !'
+  update_found: '&bNew update Available !\n&o%link%'

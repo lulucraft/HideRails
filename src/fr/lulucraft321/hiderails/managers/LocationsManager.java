@@ -18,7 +18,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
-import fr.lulucraft321.hiderails.utils.Checker;
+import fr.lulucraft321.hiderails.utils.checkers.BlocksChecker;
 
 public class LocationsManager
 {
@@ -58,7 +58,7 @@ public class LocationsManager
 					if(blockType == BlockReplacementType.RAILS || blockType == BlockReplacementType.IRON_BARS || blockType == BlockReplacementType.COMMAND_BLOCK || blockType == BlockReplacementType.REDSTONE
 							|| blockType == BlockReplacementType.SIGN)
 					{
-						if(Checker.checkBlockIfActive(newCheckBlock))
+						if(BlocksChecker.checkBlockIfActive(newCheckBlock))
 						{
 							checked.add(newCheckBlock.getLocation());
 

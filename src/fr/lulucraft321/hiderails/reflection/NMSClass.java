@@ -1,3 +1,10 @@
+/**
+ * Copyright Java Code
+ * All right reserved.
+ *
+ * @author lulucraft321
+ */
+
 package fr.lulucraft321.hiderails.reflection;
 
 import java.lang.reflect.Constructor;

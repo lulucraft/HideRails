@@ -4,7 +4,7 @@
  *
  */
 
-package fr.lulucraft321.hiderails.utils.railsdata;
+package fr.lulucraft321.hiderails.utils.data.railsdata;
 
 import java.util.ArrayList;
 import java.util.List;

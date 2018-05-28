@@ -5,7 +5,7 @@
  * @author lulucraft321
  */
 
-package fr.lulucraft321.hiderails.managers.config;
+package fr.lulucraft321.hiderails.configurations.configs;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +13,12 @@ import java.io.IOException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.lulucraft321.hiderails.managers.FileConfigurationManager;
+import fr.lulucraft321.hiderails.utils.abstractclass.AbstractLangConfig;
 
-public class Hongrois extends FileConfigurationManager
+public class Hongrois extends FileConfigurationManager implements AbstractLangConfig
 {
-	public static void setupHUConfig()
+	@Override
+	public void setupConfig()
 	{
 		// HU.yml
 		FileConfigurationManager.huLangFile = new File(FileConfigurationManager.path, "HU.yml");
@@ -48,11 +50,13 @@ public class Hongrois extends FileConfigurationManager
 			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "worldedit_no_selection", "&cElső lépés, hogy jelöld ki WorldEdit-el a területet !");
 			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "display_hidden_blocks", "&2Szamoda a(z) %hide% blokk rejtett !");
 			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "invalid_player", "&cA játékos nem található !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "update_found", "&bÙj frissitès elèrhető !\n§o%link%");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "kick_spam_hidden_block", "&cNe spameld a blokkokat !!");
 
 			// Sauveguarde des modifs
 			try {
 				FileConfigurationManager.huLangConfig.save(FileConfigurationManager.huLangFile);
-			} catch (IOException e1) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.huLangConfig.getName().toString() + "\" !"); }
+			} catch (IOException e) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.huLangConfig.getName().toString() + "\" !"); }
 		} else {
 			FileConfigurationManager.huLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.huLangFile);
 			FileConfigurationManager.huLangConfig.options().header("Köszönöm Zsomi-nak hogy leforditotta magyarra !").copyDefaults(true);
@@ -73,11 +77,13 @@ public class Hongrois extends FileConfigurationManager
 			checkConfContains(FileConfigurationManager.huLangConfig, "worldedit_no_selection", "&cElső lépés, hogy jelöld ki WorldEdit-el a területet !");
 			checkConfContains(FileConfigurationManager.huLangConfig, "display_hidden_blocks", "&2Szamoda a(z) %hide% blokk rejtett !");
 			checkConfContains(FileConfigurationManager.huLangConfig, "invalid_player", "&cA játékos nem található !");
+			checkConfContains(FileConfigurationManager.huLangConfig, "update_found", "&bÙj frissitès elèrhető !\n§o%link%");
+			checkConfContains(FileConfigurationManager.huLangConfig, "kick_spam_hidden_block", "&cNe spameld a blokkokat !!");
 
 			// Sauveguarde des modifs
 			try {
 				FileConfigurationManager.huLangConfig.save(FileConfigurationManager.huLangFile);
-			} catch (IOException e1) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.huLangConfig.getName().toString() + "\" !"); }
+			} catch (IOException e) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.huLangConfig.getName().toString() + "\" !"); }
 		}
 		FileConfigurationManager.huLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.huLangFile);
 		//

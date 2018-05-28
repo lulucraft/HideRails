@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="F:/Users/ProCZ/Desktop/JEUX - PLUGINS/Minecraft/Nouveau dossier/spigot-1.11.2.jar"/>
+	<classpathentry kind="lib" path="F:/Users/ProCZ/Desktop/JEUX - PLUGINS/Minecraft/Nouveau dossier/spigotmc-1.12-R0.1.jar"/>
 	<classpathentry kind="lib" path="F:/Users/ProCZ/Desktop/JEUX - PLUGINS/Minecraft/plugins/worldedit-bukkit-6.1.7.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

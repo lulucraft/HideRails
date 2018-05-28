@@ -24,7 +24,9 @@ public enum Messages
 	WORLDEDIT_NOT_INSTALLED("le plugin worldedit n'est pas installé sur le serveur !"),
 	WORLDEDIT_NO_SELECTION("vous devez d'abord sélectionner un region avec worldedit !"),
 	DISPLAY_HIDDEN_BLOCKS("vous avez %status% le masquage des rails seulement poour vous"),
-	INVALID_PLAYER("le joueur entré est invalide");
+	INVALID_PLAYER("le joueur entré est invalide"),
+	UPDATE_FOUND("une mise à jour du plugin est disponible !"),
+	KICK_SPAM_BLOCK("arrête de spam sur les blocs svp");
 
 	private String message;
 

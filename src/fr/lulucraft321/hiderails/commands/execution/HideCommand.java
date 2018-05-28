@@ -1,0 +1,43 @@
+/**
+ * Copyright Java Code
+ * All right reserved.
+ *
+ * @author lulucraft321
+ */
+
+package fr.lulucraft321.hiderails.commands.execution;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import fr.lulucraft321.hiderails.enums.Messages;
+import fr.lulucraft321.hiderails.managers.HideRailsManager;
+import fr.lulucraft321.hiderails.managers.MessagesManager;
+import fr.lulucraft321.hiderails.utils.abstractclass.AbstractCommand;
+
+public class HideCommand extends AbstractCommand
+{
+	public HideCommand(CommandSender sender) {
+		super(sender, "hiderails.hide");
+	}
+
+	/*
+	 * Hide blocks
+	 */
+	@Override
+	public void execute(CommandSender sender, Command cmd, String[] args) {
+		if (sender instanceof Player) {
+			if (hasPermission()) {
+				// args[1] == Material
+				HideRailsManager.saveChangedBlocks((Player) sender, args[1], true, false);
+			} else {
+				// Si sender n'est pas op ou n'a pas la perm
+				MessagesManager.sendPluginMessage(sender, Messages.PLAYER_NO_ENOUGH_PERMISSION);
+			}
+		} else {
+			MessagesManager.sendPluginMessage(sender, Messages.SENDER_TYPE_ERROR);
+		}
+	}
+
+}

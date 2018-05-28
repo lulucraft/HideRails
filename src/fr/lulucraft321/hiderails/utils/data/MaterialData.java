@@ -4,7 +4,7 @@
  *
  */
 
-package fr.lulucraft321.hiderails.utils;
+package fr.lulucraft321.hiderails.utils.data;
 
 import org.bukkit.Material;
 

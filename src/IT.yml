@@ -15,3 +15,5 @@ messages:
   worldedit_not_installed: '&cIl Plugin WorldEdit non è installato in questo server !'
   worldedit_no_selection: '&cDevi prima selezionare una regione con WorldEdit !'
   display_hidden_blocks: '&2Hai %hide% i blocchi nascosti per te !'
+  update_found: '§bNuovo aggiornamento disponibile !\n§o%link%'
+  kick_spam_hidden_block: '§cNon spammare blocchi perfavore !!'

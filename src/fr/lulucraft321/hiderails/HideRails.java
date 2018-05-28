@@ -10,19 +10,20 @@ package fr.lulucraft321.hiderails;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
-import fr.lulucraft321.hiderails.commands.HideRailsCommand;
+import fr.lulucraft321.hiderails.commands.CommandsHandle;
 import fr.lulucraft321.hiderails.commands.TabComplete;
-import fr.lulucraft321.hiderails.events.JoinEvent;
-import fr.lulucraft321.hiderails.events.RailBreakEvent;
-import fr.lulucraft321.hiderails.events.RedstoneInWaterEvents;
-import fr.lulucraft321.hiderails.external.metrics.Metrics;
+import fr.lulucraft321.hiderails.external.metrics.MetricsLite;
 import fr.lulucraft321.hiderails.external.updater.SpigotUpdater;
+import fr.lulucraft321.hiderails.listeners.BlockClickEvent;
+import fr.lulucraft321.hiderails.listeners.BreakBlockEvent;
+import fr.lulucraft321.hiderails.listeners.JoinEvent;
+import fr.lulucraft321.hiderails.listeners.RedstoneInWaterEvents;
 import fr.lulucraft321.hiderails.managers.FileConfigurationManager;
 import fr.lulucraft321.hiderails.managers.HideRailsManager;
 
@@ -36,13 +37,11 @@ public class HideRails extends JavaPlugin
 	{
 		instance = this;
 
-		// Init Enabled and Disabled blocksType to hide
-		HideRailsManager.initHideBlocksType();
-
-		FileConfigurationManager.setupConfig();
+		// Init and setup all custom configs
+		FileConfigurationManager.setupConfigs();
 		FileConfigurationManager.saveConfigs();
 
-		registerEvents();
+		registerListeners();
 		registerCommands();
 
 		// Chargement de tous les rails masques
@@ -52,27 +51,28 @@ public class HideRails extends JavaPlugin
 		try {
 			new SpigotUpdater(this, 55158, true);
 		} catch (IOException e) {
-			getLogger().warning("[Updater] Resource not found ! Ressource non trouvee !");
+			Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "[Updater] Resource not found ! Ressource non trouvee !");
 		}
 
 		// Metrics stats
-		Metrics metrics = new Metrics(this);
-		metrics.addCustomChart(new Metrics.SimplePie("used_language", () -> FileConfigurationManager.getLanguage() ));
-		metrics.addCustomChart(new Metrics.SingleLineChart("online_players", () -> Bukkit.getServer().getOnlinePlayers().size() ));
-		metrics.addCustomChart(new Metrics.SingleLineChart("offline_players", () -> Bukkit.getServer().getOfflinePlayers().length ));
+		try {
+			new MetricsLite(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void registerEvents()
+	private void registerListeners()
 	{
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new RailBreakEvent(), this);
-		pm.registerEvents(new RedstoneInWaterEvents(), this);
-		pm.registerEvents(new JoinEvent(), this);
+		new BreakBlockEvent();
+		new RedstoneInWaterEvents();
+		new JoinEvent();
+		new BlockClickEvent();
 	}
 
 	private void registerCommands()
 	{
-		getCommand("hiderails").setExecutor(new HideRailsCommand());
+		getCommand("hiderails").setExecutor(new CommandsHandle());
 		getCommand("hiderails").setTabCompleter(new TabComplete());
 	}
 

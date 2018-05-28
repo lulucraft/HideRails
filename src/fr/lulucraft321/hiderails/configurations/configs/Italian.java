@@ -5,7 +5,7 @@
  * @author lulucraft321
  */
 
-package fr.lulucraft321.hiderails.managers.config;
+package fr.lulucraft321.hiderails.configurations.configs;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +13,12 @@ import java.io.IOException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.lulucraft321.hiderails.managers.FileConfigurationManager;
+import fr.lulucraft321.hiderails.utils.abstractclass.AbstractLangConfig;
 
-public class Italian extends FileConfigurationManager
+public class Italian extends FileConfigurationManager implements AbstractLangConfig
 {
-	public static void setupITConfig()
+	@Override
+	public void setupConfig()
 	{
 		// IT.yml
 		FileConfigurationManager.itLangFile = new File(FileConfigurationManager.path, "IT.yml");
@@ -48,11 +50,13 @@ public class Italian extends FileConfigurationManager
 			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "worldedit_no_selection", "&cDevi prima selezionare una regione con WorldEdit !");
 			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "display_hidden_blocks", "&2Hai %hide% i blocchi nascosti per te !");
 			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "invalid_player", "&cIl giocatore non può essere trovato");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "update_found", "§bNuovo aggiornamento disponibile !\n§o%link%");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "kick_spam_hidden_block", "§cNon spammare blocchi perfavore !!");
 
 			// Sauveguarde des modifs
 			try {
 				FileConfigurationManager.itLangConfig.save(FileConfigurationManager.itLangFile);
-			} catch (IOException e1) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.itLangConfig.getName().toString() + "\" !"); }
+			} catch (IOException e) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.itLangConfig.getName().toString() + "\" !"); }
 		} else {
 			FileConfigurationManager.itLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.itLangFile);
 			FileConfigurationManager.itLangConfig.options().header("Grazie a Sitieno14 per la traduzione in italiano !").copyDefaults(true);
@@ -73,11 +77,13 @@ public class Italian extends FileConfigurationManager
 			checkConfContains(FileConfigurationManager.itLangConfig, "worldedit_no_selection", "&cDevi prima selezionare una regione con WorldEdit !");
 			checkConfContains(FileConfigurationManager.itLangConfig, "display_hidden_blocks", "&2Hai %hide% i blocchi nascosti per te !");
 			checkConfContains(FileConfigurationManager.itLangConfig, "invalid_player", "&cIl giocatore non può essere trovato");
+			checkConfContains(FileConfigurationManager.itLangConfig, "update_found", "§bNuovo aggiornamento disponibile !\n§o%link%");
+			checkConfContains(FileConfigurationManager.itLangConfig, "kick_spam_hidden_block", "§cNon spammare blocchi perfavore !!");
 
 			// Sauveguarde des modifs
 			try {
 				FileConfigurationManager.itLangConfig.save(FileConfigurationManager.itLangFile);
-			} catch (IOException e1) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.itLangConfig.getName().toString() + "\" !"); }
+			} catch (IOException e) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.itLangConfig.getName().toString() + "\" !"); }
 		}
 		FileConfigurationManager.itLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.itLangFile);
 		//

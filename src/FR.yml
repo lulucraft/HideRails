@@ -11,10 +11,14 @@ messages:
     redstone sous l''eau pour le monde %world%'
   invalid_worldname: '&cMonde invalide !'
   plugin_success_reloaded: '&2Plugin rechargé avec succès !'
-  water_protection_status_already: '&cLa protection de la redstone et des rails sous l''eau dans le monde %world% est déja définit sur %status%'
+  water_protection_status_already: '&cLa protection de la redstone et des rails sous
+    l''eau dans le monde %world% est déja définit sur %status%'
   no_backup: '&cAucune sauvegarde disponible !'
-  return_backup_success: '&cSauvegarde restorée avec succès !'
-  worldedit_not_installed: '&cLe plugin worldedit n''est pas installé sur le serveur !'
-  worldedit_no_selection: '&cVous devez d''abord sélectionner une région avec worldedit !'
-  display_hidden_blocks: '&2Vous avez %hide% le masquage des blocks pour vous !'
+  return_backup_success: '&2Sauvegarde restorée avec succès !'
+  worldedit_not_installed: '&cLe plugin worldedit n''est pas installé sur le serveur
+    !'
+  worldedit_no_selection: '&cVous devez d''abord sélectionner une région avec worldedit
+    !'
+  display_hidden_blocks: '&2Vous avez %hide% le masquage des blocs pour vous !'
   invalid_player: '&cLe joueur n''est pas connecté/n''existe pas !'
+  update_found: '&bUne nouvelle mise à jour est disponible !\n&o%link%'

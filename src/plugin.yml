@@ -1,8 +1,10 @@
 name: HideRails
-version: 0.3.7-SNAPSHOT
-authors: [lulucraft321]
+version: 0.4.6-SNAPSHOT
+author: lulucraft321
 description: Plugin for hide rails - By lulucraft321
 main: fr.lulucraft321.hiderails.HideRails
+load: POSTWORLD
+loadbefore: [HideRails]
 commands:
   hiderails:
     aliases: [hr]

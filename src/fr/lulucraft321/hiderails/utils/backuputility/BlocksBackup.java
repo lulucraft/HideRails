@@ -10,10 +10,12 @@ package fr.lulucraft321.hiderails.utils.backuputility;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Material;
+
 import com.sk89q.worldedit.bukkit.selections.Selection;
 
 import fr.lulucraft321.hiderails.enums.BackupType;
-import fr.lulucraft321.hiderails.utils.MaterialData;
+import fr.lulucraft321.hiderails.utils.data.MaterialData;
 
 public class BlocksBackup
 {
@@ -22,6 +24,7 @@ public class BlocksBackup
 	private MaterialData unHideBlocksType; // Only for unhide reverse
 
 	private Selection weSelection; // Only if replacement was done with Worldedit selection
+	private List<Material> blocksType = new ArrayList<>();
 
 	public BackupType getType() {
 		return type;
@@ -54,5 +57,13 @@ public class BlocksBackup
 
 	public void setWeSelection(Selection weSelection) {
 		this.weSelection = weSelection;
+	}
+
+	public List<Material> getBlocksType() {
+		return blocksType;
+	}
+
+	public void setBlocksType(List<Material> blocksType) {
+		this.blocksType = blocksType;
 	}
 }

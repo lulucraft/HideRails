@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author ProCZ
+ * @author lulucraft321
  */
 
 package fr.lulucraft321.hiderails.managers;
@@ -21,9 +21,10 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
 import fr.lulucraft321.hiderails.enums.Messages;
-import fr.lulucraft321.hiderails.utils.Checker;
 import fr.lulucraft321.hiderails.utils.backuputility.BlocksBackup;
 import fr.lulucraft321.hiderails.utils.backuputility.PlayerCommandBackup;
+import fr.lulucraft321.hiderails.utils.checkers.BlocksChecker;
+import fr.lulucraft321.hiderails.utils.checkers.WorldeditChecker;
 
 public class PlayerCommandBackupManager
 {
@@ -47,14 +48,11 @@ public class PlayerCommandBackupManager
 	{
 		PlayerCommandBackup backup = getPlayerCommandBackups(player);
 
-		if (backup != null)
-		{
-			if (backup.getPlayerBackups().size() > 0)
-			{
+		if (backup != null) {
+			if (backup.getPlayerBackups().size() > 0) {
 				BlocksBackup back = backup.getPlayerBackups().get(backup.getPlayerBackups().size()-1);
 
-				if (back != null)
-				{
+				if (back != null) {
 					return back;
 				}
 			}
@@ -108,7 +106,7 @@ public class PlayerCommandBackupManager
 			else
 			{
 				// Si le backup contient une worldedit selection
-				for (Location blockLoc : Checker.getAllValidRails(backup.getWeSelection())) {
+				for (Location blockLoc : WorldeditChecker.getAllValidRails(backup.getWeSelection(), backup.getBlocksType())) {
 					bl = Bukkit.getWorld(blockLoc.getWorld().getName()).getBlockAt(blockLoc);
 					BlockState state = bl.getState();
 					bl.setType(state.getType());
@@ -116,7 +114,7 @@ public class PlayerCommandBackupManager
 					state.update(true);
 				}
 
-				HideRailsManager.removeSelectionBlocks(p, backup.getWeSelection(), false);
+				HideRailsManager.removeSelectionBlocks(p, backup.getWeSelection(), false, backup.getBlocksType());
 			}
 		}
 
@@ -134,12 +132,12 @@ public class PlayerCommandBackupManager
 				if (i > 1) single = false;
 				else single = true;
 
-				BlockReplacementType blockType = Checker.getBlockReplacementType(p, bl);
+				BlockReplacementType blockType = BlocksChecker.getBlockReplacementType(p, bl);
 				HideRailsManager.saveChangedBlocks(p, bl, blockType, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false, single);
 			}
 			else
 			{
-				HideRailsManager.hideSelectionBlocks(p, sel, (backup.getUnHideBlocksType().getMat().toString()+":"+backup.getUnHideBlocksType().getData()), false);
+				HideRailsManager.hideSelectionBlocks(p, sel, (backup.getUnHideBlocksType().getMat().toString()+":"+backup.getUnHideBlocksType().getData()), false, backup.getBlocksType());
 			}
 		}
 
@@ -159,9 +157,16 @@ public class PlayerCommandBackupManager
 	{
 		BlocksBackup backup = PlayerCommandBackupManager.getLatestBlocksBackup(p);
 
-		if(backup != null)
-		{
-			PlayerCommandBackupManager.restoreBackup(p);
+		if(backup != null) {
+			if (!backup.getChangedBlocks().isEmpty()) {
+				PlayerCommandBackupManager.restoreBackup(p);
+			} else {
+				// If no block is to be restore
+				PlayerCommandBackup pBackup = getPlayerCommandBackups(p);
+				pBackup.getPlayerBackups().remove(backup);
+				playerCommandBackups.put(p, pBackup);
+				restoreBackupRails(p);
+			}
 		} else {
 			MessagesManager.sendPluginMessage(p, Messages.NO_BACKUP);
 		}
