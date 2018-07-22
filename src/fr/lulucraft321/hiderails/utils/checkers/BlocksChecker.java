@@ -75,7 +75,7 @@ public class BlocksChecker
 		return (blockCheck.getType() == Material.REDSTONE_WIRE) || (blockCheck.getType() == Material.REDSTONE) || (blockCheck.getType() == Material.REDSTONE_BLOCK) || 
 				(blockCheck.getType() == Material.REDSTONE_COMPARATOR) || (blockCheck.getType() == Material.REDSTONE_COMPARATOR_OFF) || (blockCheck.getType() == Material.REDSTONE_COMPARATOR_ON) || 
 				(blockCheck.getType() == Material.REDSTONE_TORCH_OFF) || (blockCheck.getType() == Material.REDSTONE_TORCH_ON) || 
-				(blockCheck.getType() == Material.DIODE) || (blockCheck.getType() == Material.DIODE_BLOCK_OFF) || (blockCheck.getType() == Material.DIODE_BLOCK_ON) || 
+				(blockCheck.getType() == Material.DIODE) || (blockCheck.getType() == Material.DIODE_BLOCK_OFF) || (blockCheck.getType() == Material.DIODE_BLOCK_ON) ||
 				(blockCheck.getType() == Material.LEVER);
 	}
 

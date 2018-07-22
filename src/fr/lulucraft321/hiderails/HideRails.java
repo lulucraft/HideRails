@@ -18,7 +18,7 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 import fr.lulucraft321.hiderails.commands.CommandsHandle;
 import fr.lulucraft321.hiderails.commands.TabComplete;
-import fr.lulucraft321.hiderails.external.metrics.MetricsLite;
+import fr.lulucraft321.hiderails.external.metrics.Metrics;
 import fr.lulucraft321.hiderails.external.updater.SpigotUpdater;
 import fr.lulucraft321.hiderails.listeners.BlockClickEvent;
 import fr.lulucraft321.hiderails.listeners.BreakBlockEvent;
@@ -55,11 +55,7 @@ public class HideRails extends JavaPlugin
 		}
 
 		// Metrics stats
-		try {
-			new MetricsLite(this);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		new Metrics(this);
 	}
 
 	private void registerListeners()

@@ -1,0 +1,21 @@
+messages:
+  sender_type_error: '&cDebes ser un jugador para poder ejecutar ese comando.'
+  player_no_enough_permission: '&cNo tienes permiso para ejecutar ese comando.'
+  rail_success_change: '&2Has reemplazado los railes por %blocktype%.'
+  material_type_error: '&cEse bloque no existe.'
+  rail_error: '&cEl bloque al que miras no es un rail.'
+  rail_success_break: '&2Has destruido un rail oculto.'
+  rail_success_unhide: '&2Has hecho visibles los railes.'
+  water_protection_status_success_change: '&2La proteccion bajo el agua ahora es %status%
+    en el mundo %world%.'
+  invalid_worldname: '&c&cEse mundo no existe.'
+  plugin_success_reloaded: '&2Plugin recargado correctamente.'
+  water_protection_status_already: '&cLa proteccion bajo el agua em el mundo %world%
+    ya es %status%.'
+  no_backup: '&cNo hay copias de seguridad disponibles.'
+  return_backup_success: '&2Copia de seguridad reestablecida correctamente.'
+  worldedit_not_installed: '&cWorldedit no esta instalado.'
+  worldedit_no_selection: '&cPrimero debes seleccionar la region con Worldedit.'
+  display_hidden_blocks: '&2Tienes los bloques invisibles en %hide%.'
+  invalid_player: '&cEl jugador no existe.'
+  update_found: '&bNueva actualizacion disponible !\n&o%link%'

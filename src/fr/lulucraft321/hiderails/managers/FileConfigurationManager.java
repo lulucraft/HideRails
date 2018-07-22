@@ -24,7 +24,7 @@ public class FileConfigurationManager
 	public static String language;
 	public static String getLanguage() { return language; }
 
-	public static String path = "plugins/HideRails/Languages";
+	public static final String path = "plugins/HideRails/Languages";
 	private static File langFolder = new File(path);
 	private static File conf = new File("plugins/HideRails", "config.yml");
 
