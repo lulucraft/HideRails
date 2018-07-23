@@ -15,9 +15,12 @@ import java.lang.reflect.Method;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
-import fr.lulucraft321.hiderails.enums.ParticleName;
+import fr.lulucraft321.hiderails.HideRails;
+import fr.lulucraft321.hiderails.enums.ParticleName_v1_12;
+import fr.lulucraft321.hiderails.enums.ParticleName_v1_13;
 
 public class BukkitNMS
 {
@@ -30,6 +33,7 @@ public class BukkitNMS
 	private static Constructor<?> constructorBP;
 	private static Method fromLegacyData_method;
 	private static Method craftMagicNumbers_method;
+	private static Method block_data_method; // Only for 1.13
 	private static Field block_change_pos_field;
 	private static Field block_field;
 
@@ -51,8 +55,13 @@ public class BukkitNMS
 			block_change_pos_field = NMSClass.getField(block_change_class, "a");
 			block_change_pos_field.setAccessible(true);
 
-			// Get "IBlockData fromLegacy(int i)" method
-			fromLegacyData_method = NMSClass.getMethod(block_class, "fromLegacyData", int.class);
+			if (HideRails.version == "1.12") {
+				// Get "IBlockData fromLegacy(int i)" method
+				fromLegacyData_method = NMSClass.getMethod(block_class, "fromLegacyData", int.class);
+			} else if (HideRails.version == "1.13") {
+				// Get "IBlockData getBlockData()" method
+				block_data_method = NMSClass.getMethod(block_class, "getBlockData", null);
+			}
 			// Get Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
 			craftMagicNumbers_method = NMSClass.getMethod(craftMagicNumbersClass, "getBlock", Material.class);
 
@@ -62,15 +71,25 @@ public class BukkitNMS
 
 			// ---------------------------------------------------- PARTICLES ---------------------------------------------------- //
 			packet_play_out_world_particles = NMSClass.getNMSClass("PacketPlayOutWorldParticles");
-			enum_particle_class = NMSClass.getNMSClass("EnumParticle");
-			try {
-				packet_particles_constructor = NMSClass.getConstructor(packet_play_out_world_particles,
-						enum_particle_class, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class, int[].class);
+			if (HideRails.version == "1.12") {
+				enum_particle_class = NMSClass.getNMSClass("EnumParticle");
+				try {
+					packet_particles_constructor = NMSClass.getConstructor(packet_play_out_world_particles,
+							enum_particle_class, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class, int[].class);
 
-				// Get Method a() in Paticle Class
-				particles_method = NMSClass.getMethod(enum_particle_class, "a", String.class);
-			} catch (NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
+					// Get Method a() in Paticle Class
+					particles_method = NMSClass.getMethod(enum_particle_class, "a", String.class);
+				} catch (NoSuchMethodException | SecurityException e) {
+					e.printStackTrace();
+				}
+			} else if (HideRails.version == "1.13") {
+				enum_particle_class = NMSClass.getNMSClass("ParticleParam");
+				try {
+					packet_particles_constructor = NMSClass.getConstructor(packet_play_out_world_particles,
+							enum_particle_class, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class);
+				} catch (NoSuchMethodException | SecurityException e) {
+					e.printStackTrace();
+				}
 			}
 			// ------------------------------------------------------------------------------------------------------------------- //
 		} catch (SecurityException | NoSuchFieldException | NoSuchMethodException e) {
@@ -80,6 +99,7 @@ public class BukkitNMS
 
 	public BukkitNMS() {
 		this.version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+		HideRails.version = this.version.contains("1_13") ? "1.13" : "1.12";
 	}
 
 
@@ -95,14 +115,18 @@ public class BukkitNMS
 	 */
 	public static void changeBlock(Player p, Material material, byte data, int x, int y, int z)
 	{
+		// Adapt material name to good versions
+		String matName = material.name().replace("LEGACY_", "");
+		material = Material.matchMaterial(matName);
+
 		try {
 			/*
 			 * Instanciation du packet PacketPlayOutBlockChange
 			 */
-			Object packet = block_change_class.newInstance();
+			Object packet = NMSClass.newInstance(block_change_class);
 
 			// Set blockChange location
-			Object blockPosition = constructorBP.newInstance(x, y, z);
+			Object blockPosition = NMSClass.newInstance(constructorBP, x, y, z);
 			block_change_pos_field.set(packet, blockPosition);
 
 			/*
@@ -111,8 +135,14 @@ public class BukkitNMS
 			// Invoke Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
 			Object craftMagicNumber = NMSClass.invokeMethod(craftMagicNumbers_method, fromLegacyData_method, material);
 			// Get final IBlockData
-			Object block_data = NMSClass.invokeMethod(fromLegacyData_method, craftMagicNumber, data);
-
+			Object block_data = null;
+			if (HideRails.version == "1.12") {
+				block_data = NMSClass.invokeMethod(fromLegacyData_method, craftMagicNumber, data);
+			} else if (HideRails.version == "1.13") {
+				// replace "block_data = CraftMagicNumbers.getBlock(material).getBlockData();"
+				Object iMe = NMSClass.invokeMethod(craftMagicNumbers_method, craftMagicNumber, material);
+				block_data = block_data_method.invoke(iMe, null);
+			}
 
 			/*
 			 * Set "block" field in PacketPlayOutBlockChange Class ("packet.block")
@@ -146,21 +176,27 @@ public class BukkitNMS
 	 * @throws SecurityException
 	 * @throws NoSuchFieldException
 	 */
-	public static void summonParticle(Player p, Location loc, ParticleName particleName, int amount, int speed) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException
+	@SuppressWarnings("unchecked")
+	public static void summonParticle(Player p, Location loc, Object particleName, int amount, int speed) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException
 	{
-		Object packet =
-				NMSClass.newInstance(
-						packet_particles_constructor,
-						NMSClass.invokeMethod(particles_method, enum_particle_class, particleName.getParticleName()),
-						true,
-						(float) loc.getX(), (float) loc.getY(), (float) loc.getZ(),
-						0f, 0f, 0f,
-						0f,
-						amount,
-						new int[]{speed}
-						);
+		Object packet = null;
 
-		sendPacket(p, packet);
+		if (HideRails.version == "1.12") {
+			packet =
+					NMSClass.newInstance(
+							packet_particles_constructor,
+							NMSClass.invokeMethod(particles_method, enum_particle_class, ((ParticleName_v1_12) particleName).getParticleName()),
+							true,
+							(float) loc.getX(), (float) loc.getY(), (float) loc.getZ(),
+							0f, 0f, 0f,
+							0f,
+							amount,
+							new int[]{speed}
+							);
+			sendPacket(p, packet);
+		} else if (HideRails.version == "1.13") {
+			p.spawnParticle(Particle.valueOf(((Enum<ParticleName_v1_13>) particleName).name().toUpperCase()), loc.getX(), loc.getY(), loc.getZ(), 0, 0d, 0d, 0d, amount);
+		}
 	}
 
 

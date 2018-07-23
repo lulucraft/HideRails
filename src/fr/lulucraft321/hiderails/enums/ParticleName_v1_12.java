@@ -7,7 +7,7 @@
 
 package fr.lulucraft321.hiderails.enums;
 
-public enum ParticleName
+public enum ParticleName_v1_12
 {
 	EXPLOSION_NORMAL("explode"),
 	EXPLOSION_LARGE("largeexplode"),
@@ -61,7 +61,7 @@ public enum ParticleName
 
 	private String particleName;
 
-	ParticleName(String particleName) {
+	ParticleName_v1_12(String particleName) {
 		this.particleName = particleName;
 	}
 

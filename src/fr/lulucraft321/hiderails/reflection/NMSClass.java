@@ -98,6 +98,21 @@ public class NMSClass
 
 	/**
 	 * 
+	 * @param class
+	 * @return Object
+	 * 
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	public static Object newInstance(Class<?> clazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		return clazz.newInstance();
+	}
+
+	/**
+	 * 
 	 * @param constructor
 	 * @param initArgs
 	 * @return Object

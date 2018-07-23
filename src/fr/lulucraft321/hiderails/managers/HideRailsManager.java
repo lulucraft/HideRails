@@ -6,6 +6,7 @@
 
 package fr.lulucraft321.hiderails.managers;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,7 +15,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -46,9 +46,6 @@ public class HideRailsManager
 {
 	// List of HiddenRails per world
 	public static List<HiddenRailsWorld> rails = new ArrayList<>();
-
-	// List of chunks who contains hiddenBlocks
-	public static List<Location> chunksLocs = new ArrayList<>();
 
 	// List of players who unhide hidden blocks
 	public static List<Player> displayBlocksPlayers = new ArrayList<>();
@@ -160,23 +157,23 @@ public class HideRailsManager
 
 			for (String loc : config.getStringList(path + "." + keys))
 			{
-				HiddenRail rail = new HiddenRail(LocationsManager.deserializeMatInSerializedLoc(loc), LocationsManager.deserializeDataInSerializedLoc(loc));
+				Material mat = LocationsManager.deserializeMatInSerializedLoc(loc);
+				Byte data = LocationsManager.deserializeDataInSerializedLoc(loc);
+				HiddenRail rail = null;
+
+				if (HideRails.version == "1.12") {
+					// Adapt material name to good versions
+					String matName = mat.name().replace("LEGACY_", "");
+					mat = Material.matchMaterial(matName);
+
+					rail = new HiddenRail(mat, data);
+				}
+
+				rail = new HiddenRail(mat, data);
 				Location dLoc = LocationsManager.deserializeLoc(loc);
 				rail.setLocation(dLoc);
 				hiddenRails.add(rail);
 				world = rail.getLocation().getWorld();
-
-				// Save hiddenBlocks chunks
-				Chunk ch = null;
-				if (world != null) {
-					ch = Bukkit.getWorld(world.getName()).getChunkAt(dLoc);
-				}
-				if (ch != null) {
-					ch = dLoc.getChunk();
-					Location cLoc = new Location(world, ch.getX(), 0, ch.getZ());
-					if (!chunksLocs.contains(cLoc))
-						chunksLocs.add(cLoc);
-				}
 			}
 
 			if (world != null)
@@ -186,7 +183,7 @@ public class HideRailsManager
 
 		// Activation du changement des rails, des barreaux, des commandBlock ou de la redstone
 		if (hr || hb || hc || hd || hs) {
-			new BlockChangeRunner().runTaskTimer(HideRails.getInstance(), 20 * HideRails.getInstance().getConfig().getInt("hideRails.time"), 100L);
+			new BlockChangeRunner().runTaskTimer(HideRails.getInstance(), 20L * HideRails.getInstance().getConfig().getInt("hideRails.time"), 100L);
 		}
 	}
 
@@ -368,7 +365,14 @@ public class HideRailsManager
 					BlockState state = rail.getState();
 
 					rail.setType(rail.getType());
-					rail.setData(entry.getValue().byteValue());
+					if (HideRails.version == "1.12") {
+						try {
+							Block.class.getDeclaredMethod("setData", byte.class).invoke(rail, entry.getValue().byteValue());
+						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace();
+						}
+						//rail.setData(entry.getValue().byteValue());
+					}
 					state.update(true);
 
 					hRails.add(hRail);
@@ -623,7 +627,14 @@ public class HideRailsManager
 					Block rail = Bukkit.getWorld(worldName).getBlockAt(entry.getKey());
 					BlockState state = rail.getState();
 					rail.setType(rail.getType());
-					rail.setData(entry.getValue().byteValue());
+					if (HideRails.version == "1.12") {
+						try {
+							Block.class.getDeclaredMethod("setData", byte.class).invoke(rail, entry.getValue().byteValue());
+						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace();
+						}
+						//rail.setData(entry.getValue().byteValue());
+					}
 					state.update(true);
 
 					hRails.add(hRail);

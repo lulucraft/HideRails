@@ -7,6 +7,7 @@
 
 package fr.lulucraft321.hiderails.utils.checkers;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
+import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
 import fr.lulucraft321.hiderails.enums.Messages;
 import fr.lulucraft321.hiderails.managers.HideRailsManager;
@@ -38,64 +40,134 @@ public class BlocksChecker
 
 	public static boolean isRail(Block blockCheck)
 	{
-		return (blockCheck.getType() == Material.RAILS) || 
-				(blockCheck.getType() == Material.LADDER) || 
-				(blockCheck.getType() == Material.ACTIVATOR_RAIL) || 
-				(blockCheck.getType() == Material.DETECTOR_RAIL) || 
-				(blockCheck.getType() == Material.POWERED_RAIL);
+		if (HideRails.version == "1.12") {
+			return blockCheck.getType() == Enum.valueOf(Material.class, "RAILS") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "LADDER") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "ACTIVATOR_RAIL") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "DETECTOR_RAIL") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "POWERED_RAIL");
+		} else if (HideRails.version == "1.13") {
+			return blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_RAILS") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_LADDER") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_ACTIVATOR_RAIL") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_DETECTOR_RAIL") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_POWERED_RAIL");
+		}
+		return false;
 	}
 
 	public static boolean isRail(Material matCheck)
 	{
-		return (matCheck == Material.RAILS) || (matCheck == Material.LADDER) || (matCheck == Material.ACTIVATOR_RAIL) || (matCheck == Material.DETECTOR_RAIL) || (matCheck == Material.POWERED_RAIL);
+		if (HideRails.version == "1.12") {
+			return matCheck == Enum.valueOf(Material.class, "RAILS") ||
+					matCheck == Enum.valueOf(Material.class, "LADDER") ||
+					matCheck == Enum.valueOf(Material.class, "ACTIVATOR_RAIL") ||
+					matCheck == Enum.valueOf(Material.class, "DETECTOR_RAIL") ||
+					matCheck == Enum.valueOf(Material.class, "POWERED_RAIL");
+		} else if (HideRails.version == "1.13") {
+			return matCheck == Enum.valueOf(Material.class, "LEGACY_RAILS") ||
+					matCheck == Enum.valueOf(Material.class, "LEGACY_LADDER") ||
+					matCheck == Enum.valueOf(Material.class, "LEGACY_ACTIVATOR_RAIL") ||
+					matCheck == Enum.valueOf(Material.class, "LEGACY_DETECTOR_RAIL") ||
+					matCheck == Enum.valueOf(Material.class, "LEGACY_POWERED_RAIL");
+		}
+		return false;
 	}
 
 	public static boolean isIronBar(Block blockCheck)
 	{
-		return blockCheck.getType() == Material.IRON_FENCE;
+		if (HideRails.version == "1.12") {
+			return blockCheck.getType() == Enum.valueOf(Material.class, "IRON_FENCE");
+		} else if (HideRails.version == "1.13") {
+			return blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_IRON_FENCE");
+		}
+		return false;
 	}
 
 	public static boolean isIronBar(Material matCheck)
 	{
-		return matCheck == Material.IRON_FENCE;
+		if (HideRails.version == "1.12") {
+			return matCheck == Enum.valueOf(Material.class, "IRON_FENCE");
+		} else if (HideRails.version == "1.13") {
+			return matCheck == Enum.valueOf(Material.class, "LEGACY_IRON_FENCE");
+		}
+		return false;
 	}
 
 	public static boolean isCommandBlock(Block blockCheck)
 	{
-		return (blockCheck.getType() == Material.COMMAND) || (blockCheck.getType() == Material.COMMAND_CHAIN) || (blockCheck.getType() == Material.COMMAND_REPEATING);
+		if (HideRails.version == "1.12") {
+			return blockCheck.getType() == Enum.valueOf(Material.class, "COMMAND") || blockCheck.getType() == Enum.valueOf(Material.class, "COMMAND_CHAIN") || blockCheck.getType() == Enum.valueOf(Material.class, "COMMAND_REPEATING");
+		} else if (HideRails.version == "1.13") {
+			return blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_COMMAND") || blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_COMMAND_CHAIN") || blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_COMMAND_REPEATING");
+		}
+		return false;
 	}
 
 	public static boolean isCommandBlock(Material matCheck)
 	{
-		return (matCheck == Material.COMMAND) || (matCheck == Material.COMMAND_CHAIN) || (matCheck == Material.COMMAND_REPEATING);
+		if (HideRails.version == "1.12") {
+			return matCheck == Enum.valueOf(Material.class, "COMMAND") || matCheck == Enum.valueOf(Material.class, "COMMAND_CHAIN") || matCheck == Enum.valueOf(Material.class, "COMMAND_REPEATING");
+		} else if (HideRails.version == "1.13") {
+			return matCheck == Enum.valueOf(Material.class, "LEGACY_COMMAND") || matCheck == Enum.valueOf(Material.class, "LEGACY_COMMAND_CHAIN") || matCheck == Enum.valueOf(Material.class, "LEGACY_COMMAND_REPEATING");
+		}
+		return false;
 	}
 
 	public static boolean isRedstone(Block blockCheck)
 	{
-		return (blockCheck.getType() == Material.REDSTONE_WIRE) || (blockCheck.getType() == Material.REDSTONE) || (blockCheck.getType() == Material.REDSTONE_BLOCK) || 
-				(blockCheck.getType() == Material.REDSTONE_COMPARATOR) || (blockCheck.getType() == Material.REDSTONE_COMPARATOR_OFF) || (blockCheck.getType() == Material.REDSTONE_COMPARATOR_ON) || 
-				(blockCheck.getType() == Material.REDSTONE_TORCH_OFF) || (blockCheck.getType() == Material.REDSTONE_TORCH_ON) || 
-				(blockCheck.getType() == Material.DIODE) || (blockCheck.getType() == Material.DIODE_BLOCK_OFF) || (blockCheck.getType() == Material.DIODE_BLOCK_ON) ||
-				(blockCheck.getType() == Material.LEVER);
+		if (HideRails.version == "1.12") {
+			return blockCheck.getType() == Enum.valueOf(Material.class, "REDSTONE_WIRE") || blockCheck.getType() == Enum.valueOf(Material.class, "REDSTONE") || blockCheck.getType() == Enum.valueOf(Material.class, "REDSTONE_BLOCK") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "REDSTONE_COMPARATOR") || blockCheck.getType() == Enum.valueOf(Material.class, "REDSTONE_COMPARATOR_OFF") || blockCheck.getType() == Enum.valueOf(Material.class, "REDSTONE_COMPARATOR_ON") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "REDSTONE_TORCH_OFF") || blockCheck.getType() == Enum.valueOf(Material.class, "REDSTONE_TORCH_ON") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "DIODE_BLOCK_OFF") || blockCheck.getType() == Enum.valueOf(Material.class, "DIODE_BLOCK_ON") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "LEVER");
+		} else if (HideRails.version == "1.13") {
+			return blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_REDSTONE_WIRE") || blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_REDSTONE") || blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_REDSTONE_BLOCK") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_REDSTONE_TORCH_OFF") || blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_REDSTONE_TORCH_ON") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_DIODE_BLOCK_OFF") || blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_DIODE_BLOCK_ON") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "REPEATER") || blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_REDSTONE_COMPARATOR_ON") || blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_REDSTONE_COMPARATOR_OFF") ||
+					blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_LEVER");
+		}
+		return false;
 	}
 
 	public static boolean isRedstone(Material matCheck)
 	{
-		return (matCheck == Material.REDSTONE_WIRE) || (matCheck == Material.REDSTONE) || (matCheck == Material.REDSTONE_BLOCK) || 
-				(matCheck == Material.REDSTONE_COMPARATOR) || (matCheck == Material.REDSTONE_COMPARATOR_OFF) || (matCheck == Material.REDSTONE_COMPARATOR_ON) || 
-				(matCheck == Material.REDSTONE_TORCH_OFF) || (matCheck == Material.REDSTONE_TORCH_ON) || 
-				(matCheck == Material.DIODE) || (matCheck == Material.DIODE_BLOCK_OFF) || (matCheck == Material.DIODE_BLOCK_ON) || 
-				(matCheck == Material.LEVER);
+		if (HideRails.version == "1.12") {
+			return matCheck == Enum.valueOf(Material.class, "REDSTONE_WIRE") || matCheck == Enum.valueOf(Material.class, "REDSTONE") || matCheck == Enum.valueOf(Material.class, "REDSTONE_BLOCK") ||
+					matCheck == Enum.valueOf(Material.class, "REDSTONE_COMPARATOR") || matCheck == Enum.valueOf(Material.class, "REDSTONE_COMPARATOR_OFF") || matCheck == Enum.valueOf(Material.class, "REDSTONE_COMPARATOR_ON") ||
+					matCheck == Enum.valueOf(Material.class, "REDSTONE_TORCH_OFF") || matCheck == Enum.valueOf(Material.class, "REDSTONE_TORCH_ON") ||
+					matCheck == Enum.valueOf(Material.class, "DIODE_BLOCK_OFF") || matCheck == Enum.valueOf(Material.class, "DIODE_BLOCK_ON") ||
+					matCheck == Enum.valueOf(Material.class, "LEVER");
+		} else if (HideRails.version == "1.13") {
+			return matCheck == Enum.valueOf(Material.class, "LEGACY_REDSTONE_WIRE") || matCheck == Enum.valueOf(Material.class, "LEGACY_REDSTONE") || matCheck == Enum.valueOf(Material.class, "LEGACY_REDSTONE_BLOCK") ||
+					matCheck == Enum.valueOf(Material.class, "LEGACY_REDSTONE_TORCH_OFF") || matCheck == Enum.valueOf(Material.class, "LEGACY_REDSTONE_TORCH_ON") ||
+					matCheck == Enum.valueOf(Material.class, "LEGACY_DIODE_BLOCK_OFF") || matCheck == Enum.valueOf(Material.class, "LEGACY_DIODE_BLOCK_ON") ||
+					matCheck == Enum.valueOf(Material.class, "REPEATER") || matCheck == Enum.valueOf(Material.class, "LEGACY_REDSTONE_COMPARATOR_ON") || matCheck == Enum.valueOf(Material.class, "LEGACY_REDSTONE_COMPARATOR_OFF") ||
+					matCheck == Enum.valueOf(Material.class, "LEGACY_LEVER");
+		}
+		return false;
 	}
 
 	public static boolean isSign(Block blockCheck)
 	{
-		return (blockCheck.getType() == Material.SIGN) || (blockCheck.getType() == Material.SIGN_POST) || (blockCheck.getType() == Material.WALL_SIGN);
+		if (HideRails.version == "1.12") {
+			return blockCheck.getType() == Enum.valueOf(Material.class, "SIGN") || blockCheck.getType() == Enum.valueOf(Material.class, "SIGN_POST") || blockCheck.getType() == Enum.valueOf(Material.class, "WALL_SIGN");
+		} else if (HideRails.version == "1.13") {
+			return blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_SIGN_POST") || blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_WALL_SIGN");
+		}
+		return false;
 	}
 
 	public static boolean isSign(Material matCheck)
 	{
-		return (matCheck == Material.SIGN) || (matCheck == Material.SIGN_POST) || (matCheck == Material.WALL_SIGN);
+		if (HideRails.version == "1.12") {
+			return matCheck == Enum.valueOf(Material.class, "SIGN") || matCheck == Enum.valueOf(Material.class, "SIGN_POST") || matCheck == Enum.valueOf(Material.class, "WALL_SIGN");
+		} else if (HideRails.version == "1.13") {
+			return matCheck == Enum.valueOf(Material.class, "LEGACY_SIGN_POST") || matCheck == Enum.valueOf(Material.class, "LEGACY_WALL_SIGN");
+		}
+		return false;
 	}
 
 
@@ -188,7 +260,6 @@ public class BlocksChecker
 	}
 
 
-	@SuppressWarnings("deprecation")
 	public static MaterialData getMatData(Player p, String input)
 	{
 		Material mat = null;
@@ -201,7 +272,15 @@ public class BlocksChecker
 
 			// Material with ID
 			if(Checker.isInt(split[0]) && Checker.isInt(split[1])) {
-				mat = Material.getMaterial(Integer.parseInt(split[0]));
+				if (HideRails.version == "1.12") {
+					try {
+						mat = (Material) Material.class.getDeclaredMethod("getMaterial", String.class).invoke(Material.class.newInstance(), Integer.parseInt(split[0]));
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+							| NoSuchMethodException | SecurityException | InstantiationException e) {
+						e.printStackTrace();
+					}
+					//mat = Material.getMaterial(Integer.parseInt(split[0]));
+				}
 				data = getMatData(split[1]);
 			}
 			else {
@@ -216,7 +295,15 @@ public class BlocksChecker
 		{
 			// Material with ID
 			if(Checker.isInt(input)) {
-				mat = Material.getMaterial(Integer.parseInt(input));
+				if (HideRails.version == "1.12") {
+					try {
+						mat = (Material) Material.class.getDeclaredMethod("getMaterial", String.class).invoke(Material.class.newInstance(), Integer.parseInt(input));
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+							| NoSuchMethodException | SecurityException | InstantiationException e) {
+						e.printStackTrace();
+					}
+					//mat = Material.getMaterial(Integer.parseInt(input));
+				}
 				data = 0;
 			}
 			else {

@@ -13,7 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.lulucraft321.hiderails.enums.ParticleName;
+import fr.lulucraft321.hiderails.enums.ParticleName_v1_12;
 import fr.lulucraft321.hiderails.managers.HideRailsManager;
 import fr.lulucraft321.hiderails.reflection.BukkitNMS;
 import fr.lulucraft321.hiderails.utils.data.railsdata.HiddenRail;
@@ -43,7 +43,7 @@ public class PlayerDisplayBlocks extends BukkitRunnable
 						Location loc1 = null;
 						try {
 							loc1 = loc.add(0, 0.3, 0);
-							BukkitNMS.summonParticle(p, loc1, ParticleName.VILLAGER_ANGRY, 1, 1);
+							BukkitNMS.summonParticle(p, loc1, ParticleName_v1_12.VILLAGER_ANGRY, 1, 1);
 							loc1.subtract(0, 0.3, 0);
 						} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
 							e.printStackTrace();

@@ -21,21 +21,28 @@ import fr.lulucraft321.hiderails.commands.TabComplete;
 import fr.lulucraft321.hiderails.external.metrics.Metrics;
 import fr.lulucraft321.hiderails.external.updater.SpigotUpdater;
 import fr.lulucraft321.hiderails.listeners.BlockClickEvent;
+import fr.lulucraft321.hiderails.listeners.BlockPhysicEvent;
 import fr.lulucraft321.hiderails.listeners.BreakBlockEvent;
 import fr.lulucraft321.hiderails.listeners.JoinEvent;
 import fr.lulucraft321.hiderails.listeners.RedstoneInWaterEvents;
 import fr.lulucraft321.hiderails.managers.FileConfigurationManager;
 import fr.lulucraft321.hiderails.managers.HideRailsManager;
+import fr.lulucraft321.hiderails.reflection.BukkitNMS;
 
 public class HideRails extends JavaPlugin
 {
 	private static HideRails instance;
 	public static HideRails getInstance() { return instance; }
 
+	public static String version = "";
+
 	@Override
 	public void onEnable()
 	{
 		instance = this;
+
+		// Init this.version and all class
+		new BukkitNMS();
 
 		// Init and setup all custom configs
 		FileConfigurationManager.setupConfigs();
@@ -64,6 +71,7 @@ public class HideRails extends JavaPlugin
 		new RedstoneInWaterEvents();
 		new JoinEvent();
 		new BlockClickEvent();
+		new BlockPhysicEvent();
 	}
 
 	private void registerCommands()
