@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.ParticleName_v1_12;
 import fr.lulucraft321.hiderails.enums.ParticleName_v1_13;
+import fr.lulucraft321.hiderails.enums.Version;
 
 public class BukkitNMS
 {
@@ -55,10 +56,10 @@ public class BukkitNMS
 			block_change_pos_field = NMSClass.getField(block_change_class, "a");
 			block_change_pos_field.setAccessible(true);
 
-			if (HideRails.version == "1.12") {
+			if (HideRails.version == Version.v1_12) {
 				// Get "IBlockData fromLegacy(int i)" method
 				fromLegacyData_method = NMSClass.getMethod(block_class, "fromLegacyData", int.class);
-			} else if (HideRails.version == "1.13") {
+			} else if (HideRails.version == Version.v1_13) {
 				// Get "IBlockData getBlockData()" method
 				block_data_method = NMSClass.getMethod(block_class, "getBlockData", null);
 			}
@@ -71,7 +72,7 @@ public class BukkitNMS
 
 			// ---------------------------------------------------- PARTICLES ---------------------------------------------------- //
 			packet_play_out_world_particles = NMSClass.getNMSClass("PacketPlayOutWorldParticles");
-			if (HideRails.version == "1.12") {
+			if (HideRails.version == Version.v1_12) {
 				enum_particle_class = NMSClass.getNMSClass("EnumParticle");
 				try {
 					packet_particles_constructor = NMSClass.getConstructor(packet_play_out_world_particles,
@@ -82,7 +83,7 @@ public class BukkitNMS
 				} catch (NoSuchMethodException | SecurityException e) {
 					e.printStackTrace();
 				}
-			} else if (HideRails.version == "1.13") {
+			} else if (HideRails.version == Version.v1_13) {
 				enum_particle_class = NMSClass.getNMSClass("ParticleParam");
 				try {
 					packet_particles_constructor = NMSClass.getConstructor(packet_play_out_world_particles,
@@ -99,7 +100,7 @@ public class BukkitNMS
 
 	public BukkitNMS() {
 		this.version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-		HideRails.version = this.version.contains("1_13") ? "1.13" : "1.12";
+		HideRails.version = this.version.contains("1_13") ? Version.v1_13 : Version.v1_12;
 	}
 
 
@@ -136,9 +137,9 @@ public class BukkitNMS
 			Object craftMagicNumber = NMSClass.invokeMethod(craftMagicNumbers_method, fromLegacyData_method, material);
 			// Get final IBlockData
 			Object block_data = null;
-			if (HideRails.version == "1.12") {
+			if (HideRails.version == Version.v1_12) {
 				block_data = NMSClass.invokeMethod(fromLegacyData_method, craftMagicNumber, data);
-			} else if (HideRails.version == "1.13") {
+			} else if (HideRails.version == Version.v1_13) {
 				// replace "block_data = CraftMagicNumbers.getBlock(material).getBlockData();"
 				Object iMe = NMSClass.invokeMethod(craftMagicNumbers_method, craftMagicNumber, material);
 				block_data = block_data_method.invoke(iMe, null);
@@ -181,7 +182,7 @@ public class BukkitNMS
 	{
 		Object packet = null;
 
-		if (HideRails.version == "1.12") {
+		if (HideRails.version == Version.v1_12) {
 			packet =
 					NMSClass.newInstance(
 							packet_particles_constructor,
@@ -194,7 +195,7 @@ public class BukkitNMS
 							new int[]{speed}
 							);
 			sendPacket(p, packet);
-		} else if (HideRails.version == "1.13") {
+		} else if (HideRails.version == Version.v1_13) {
 			p.spawnParticle(Particle.valueOf(((Enum<ParticleName_v1_13>) particleName).name().toUpperCase()), loc.getX(), loc.getY(), loc.getZ(), 0, 0d, 0d, 0d, amount);
 		}
 	}

@@ -35,7 +35,7 @@ public class HideSelectionBlockTypeCommand extends AbstractCommand
 	public void execute(CommandSender sender, Command cmd, String[] args) {
 		if (sender instanceof Player) {
 			if (hasPermission()) {
-				Player p = (Player)sender;
+				Player p = (Player) sender;
 				Selection sel = WorldeditChecker.getWorldeditSelection(p);
 				if (sel == null) {
 					MessagesManager.sendPluginMessage(p, Messages.WORLDEDIT_NO_SELECTION);

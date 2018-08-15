@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockFromToEvent;
 
 import fr.lulucraft321.hiderails.HideRails;
+import fr.lulucraft321.hiderails.enums.Version;
 import fr.lulucraft321.hiderails.utils.abstractclass.AbstractEvent;
 
 public class RedstoneInWaterEvents extends AbstractEvent
@@ -16,7 +17,7 @@ public class RedstoneInWaterEvents extends AbstractEvent
 	private static EnumSet<Material> redstoneBlocks = null;
 
 	static {
-		if (HideRails.version == "1.12") {
+		if (HideRails.version == Version.v1_12) {
 			redstoneBlocks = EnumSet.of(Enum.valueOf(Material.class, "REDSTONE_WIRE"), new Material[] {
 					Enum.valueOf(Material.class, "REDSTONE_TORCH_ON"),
 					Enum.valueOf(Material.class, "REDSTONE_TORCH_OFF"),
@@ -35,7 +36,7 @@ public class RedstoneInWaterEvents extends AbstractEvent
 					Enum.valueOf(Material.class, "REDSTONE_COMPARATOR_OFF")
 			});
 		}
-		else if (HideRails.version == "1.13") {
+		else if (HideRails.version == Version.v1_13) {
 			redstoneBlocks = EnumSet.of(Enum.valueOf(Material.class, "LEGACY_REDSTONE_WIRE"), new Material[] {
 					Enum.valueOf(Material.class, "LEGACY_REDSTONE_TORCH_ON"),
 					Enum.valueOf(Material.class, "LEGACY_REDSTONE_TORCH_OFF"),

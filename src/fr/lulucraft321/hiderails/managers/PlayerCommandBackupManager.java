@@ -23,6 +23,7 @@ import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
 import fr.lulucraft321.hiderails.enums.Messages;
+import fr.lulucraft321.hiderails.enums.Version;
 import fr.lulucraft321.hiderails.utils.backuputility.BlocksBackup;
 import fr.lulucraft321.hiderails.utils.backuputility.PlayerCommandBackup;
 import fr.lulucraft321.hiderails.utils.checkers.BlocksChecker;
@@ -95,7 +96,7 @@ public class PlayerCommandBackupManager
 					bl = Bukkit.getWorld(deserLoc.getWorld().getName()).getBlockAt(deserLoc);
 					BlockState state = bl.getState();
 					bl.setType(bl.getType());
-					if (HideRails.version == "1.12") {
+					if (HideRails.version == Version.v1_12) {
 						try {
 							Block.class.getDeclaredMethod("setData", byte.class).invoke(bl, Byte.valueOf(bl.getData()));
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -119,7 +120,7 @@ public class PlayerCommandBackupManager
 					bl = Bukkit.getWorld(blockLoc.getWorld().getName()).getBlockAt(blockLoc);
 					BlockState state = bl.getState();
 					bl.setType(state.getType());
-					if (HideRails.version == "1.12") {
+					if (HideRails.version == Version.v1_12) {
 						try {
 							Block.class.getDeclaredMethod("setData", byte.class).invoke(bl, state.getData().getData());
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

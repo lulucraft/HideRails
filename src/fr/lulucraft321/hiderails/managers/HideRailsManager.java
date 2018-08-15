@@ -31,6 +31,7 @@ import fr.lulucraft321.hiderails.commands.TabComplete;
 import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
 import fr.lulucraft321.hiderails.enums.Messages;
+import fr.lulucraft321.hiderails.enums.Version;
 import fr.lulucraft321.hiderails.listeners.RedstoneInWaterEvents;
 import fr.lulucraft321.hiderails.reflection.BukkitNMS;
 import fr.lulucraft321.hiderails.runnables.BlockChangeRunner;
@@ -161,7 +162,7 @@ public class HideRailsManager
 				Byte data = LocationsManager.deserializeDataInSerializedLoc(loc);
 				HiddenRail rail = null;
 
-				if (HideRails.version == "1.12") {
+				if (HideRails.version == Version.v1_12) {
 					// Adapt material name to good versions
 					String matName = mat.name().replace("LEGACY_", "");
 					mat = Material.matchMaterial(matName);
@@ -365,7 +366,7 @@ public class HideRailsManager
 					BlockState state = rail.getState();
 
 					rail.setType(rail.getType());
-					if (HideRails.version == "1.12") {
+					if (HideRails.version == Version.v1_12) {
 						try {
 							Block.class.getDeclaredMethod("setData", byte.class).invoke(rail, entry.getValue().byteValue());
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -627,7 +628,7 @@ public class HideRailsManager
 					Block rail = Bukkit.getWorld(worldName).getBlockAt(entry.getKey());
 					BlockState state = rail.getState();
 					rail.setType(rail.getType());
-					if (HideRails.version == "1.12") {
+					if (HideRails.version == Version.v1_12) {
 						try {
 							Block.class.getDeclaredMethod("setData", byte.class).invoke(rail, entry.getValue().byteValue());
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

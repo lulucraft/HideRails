@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.commands.execution.DisplayCommand;
 import fr.lulucraft321.hiderails.commands.execution.DisplayOtherCommand;
 import fr.lulucraft321.hiderails.commands.execution.HelpCommand;
@@ -25,6 +26,7 @@ import fr.lulucraft321.hiderails.commands.execution.UnHideSelectionBlockTypeComm
 import fr.lulucraft321.hiderails.commands.execution.UnHideSelectionCommand;
 import fr.lulucraft321.hiderails.commands.execution.UnHideSingleCommand;
 import fr.lulucraft321.hiderails.commands.execution.WaterProtectionCommand;
+import fr.lulucraft321.hiderails.enums.Version;
 import fr.lulucraft321.hiderails.utils.abstractclass.AbstractCommand;
 
 public class CommandsHandle implements CommandExecutor
@@ -62,7 +64,7 @@ public class CommandsHandle implements CommandExecutor
 				case "showselection":
 				case "showselect":
 				case "showsel":
-					a = new UnHideSelectionCommand(sender);
+					if (HideRails.version == Version.v1_12) a = new UnHideSelectionCommand(sender);
 					break;
 
 				case "unhide":
@@ -104,7 +106,7 @@ public class CommandsHandle implements CommandExecutor
 				case "hideselection":
 				case "hideselect":
 				case "hidesel":
-					a = new HideSelectionCommand(sender);
+					if (HideRails.version == Version.v1_12) a = new HideSelectionCommand(sender);
 					break;
 
 				case "unhideselection":
@@ -113,7 +115,7 @@ public class CommandsHandle implements CommandExecutor
 				case "showselection":
 				case "showselect":
 				case "showsel":
-					a = new UnHideSelectionBlockTypeCommand(sender);
+					if (HideRails.version == Version.v1_12) a = new UnHideSelectionBlockTypeCommand(sender);
 					break;
 
 				case "hide":
@@ -145,7 +147,7 @@ public class CommandsHandle implements CommandExecutor
 				case "hideselection":
 				case "hideselect":
 				case "hidesel":
-					a = new HideSelectionBlockTypeCommand(sender);
+					if (HideRails.version == Version.v1_12) a = new HideSelectionBlockTypeCommand(sender);
 					break;
 
 				case "waterprotection":

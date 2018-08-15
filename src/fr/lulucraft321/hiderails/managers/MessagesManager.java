@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.Messages;
+import fr.lulucraft321.hiderails.enums.Version;
 
 public class MessagesManager
 {
@@ -50,11 +51,15 @@ public class MessagesManager
 		String weColor1 = "§c";
 		String weColor2 = "§6§m";
 		if(HideRails.getInstance().getWorldEdit() != null) {
-			required = "";
-			weColor1 = "§f";
-			weColor2 = "§6";
+			if (HideRails.version == Version.v1_12) {
+				required = "";
+				weColor1 = "§f";
+				weColor2 = "§6";
+			} else {
+				required = "§c§o > Incompatible with 1.13";
+			}
 		}
-		sender.sendMessage("\n" + "§8§l§m--------------§8§l[§6Hide§7Rails§8§l]§8§l§m--------------");
+		sender.sendMessage("\n" + "§8§l§m---------------§8§l[§6Hide§7Rails§8§l]§8§l§m---------------");
 		sender.sendMessage("\n" + "§f§l » §6/hiderails reload");
 		sender.sendMessage("§f§l » §6/hiderails help");
 		sender.sendMessage("\n" + "§f§l » §6/hiderails hideone \"§oblock:data§6\"");
@@ -67,7 +72,7 @@ public class MessagesManager
 		sender.sendMessage("§f§l » §6/hiderails display");
 		sender.sendMessage("§f§l » §6/hiderails waterprotection \"§oworld§6\" \"§ovalue§6\"");
 		sender.sendMessage("§7§l » §6§o/hiderails display [\"player\"] §8(Command Block only)");
-		sender.sendMessage("\n" + "§8§l§m-----------------------------------\n§r§o Plugin by lulucraft321");
+		sender.sendMessage("\n" + "§8§l§m-------------------------------------\n§r§o Plugin by lulucraft321");
 	}
 
 	public static void sendPluginMessage(CommandSender sender, Messages messageType)

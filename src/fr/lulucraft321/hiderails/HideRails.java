@@ -18,6 +18,7 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 import fr.lulucraft321.hiderails.commands.CommandsHandle;
 import fr.lulucraft321.hiderails.commands.TabComplete;
+import fr.lulucraft321.hiderails.enums.Version;
 import fr.lulucraft321.hiderails.external.metrics.Metrics;
 import fr.lulucraft321.hiderails.external.updater.SpigotUpdater;
 import fr.lulucraft321.hiderails.listeners.BlockClickEvent;
@@ -34,7 +35,7 @@ public class HideRails extends JavaPlugin
 	private static HideRails instance;
 	public static HideRails getInstance() { return instance; }
 
-	public static String version = "";
+	public static Version version;
 
 	@Override
 	public void onEnable()
