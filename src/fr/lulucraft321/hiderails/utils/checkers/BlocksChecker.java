@@ -98,7 +98,11 @@ public class BlocksChecker
 	public static boolean isCommandBlock(Block blockCheck)
 	{
 		if (HideRails.version == Version.v1_12) {
-			return blockCheck.getType() == Enum.valueOf(Material.class, "COMMAND") || blockCheck.getType() == Enum.valueOf(Material.class, "COMMAND_CHAIN") || blockCheck.getType() == Enum.valueOf(Material.class, "COMMAND_REPEATING");
+			// for 1.8 version
+			if (Version.v1_12.isOldVersion())
+				return blockCheck.getType() == Enum.valueOf(Material.class, "COMMAND");
+			else
+				return blockCheck.getType() == Enum.valueOf(Material.class, "COMMAND") || blockCheck.getType() == Enum.valueOf(Material.class, "COMMAND_CHAIN") || blockCheck.getType() == Enum.valueOf(Material.class, "COMMAND_REPEATING");
 		} else if (HideRails.version == Version.v1_13) {
 			return blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_COMMAND") || blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_COMMAND_CHAIN") || blockCheck.getType() == Enum.valueOf(Material.class, "LEGACY_COMMAND_REPEATING");
 		}
@@ -108,7 +112,11 @@ public class BlocksChecker
 	public static boolean isCommandBlock(Material matCheck)
 	{
 		if (HideRails.version == Version.v1_12) {
-			return matCheck == Enum.valueOf(Material.class, "COMMAND") || matCheck == Enum.valueOf(Material.class, "COMMAND_CHAIN") || matCheck == Enum.valueOf(Material.class, "COMMAND_REPEATING");
+			// for 1.8 version
+			if (Version.v1_12.isOldVersion())
+				return matCheck == Enum.valueOf(Material.class, "COMMAND");
+			else
+				return matCheck == Enum.valueOf(Material.class, "COMMAND") || matCheck == Enum.valueOf(Material.class, "COMMAND_CHAIN") || matCheck == Enum.valueOf(Material.class, "COMMAND_REPEATING");
 		} else if (HideRails.version == Version.v1_13) {
 			return matCheck == Enum.valueOf(Material.class, "LEGACY_COMMAND") || matCheck == Enum.valueOf(Material.class, "LEGACY_COMMAND_CHAIN") || matCheck == Enum.valueOf(Material.class, "LEGACY_COMMAND_REPEATING");
 		}

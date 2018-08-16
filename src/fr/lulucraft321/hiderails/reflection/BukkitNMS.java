@@ -101,6 +101,11 @@ public class BukkitNMS
 	public BukkitNMS() {
 		this.version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 		HideRails.version = this.version.contains("1_13") ? Version.v1_13 : Version.v1_12;
+		if (HideRails.version == Version.v1_12) {
+			if (this.version.contains("1_8")) {
+				Version.v1_12.setOldVersion(true);
+			}
+		}
 	}
 
 
@@ -180,6 +185,8 @@ public class BukkitNMS
 	@SuppressWarnings("unchecked")
 	public static void summonParticle(Player p, Location loc, Object particleName, int amount, int speed) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException
 	{
+		if (HideRails.version.isOldVersion()) return;
+
 		Object packet = null;
 
 		if (HideRails.version == Version.v1_12) {

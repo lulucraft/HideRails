@@ -479,12 +479,15 @@ public class HideRailsManager
 				// Sauveguarde des blocs changés dans le nouveau backup pour pouvoir retourner en arriere apres /hiderails undo
 				bBackup.addChangedBlocks(LocationsManager.serialize(loc));
 
-				// Spawn particle for see where is replacement
-				if (blockType == BlockReplacementType.RAILS) world.spawnParticle(Particle.HEART, loc, 5);
-				else if (blockType == BlockReplacementType.IRON_BARS) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
-				else if (blockType == BlockReplacementType.COMMAND_BLOCK) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
-				else if (blockType == BlockReplacementType.REDSTONE) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
-				else if (blockType == BlockReplacementType.SIGN) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
+				// If version is not 1.8
+				if (!HideRails.version.isOldVersion()) {
+					// Spawn particle for see where is replacement
+					if (blockType == BlockReplacementType.RAILS) world.spawnParticle(Particle.HEART, loc, 5);
+					else if (blockType == BlockReplacementType.IRON_BARS) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
+					else if (blockType == BlockReplacementType.COMMAND_BLOCK) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
+					else if (blockType == BlockReplacementType.REDSTONE) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
+					else if (blockType == BlockReplacementType.SIGN) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
+				}
 			}
 		}
 
@@ -562,8 +565,11 @@ public class HideRailsManager
 				// Sauveguarde des blocs changés dans le nouveau backup pour pouvoir retourner en arriere apres /hiderails undo
 				bBackup.addChangedBlocks(LocationsManager.serialize(loc));
 
-				// Spawn particle for see where is replacement
-				world.spawnParticle(Particle.BARRIER, loc, 6);
+				// If version is not 1.8
+				if (!HideRails.version.isOldVersion()) {
+					// Spawn particle for see where is replacement
+					world.spawnParticle(Particle.BARRIER, loc, 6);
+				}
 			}
 		}
 
