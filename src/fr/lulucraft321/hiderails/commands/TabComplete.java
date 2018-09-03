@@ -75,11 +75,19 @@ public class TabComplete implements TabCompleter
 					}
 
 					if (args[0].equalsIgnoreCase("hideselection")) {
-						completions.addAll(BLOCK_TYPE);
+						for(String list : BLOCK_TYPE) {
+							if(list.startsWith(args[1])) {
+								completions.add(list);
+							}
+						}
 					}
 
 					if (args[0].equalsIgnoreCase("unhideselection")) {
-						completions.addAll(BLOCK_TYPE);
+						for(String list : BLOCK_TYPE) {
+							if(list.startsWith(args[1])) {
+								completions.add(list);
+							}
+						}
 					}
 
 					if (args[0].startsWith("display")) {

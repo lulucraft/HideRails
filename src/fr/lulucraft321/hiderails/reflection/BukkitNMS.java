@@ -27,6 +27,9 @@ public class BukkitNMS
 {
 	public String version;
 
+	/* General */
+	private static Class<?> packet_class;
+
 	/* BLOCKS */
 	private static Class<?> block_change_class;
 	private static Class<?> craftMagicNumbersClass;
@@ -45,6 +48,7 @@ public class BukkitNMS
 	private static Method particles_method;
 
 	static {
+		packet_class = NMSClass.getNMSClass("Packet");
 		try {
 			// ----------------------------------------------------- BLOCKS ------------------------------------------------------ //
 			block_change_class = NMSClass.getNMSClass("PacketPlayOutBlockChange");
@@ -72,7 +76,7 @@ public class BukkitNMS
 
 			// ---------------------------------------------------- PARTICLES ---------------------------------------------------- //
 			packet_play_out_world_particles = NMSClass.getNMSClass("PacketPlayOutWorldParticles");
-			if (HideRails.version == Version.v1_12) {
+			if (HideRails.version == Version.v1_12 && !Version.v1_12.isOldVersion()) {
 				enum_particle_class = NMSClass.getNMSClass("EnumParticle");
 				try {
 					packet_particles_constructor = NMSClass.getConstructor(packet_play_out_world_particles,
@@ -185,12 +189,11 @@ public class BukkitNMS
 	@SuppressWarnings("unchecked")
 	public static void summonParticle(Player p, Location loc, Object particleName, int amount, int speed) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException
 	{
+		// If version is 1.8
 		if (HideRails.version.isOldVersion()) return;
 
-		Object packet = null;
-
 		if (HideRails.version == Version.v1_12) {
-			packet =
+			Object packet =
 					NMSClass.newInstance(
 							packet_particles_constructor,
 							NMSClass.invokeMethod(particles_method, enum_particle_class, ((ParticleName_v1_12) particleName).getParticleName()),
@@ -232,7 +235,7 @@ public class BukkitNMS
 				"playerConnection").get(handle);
 
 		NMSClass.invokeMethod(
-				NMSClass.getMethod(playerConnection.getClass(), "sendPacket", NMSClass.getNMSClass("Packet")),
+				NMSClass.getMethod(playerConnection.getClass(), "sendPacket", packet_class),
 				playerConnection, packet);
 	}
 }

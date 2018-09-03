@@ -1,28 +1,42 @@
-# ############################################################ #
-#                                                              #
-#               Plugin HideRails by lulucraft321               #
-#                                                              #
-# ############################################################ #
+#############################################################
+#'                                                         '#
+#              Plugin HideRails by lulucraft321             #
+#'                                                         '#
+#############################################################
 
 # Language of all messages in plugin
-# You can create your custom language (copy and paste existing language file and remake it)
+# You can create your custom language (copy
+# and paste existing language file and remake it)
 language: EN
 
 # Enable block hidding
 hideRails: true
+# 'Enable Iron bars hidding (ex: TC-HangRail hanging train)'
 hideIronBars: false
+# Enable Command blocks hidding (include 3 types of command blocks)
 hideCommandBlock: false
+# Enable Redstone hidding (include levers, ...)
 hideRedstone: false
+# 'Enable Signs hidding (ex: TrainCart sign)'
 hideSigns: false
 
 # Particle who spawn in hidden-blocks if player execute /hr display command
-hiddingBlocksParticles: false
+hiddingBlocksParticles: true
 
 # HiddenBlocks view distance
 viewDistance: 100
 
-# Plugin update message sent when a player join the server
+# Plugin update message sent when admin player join the server
 adminsUpdateMessage: true
+
+# Enable or disable player spam block kick
+# If you disable it, the players can spam
+# sending packets and that can cause bugs !
+kickSpamBlock: true
+
+# Max block spam click number before kick player
+# If number is high, bugs may increase !
+maxSpamNumber: 4
 
 # Enable or disable water-protection for each world
 # _all_ is waterprotection for all worlds if no world is defined

@@ -118,19 +118,19 @@ public class HideRailsManager
 
 		TabComplete.BLOCK_TYPE.clear();
 		if (hr) {
-			TabComplete.BLOCK_TYPE.add("RAILS");
+			TabComplete.BLOCK_TYPE.add("rails");
 		}
 		if (hs) {
-			TabComplete.BLOCK_TYPE.add("SIGN");
+			TabComplete.BLOCK_TYPE.add("sign");
 		}
 		if (hr) {
-			TabComplete.BLOCK_TYPE.add("REDSTONE");
+			TabComplete.BLOCK_TYPE.add("redstone");
 		}
 		if (hc) {
-			TabComplete.BLOCK_TYPE.add("COMMAND");
+			TabComplete.BLOCK_TYPE.add("command");
 		}
 		if (hb) {
-			TabComplete.BLOCK_TYPE.add("IRON_FENCE");
+			TabComplete.BLOCK_TYPE.add("iron_fence");
 		}
 
 		HideRailsManager.maj = config.getBoolean("adminsUpdateMessage");
@@ -286,6 +286,11 @@ public class HideRailsManager
 	{
 		if (HideRailsManager.displayBlocksPlayers.contains(p)) {
 			HideRailsManager.displayBlocksPlayers.remove(p);
+
+			if (PlayerDisplayBlocks.run && HideRailsManager.displayBlocksPlayers.isEmpty()) {
+				PlayerDisplayBlocks.run = false;
+				Bukkit.getScheduler().cancelTask(PlayerDisplayBlocks.taskId);
+			}
 		} else {
 			HideRailsManager.displayBlocksPlayers.add(p);
 
@@ -293,7 +298,7 @@ public class HideRailsManager
 			if (!PlayerDisplayBlocks.run) {
 				// If particles enabled
 				if (HideRailsManager.hiddingBlocksParticles) {
-					new PlayerDisplayBlocks().runTaskTimer(HideRails.getInstance(), 1L, 32L);
+					PlayerDisplayBlocks.taskId = new PlayerDisplayBlocks().runTaskTimer(HideRails.getInstance(), 1L, 32L).getTaskId();
 					PlayerDisplayBlocks.run = true;
 				}
 			}

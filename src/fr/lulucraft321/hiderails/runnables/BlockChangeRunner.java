@@ -35,7 +35,8 @@ public class BlockChangeRunner extends BukkitRunnable
 
 		for (HiddenRailsWorld hWorld : HideRailsManager.rails)
 		{
-			World world = HideRails.getInstance().getServer().getWorld(hWorld.getWorldName());
+			String hWorldName = hWorld.getWorldName();
+			World world = HideRails.getInstance().getServer().getWorld(hWorldName);
 
 			if (world != null)
 			{
@@ -44,7 +45,9 @@ public class BlockChangeRunner extends BukkitRunnable
 
 				for (Player p : players)
 				{
-					if (p.getWorld().getName().equals(hWorld.getWorldName()))
+					World pWorld = p.getWorld();
+
+					if (pWorld.getName().equals(hWorldName))
 					{
 						// Si le joueur n'a pas desactive le masquage des blocks
 						if (!HideRailsManager.isInPlayerWhoDisplayedBlocks(p))
@@ -52,18 +55,19 @@ public class BlockChangeRunner extends BukkitRunnable
 							for (HiddenRail rail : hWorld.getHiddenRails())
 							{
 								Location railLoc = rail.getLocation();
+								World railWorld = railLoc.getWorld();
 
-								if (railLoc.getWorld() != null)
+								if (railWorld != null)
 								{
-									MaterialData mats = new MaterialData(rail.getMaterial(), rail.getData());
-									Block block = Bukkit.getServer().getWorld(rail.getLocation().getWorld().getName()).getBlockAt(railLoc);
-
-									if (railLoc.getWorld().equals(p.getWorld()))
+									if (railWorld.equals(pWorld))
 									{
 										if (world.getChunkAt(railLoc).isLoaded())
 										{
 											if (railLoc.distance(p.getLocation()) <= FileConfigurationManager.viewDistance)
 											{
+												MaterialData mats = new MaterialData(rail.getMaterial(), rail.getData());
+												Block block = Bukkit.getServer().getWorld(railWorld.getName()).getBlockAt(railLoc);
+
 												// Si le masquage des barreaux est active -> continue sinon return
 												if (BlocksChecker.isIronBar(block)) {
 													if (HideRailsManager.hb) {
