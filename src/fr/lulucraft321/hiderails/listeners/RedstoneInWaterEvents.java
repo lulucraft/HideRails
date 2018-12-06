@@ -45,6 +45,7 @@ public class RedstoneInWaterEvents extends AbstractEvent
 					Enum.valueOf(Material.class, "LEGACY_LEVER"),
 					Enum.valueOf(Material.class, "LEGACY_STONE_BUTTON"),
 					Enum.valueOf(Material.class, "LEGACY_WOOD_BUTTON"),
+					Enum.valueOf(Material.class, "LEGACY_RAILS"),
 					Enum.valueOf(Material.class, "LEGACY_ACTIVATOR_RAIL"),
 					Enum.valueOf(Material.class, "LEGACY_POWERED_RAIL"),
 					Enum.valueOf(Material.class, "LEGACY_DETECTOR_RAIL"),
