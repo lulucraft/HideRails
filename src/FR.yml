@@ -22,3 +22,8 @@ messages:
   display_hidden_blocks: '&2Vous avez %hide% le masquage des blocs pour vous !'
   invalid_player: '&cLe joueur n''est pas connecté/n''existe pas !'
   update_found: '&bUne nouvelle mise à jour est disponible !\n&o%link%'
+  kick_spam_hidden_block: '&cTu veux bien arrêter de spam sur les blocs svp ??!!'
+  hiderails_no_selection: '&cVous devez d''abord sélectionner une region avec la hache
+    en bois !'
+  hiderails_selection_pos: '&8Vous avez sélectionné la position &e%pos%'
+  selection_message_status: '&8Vous avez &e%status% &8les messages de sélection !'

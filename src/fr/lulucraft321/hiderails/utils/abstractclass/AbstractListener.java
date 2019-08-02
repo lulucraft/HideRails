@@ -12,9 +12,9 @@ import org.bukkit.event.Listener;
 
 import fr.lulucraft321.hiderails.HideRails;
 
-public class AbstractEvent implements Listener
+public class AbstractListener implements Listener
 {
-	public AbstractEvent() {
+	public AbstractListener() {
 		Bukkit.getServer().getPluginManager().registerEvents(this, HideRails.getInstance());
 	}
 }

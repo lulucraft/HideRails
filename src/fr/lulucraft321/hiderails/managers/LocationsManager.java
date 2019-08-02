@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.managers;

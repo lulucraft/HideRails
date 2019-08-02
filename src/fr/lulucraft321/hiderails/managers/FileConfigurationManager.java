@@ -12,46 +12,53 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.configurations.configs.English;
 import fr.lulucraft321.hiderails.configurations.configs.French;
+import fr.lulucraft321.hiderails.configurations.configs.German;
 import fr.lulucraft321.hiderails.configurations.configs.Hongrois;
 import fr.lulucraft321.hiderails.configurations.configs.Italian;
 import fr.lulucraft321.hiderails.configurations.configs.Spanish;
 import fr.lulucraft321.hiderails.configurations.specialconfig.Configuration;
 import fr.lulucraft321.hiderails.configurations.specialconfig.ConfigurationsHandle;
-import fr.lulucraft321.hiderails.utils.checkers.Checker;
+import fr.lulucraft321.hiderails.utils.checkers.JavaChecker;
 
 public class FileConfigurationManager
 {
 	public static String language;
 	public static String getLanguage() { return language; }
 
-	public static final String path = "plugins/HideRails/Languages";
-	private static File langFolder = new File(path);
-	private static File conf = new File("plugins/HideRails", "config.yml");
+	public static final String HIDERAILS_PATH = "plugins/HideRails";
+	public static final String LANG_PATH = HIDERAILS_PATH  + "/Languages";
+	private static File langFolder = new File(LANG_PATH);
+	private static File conf = new File(HIDERAILS_PATH, "config.yml");
 
 	public static final String msgPath = "messages.";
 	public static int viewDistance = 100;
 
 	private static File hiddenRailsFile;
+	private static File playersDataFile;
 	protected static File frLangFile;
 	protected static File enLangFile;
 	protected static File itLangFile;
 	protected static File huLangFile;
 	protected static File esLangFile;
+	protected static File deLangFile;
 	protected static File langFile;
 
 	private static Configuration config = null;
 	public static Configuration getConfig() { return config; }
 
 	protected static FileConfiguration hiddenRailsConfig = null;
+	protected static FileConfiguration playersDataConfig = null;
 
 	protected static FileConfiguration frLangConfig;
 	protected static FileConfiguration enLangConfig;
 	protected static FileConfiguration itLangConfig;
 	protected static FileConfiguration huLangConfig;
 	protected static FileConfiguration esLangConfig;
+	protected static FileConfiguration deLangConfig;
 	private static FileConfiguration langConfig;
 
 	public static FileConfiguration getHiddenRailsConfig() { return hiddenRailsConfig; }
+	public static FileConfiguration getPlayersDataConfig() { return playersDataConfig; }
 	public static FileConfiguration getLangConfig() { return langConfig; }
 
 
@@ -136,7 +143,7 @@ public class FileConfigurationManager
 			FileConfigurationManager.config.setCommentedPath("viewDistance", 120, "HiddenBlocks view distance");
 		} else {
 			String view = String.valueOf(FileConfigurationManager.config.get("viewDistance"));
-			if (Checker.isInt(view)) {
+			if (JavaChecker.isInt(view)) {
 				FileConfigurationManager.viewDistance = Integer.parseInt(view);
 			}
 		}
@@ -180,7 +187,7 @@ public class FileConfigurationManager
 		 * Load HiddenRails file
 		 */
 		// HiddenRails.yml
-		hiddenRailsFile = new File("plugins/HideRails", "HiddenRails.yml");
+		hiddenRailsFile = new File(HIDERAILS_PATH, "HiddenRails.yml");
 		if (!hiddenRailsFile.exists())
 		{
 			try {
@@ -195,6 +202,24 @@ public class FileConfigurationManager
 
 
 		/*
+		 * Load PlayersData file
+		 */
+		// PlayersData.yml
+		playersDataFile = new File(HIDERAILS_PATH, "PlayersData.yml");
+		if (!playersDataFile.exists())
+		{
+			try {
+				playersDataFile.createNewFile();
+			} catch (IOException e) {
+				System.out.println("Erreur lors de la creation du fichier de configuration \"" + playersDataConfig.getName().toString() + "\" !");
+				return;
+			}
+		}
+		playersDataConfig = YamlConfiguration.loadConfiguration(playersDataFile);
+		//
+
+
+		/*
 		 * Init all config files
 		 */
 		new English().setupConfig();
@@ -202,15 +227,16 @@ public class FileConfigurationManager
 		new Hongrois().setupConfig();
 		new Italian().setupConfig();
 		new Spanish().setupConfig();
+		new German().setupConfig();
 
 
 		/*
 		 * Load custom language file
 		 */
-		if (!language.equals("FR") && !language.equals("EN") && !language.equals("IT") && !language.equals("HU") && !language.equals("ES"))
+		if (!language.equals("FR") && !language.equals("EN") && !language.equals("IT") && !language.equals("HU") && !language.equals("ES") && !language.equals("DE"))
 		{
 			// Load custom language
-			File langFile = new File(path + "/" + FileConfigurationManager.config.getString("language") + ".yml");
+			File langFile = new File(LANG_PATH + "/" + FileConfigurationManager.config.getString("language") + ".yml");
 
 			// Chargement du fichier config lang
 			try {
@@ -234,6 +260,8 @@ public class FileConfigurationManager
 			langConfig = huLangConfig;
 		} else if(language.equalsIgnoreCase("ES")) {
 			langConfig = esLangConfig;
+		} else if(language.equalsIgnoreCase("DE")) {
+			langConfig = deLangConfig;
 		}
 		//
 
@@ -250,6 +278,13 @@ public class FileConfigurationManager
 		 */
 		// Initialisation des blocks a masquer
 		HideRailsManager.initHideBlocksType();
+
+
+		/*
+		 * Load all blacklisted players selection message
+		 */
+		// Initialisation des joueurs ne voulant pas recevoir le message de selection (pos1, pos2)
+		HideRailsManager.initPlayersData();
 	}
 
 
@@ -261,7 +296,7 @@ public class FileConfigurationManager
 	// + recreation d'un fichier config avec les parametres par defaut
 	private static void addCorruptConfig() {
 		File confFile = new File(conf.getAbsolutePath());
-		File confBack = new File("plugins/HideRails/config_" + new SimpleDateFormat("yyyy-M-dd_hh.mm.ss").format(new Date()).toString() + ".yml");
+		File confBack = new File(HIDERAILS_PATH + "/config_" + new SimpleDateFormat("yyyy-M-dd_hh.mm.ss").format(new Date()).toString() + ".yml");
 
 		if (confFile.exists()) {
 			confFile.renameTo(confBack);
@@ -281,6 +316,13 @@ public class FileConfigurationManager
 		} catch (IOException e) {
 			System.out.println("Erreur lors de la sauveguarde du fichier de configuration \"" + hiddenRailsConfig.getName().toString() + "\"");
 		}
+
+		try {
+			playersDataConfig.save(playersDataFile);
+		} catch (IOException e) {
+			System.out.println("Erreur lors de la sauveguarde du fichier de configuration \"" + playersDataConfig.getName().toString() + "\"");
+		}
+
 
 		try {
 			frLangConfig.save(frLangFile);
@@ -310,6 +352,12 @@ public class FileConfigurationManager
 			esLangConfig.save(esLangFile);
 		} catch (IOException e) {
 			System.out.println("Erreur lors de la sauveguarde du fichier de configuration \"" + esLangConfig.getName().toString() + "\"");
+		}
+
+		try {
+			deLangConfig.save(deLangFile);
+		} catch (IOException e) {
+			System.out.println("Erreur lors de la sauveguarde du fichier de configuration \"" + deLangConfig.getName().toString() + "\"");
 		}
 	}
 

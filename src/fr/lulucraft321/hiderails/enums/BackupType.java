@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author ProCZ
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.enums;

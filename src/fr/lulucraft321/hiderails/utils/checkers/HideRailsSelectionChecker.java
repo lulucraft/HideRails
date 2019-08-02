@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.utils.checkers;
@@ -16,57 +16,34 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
-import com.sk89q.worldedit.bukkit.selections.Selection;
-
-import fr.lulucraft321.hiderails.HideRails;
-import fr.lulucraft321.hiderails.enums.Messages;
 import fr.lulucraft321.hiderails.managers.HideRailsManager;
-import fr.lulucraft321.hiderails.managers.MessagesManager;
+import fr.lulucraft321.hiderails.managers.PlayerClaimDataManager;
+import fr.lulucraft321.hiderails.utils.data.ClaimData;
+import fr.lulucraft321.hiderails.utils.selectionsystem.Cuboid;
 
-public class WorldeditChecker
+public class HideRailsSelectionChecker
 {
-	/*
-	 * Check and get Worldedit if plugin is installed
-	 */
-	private static WorldEditPlugin getWorldedit(Player player)
+	public static ClaimData getHideRailsSelection(Player player)
 	{
-		WorldEditPlugin we = HideRails.getInstance().getWorldEdit();
-		if(we == null) {
-			MessagesManager.sendPluginMessage(player, Messages.WORLDEDIT_NOT_INSTALLED);
-			return null;
-		}
+		ClaimData cd = PlayerClaimDataManager.getPlayerClaimData(player);
 
-		return we;
+		return cd;
 	}
 
-	public static Selection getWorldeditSelection(Player player)
+	private static List<Location> getAllBlocksLocationInWeSelection(Cuboid selection)
 	{
-		WorldEditPlugin we = WorldeditChecker.getWorldedit(player);
-		if(we != null) {
-			Selection sel = we.getSelection(player);
-			if(sel instanceof CuboidSelection) { // Eviter de confondre avec un cuboid (region protegee)
-				return sel;
-			}
-		}
-		return null;
-	}
-
-	private static List<Location> getAllBlocksLocationInWeSelection(Selection selection)
-	{
-		Location min = selection.getMinimumPoint(); // Minimum point of Worldedit Selection
-		Location max = selection.getMaximumPoint(); // Maximum point of Worldedit Selection
+		Location p1 = selection.getVector1().toLocation(selection.getWorld()); // Minimum point of HideRails Selection
+		Location p2 = selection.getVector2().toLocation(selection.getWorld()); // Maximum point of HideRails Selection
 
 		List<Location> railsLocsTemp = new ArrayList<>(); // Temporary storage of all blocks Location in Worldedit Selection
 
-		for (int x = min.getBlockX(); x <= max.getBlockX(); x++)
+		for (int x = p1.getBlockX(); x <= p2.getBlockX(); x++)
 		{
-			for (int y = min.getBlockY(); y <= max.getBlockY(); y++)
+			for (int y = p1.getBlockY(); y <= p2.getBlockY(); y++)
 			{
-				for (int z = min.getBlockZ(); z <= max.getBlockZ(); z++)
+				for (int z = p1.getBlockZ(); z <= p2.getBlockZ(); z++)
 				{
-					railsLocsTemp.add(new Location(min.getWorld(), x, y, z));
+					railsLocsTemp.add(new Location(p1.getWorld(), x, y, z));
 				}
 			}
 		}
@@ -74,9 +51,9 @@ public class WorldeditChecker
 		return railsLocsTemp;
 	}
 
-	public static List<Location> getAllValidRails(Selection selection, List<Material> types)
+	public static List<Location> getAllValidRails(Cuboid selection, List<Material> types)
 	{
-		List<Location> railsLocsTemp = WorldeditChecker.getAllBlocksLocationInWeSelection(selection);
+		List<Location> railsLocsTemp = HideRailsSelectionChecker.getAllBlocksLocationInWeSelection(selection);
 		List<Location> railsLocs = new ArrayList<>();
 
 		boolean rails = false;

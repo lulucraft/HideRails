@@ -1,7 +1,7 @@
 name: HideRails
-version: 0.5.4-SNAPSHOT
-author: lulucraft321
-description: Plugin for hide rails, ladder, redstone, signs and iron_bars - By lulucraft321
+version: 0.6.0-SNAPSHOT
+author: Nepta_
+description: Plugin for hide rails, ladder, redstone, signs and iron_bars - By Nepta_
 main: fr.lulucraft321.hiderails.HideRails
 load: POSTWORLD
 loadbefore: [HideRails]

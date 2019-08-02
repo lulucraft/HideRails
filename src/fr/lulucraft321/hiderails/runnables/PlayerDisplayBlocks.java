@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.runnables;
@@ -67,7 +67,7 @@ public class PlayerDisplayBlocks extends BukkitRunnable
 							try {
 								Location loc1 = loc.add(0, 0.3, 0);
 								if (HideRails.version == Version.v1_12) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_12.VILLAGER_ANGRY, 1, 1);
-								else if (HideRails.version == Version.v1_13) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_13.VILLAGER_ANGRY, 1, 1);
+								else if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_13.VILLAGER_ANGRY, 1, 1);
 								loc1.subtract(0, 0.3, 0);
 							} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
 								e.printStackTrace();

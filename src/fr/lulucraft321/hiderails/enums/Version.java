@@ -2,14 +2,14 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.enums;
 
 public enum Version
 {
-	v1_12(false), v1_13(false);
+	v1_12(false), v1_13(false), v1_14(false);
 
 	private boolean oldVersion;
 

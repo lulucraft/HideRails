@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.commands.execution;
@@ -15,13 +15,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.sk89q.worldedit.bukkit.selections.Selection;
-
 import fr.lulucraft321.hiderails.enums.Messages;
 import fr.lulucraft321.hiderails.managers.HideRailsManager;
 import fr.lulucraft321.hiderails.managers.MessagesManager;
 import fr.lulucraft321.hiderails.utils.abstractclass.AbstractCommand;
-import fr.lulucraft321.hiderails.utils.checkers.WorldeditChecker;
+import fr.lulucraft321.hiderails.utils.checkers.HideRailsSelectionChecker;
+import fr.lulucraft321.hiderails.utils.data.ClaimData;
+import fr.lulucraft321.hiderails.utils.selectionsystem.Cuboid;
 
 public class HideSelectionBlockTypeCommand extends AbstractCommand
 {
@@ -30,15 +30,22 @@ public class HideSelectionBlockTypeCommand extends AbstractCommand
 	}
 
 	/*
-	 * Hide hiddenBlocks type with Worldedit selection
+	 * Hide hiddenBlocks type with HideRails selection
 	 */
 	public void execute(CommandSender sender, Command cmd, String[] args) {
 		if (sender instanceof Player) {
 			if (hasPermission()) {
-				Player p = (Player) sender;
-				Selection sel = WorldeditChecker.getWorldeditSelection(p);
+				final Player p = (Player) sender;
+				final ClaimData sel = HideRailsSelectionChecker.getHideRailsSelection(p);
+
 				if (sel == null) {
-					MessagesManager.sendPluginMessage(p, Messages.WORLDEDIT_NO_SELECTION);
+					MessagesManager.sendPluginMessage(p, Messages.HIDERAILS_NO_SELECTION);
+					return;
+				}
+
+				final Cuboid cuboid = sel.getCuboid();
+				if (cuboid == null) {
+					MessagesManager.sendPluginMessage(p, Messages.HIDERAILS_NO_SELECTION);
 					return;
 				}
 
@@ -50,7 +57,7 @@ public class HideSelectionBlockTypeCommand extends AbstractCommand
 						types.add(mat);
 				}
 
-				HideRailsManager.hideSelectionBlocks(p, sel, args[2], true, types);
+				HideRailsManager.hideSelectionBlocks(p, cuboid, args[2], true, types);
 			} else {
 				// Si sender n'est pas op ou n'a pas la perm
 				MessagesManager.sendPluginMessage(sender, Messages.PLAYER_NO_ENOUGH_PERMISSION);

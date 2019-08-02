@@ -2,6 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.managers;
@@ -24,24 +25,23 @@ import org.bukkit.block.BlockState;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
-import com.sk89q.worldedit.bukkit.selections.Selection;
-
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.commands.TabComplete;
 import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
 import fr.lulucraft321.hiderails.enums.Messages;
 import fr.lulucraft321.hiderails.enums.Version;
-import fr.lulucraft321.hiderails.listeners.RedstoneInWaterEvents;
+import fr.lulucraft321.hiderails.listeners.RedstoneInWaterListeners;
 import fr.lulucraft321.hiderails.reflection.BukkitNMS;
 import fr.lulucraft321.hiderails.runnables.BlockChangeRunner;
 import fr.lulucraft321.hiderails.runnables.PlayerDisplayBlocks;
 import fr.lulucraft321.hiderails.utils.backuputility.BlocksBackup;
 import fr.lulucraft321.hiderails.utils.checkers.BlocksChecker;
-import fr.lulucraft321.hiderails.utils.checkers.WorldeditChecker;
+import fr.lulucraft321.hiderails.utils.checkers.HideRailsSelectionChecker;
 import fr.lulucraft321.hiderails.utils.data.MaterialData;
 import fr.lulucraft321.hiderails.utils.data.railsdata.HiddenRail;
 import fr.lulucraft321.hiderails.utils.data.railsdata.HiddenRailsWorld;
+import fr.lulucraft321.hiderails.utils.selectionsystem.Cuboid;
 
 public class HideRailsManager
 {
@@ -54,7 +54,7 @@ public class HideRailsManager
 	public static boolean isInPlayerWhoDisplayedBlocks(Player p) { return displayBlocksPlayers.contains(p); }
 
 	// Path to hiddenRails in HiddenRails.yml
-	public static String path = "hiddenRails";
+	public static final String HIDDEN_RAILS_PATH = "hiddenRails";
 
 	/**
 	 * HideIronBars enable
@@ -147,16 +147,16 @@ public class HideRailsManager
 	{
 		Configuration config = FileConfigurationManager.getHiddenRailsConfig();
 
-		if (config.getConfigurationSection(path) == null) return;
+		if (config.getConfigurationSection(HIDDEN_RAILS_PATH) == null) return;
 
 		HideRailsManager.rails.clear();
 
-		for (String keys : config.getConfigurationSection(path).getKeys(false))
+		for (String keys : config.getConfigurationSection(HIDDEN_RAILS_PATH).getKeys(false))
 		{
 			List<HiddenRail> hiddenRails = new ArrayList<>();
 			World world = null;
 
-			for (String loc : config.getStringList(path + "." + keys))
+			for (String loc : config.getStringList(HIDDEN_RAILS_PATH + "." + keys))
 			{
 				Material mat = LocationsManager.deserializeMatInSerializedLoc(loc);
 				Byte data = LocationsManager.deserializeDataInSerializedLoc(loc);
@@ -185,6 +185,21 @@ public class HideRailsManager
 		// Activation du changement des rails, des barreaux, des commandBlock ou de la redstone
 		if (hr || hb || hc || hd || hs) {
 			new BlockChangeRunner().runTaskTimer(HideRails.getInstance(), 20L * HideRails.getInstance().getConfig().getInt("hideRails.time"), 100L);
+		}
+	}
+
+
+	/**
+	 * Load players data
+	 */
+	public static void initPlayersData()
+	{
+		Configuration config = FileConfigurationManager.getPlayersDataConfig();
+
+		// Load players who don't want selection messages
+		for (String keys : config.getKeys(false))
+		{
+			if (!config.getBoolean(keys + ".selectionMessage")) PlayerClaimDataManager.addBlacklistedPlayer(Bukkit.getPlayer(keys));
 		}
 	}
 
@@ -257,7 +272,7 @@ public class HideRailsManager
 	 */
 	public static void setWaterProtection(Player p, String worldName, boolean b)
 	{
-		String path = RedstoneInWaterEvents.path + "." + worldName;
+		String path = RedstoneInWaterListeners.path + "." + worldName;
 
 		if (FileConfigurationManager.getConfig().contains(path))
 		{
@@ -468,7 +483,7 @@ public class HideRailsManager
 
 		// Stockage de tous les rails serialisés du monde worldName
 		List<String> hiddenRails = new ArrayList<>();
-		hiddenRails = FileConfigurationManager.getHiddenRailsConfig().getStringList(path + "." + worldName);
+		hiddenRails = FileConfigurationManager.getHiddenRailsConfig().getStringList(HIDDEN_RAILS_PATH + "." + worldName);
 		List<Location> hiddenRailsLocs = new ArrayList<>();
 
 		for (String locStr : hiddenRails) {
@@ -517,7 +532,7 @@ public class HideRailsManager
 
 
 	/**
-	 * Hide blocks with Worldedit selection
+	 * Hide blocks with HideRails selection
 	 * 
 	 * @param player
 	 * @param selection
@@ -525,7 +540,7 @@ public class HideRailsManager
 	 * @param backup
 	 * @param types 
 	 */
-	public static void hideSelectionBlocks(Player player, Selection selection, String input, boolean backup, List<Material> types)
+	public static void hideSelectionBlocks(Player player, Cuboid selection, String input, boolean backup, List<Material> types)
 	{
 		MaterialData matData = BlocksChecker.getMatData(player, input);
 		byte data = matData.getData();
@@ -535,22 +550,22 @@ public class HideRailsManager
 			HideRailsManager.hideSelectionBlocks(player, selection, mat, data, backup, types);
 	}
 
-	private static void hideSelectionBlocks(Player player, Selection selection, Material mat, byte data, boolean backup, List<Material> types)
+	private static void hideSelectionBlocks(Player player, Cuboid selection, Material mat, byte data, boolean backup, List<Material> types)
 	{
-		World world = selection.getMinimumPoint().getWorld(); // Get world of blocks
+		World world = selection.getWorld();
 		String worldName = world.getName(); // Name of blocks replacement world
 
-		List<Location> railsLocs = WorldeditChecker.getAllValidRails(selection, types); // Definitly Locations of blocks replacement
+		List<Location> railsLocs = HideRailsSelectionChecker.getAllValidRails(selection, types); // Definitly Locations of blocks replacement
 
 		// Creation d'un nouveau backup
 		BlocksBackup bBackup = new BlocksBackup();
 		bBackup.setType(BackupType.HIDE);
 		bBackup.setBlocksType(types);
-		bBackup.setWeSelection(selection);
+		bBackup.setHrSelection(selection);
 
 		// Stockage de tous les rails serialisés du monde worldName
 		List<String> hiddenRails = new ArrayList<>();
-		hiddenRails = FileConfigurationManager.getHiddenRailsConfig().getStringList(path + "." + worldName);
+		hiddenRails = FileConfigurationManager.getHiddenRailsConfig().getStringList(HIDDEN_RAILS_PATH + "." + worldName);
 		List<Location> hiddenRailsLocs = new ArrayList<>();
 
 		for (String locStr : hiddenRails) {
@@ -599,7 +614,7 @@ public class HideRailsManager
 
 
 	/**
-	 * Remove hiddenBlock with worldedit selection
+	 * Remove hiddenBlock with HideRails selection
 	 * 
 	 * @param player
 	 * @param selection
@@ -607,18 +622,18 @@ public class HideRailsManager
 	 * @param types 
 	 */
 	@SuppressWarnings("deprecation")
-	public static void removeSelectionBlocks(Player player, Selection selection, boolean backup, List<Material> types)
+	public static void removeSelectionBlocks(Player player, Cuboid selection, boolean backup, List<Material> types)
 	{
-		List<Location> railsLocs = WorldeditChecker.getAllValidRails(selection, types);
+		List<Location> railsLocs = HideRailsSelectionChecker.getAllValidRails(selection, types);
 
 		HashMap<Location, Byte> railsAndData = new HashMap<>();
-		String worldName = selection.getMinimumPoint().getWorld().getName();
+		String worldName = selection.getWorld().getName();
 
 		// Creation d'un nouveau backup
 		BlocksBackup bBackup = new BlocksBackup();
 		bBackup.setType(BackupType.UNHIDE);
 		bBackup.setBlocksType(types);
-		bBackup.setWeSelection(selection);
+		bBackup.setHrSelection(selection);
 
 		for (Location rail : railsLocs) {
 			railsAndData.put(rail, Bukkit.getWorld(worldName).getBlockAt(rail).getState().getData().getData());
@@ -692,7 +707,7 @@ public class HideRailsManager
 			railsLocs.add(LocationsManager.serialize(rails.getLocation()) + ";" + rails.getMaterial() + ";" + rails.getData());
 		}
 
-		FileConfigurationManager.getHiddenRailsConfig().set(path + "." + worldName, railsLocs);
+		FileConfigurationManager.getHiddenRailsConfig().set(HIDDEN_RAILS_PATH + "." + worldName, railsLocs);
 		FileConfigurationManager.saveConfigs();
 	}
 }

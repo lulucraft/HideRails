@@ -2,6 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.enums;
@@ -21,8 +22,9 @@ public enum Messages
 	SUCCESS_UNHIDE_RAIL("rail affiche avec succes"),
 	NO_BACKUP("aucune sauveguarde"),
 	RETURN_BACKUP_SUCCESS("backup restaure avec succes !"),
-	WORLDEDIT_NOT_INSTALLED("le plugin worldedit n'est pas installé sur le serveur !"),
-	WORLDEDIT_NO_SELECTION("vous devez d'abord sélectionner un region avec worldedit !"),
+	HIDERAILS_NO_SELECTION("vous devez d'abord selectionner une region avec la hache"),
+	HIDERAILS_SELECTION_POS("vous avez selectionne la position avec succes"),
+	CHANGE_HIDERAILS_SELECTION_MESSAGE_STATUS("vous avez definit l'activation des messages de selection avec succes"),
 	DISPLAY_HIDDEN_BLOCKS("vous avez %status% le masquage des rails seulement poour vous"),
 	INVALID_PLAYER("le joueur entré est invalide"),
 	UPDATE_FOUND("une mise à jour du plugin est disponible !"),

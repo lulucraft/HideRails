@@ -2,6 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.listeners;
@@ -16,19 +17,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
 
 import fr.lulucraft321.hiderails.enums.Messages;
 import fr.lulucraft321.hiderails.managers.FileConfigurationManager;
 import fr.lulucraft321.hiderails.managers.HideRailsManager;
 import fr.lulucraft321.hiderails.managers.MessagesManager;
 import fr.lulucraft321.hiderails.reflection.BukkitNMS;
-import fr.lulucraft321.hiderails.utils.abstractclass.AbstractEvent;
+import fr.lulucraft321.hiderails.utils.abstractclass.AbstractListener;
 import fr.lulucraft321.hiderails.utils.checkers.BlocksChecker;
 import fr.lulucraft321.hiderails.utils.data.railsdata.HiddenRail;
 import fr.lulucraft321.hiderails.utils.data.railsdata.HiddenRailsWorld;
 
-public class BreakBlockEvent extends AbstractEvent
+public class BreakBlockListener extends AbstractListener
 {
 	// Temporary cancellable blocks physic
 	protected static List<Block> trashList = new ArrayList<>();
@@ -46,7 +46,7 @@ public class BreakBlockEvent extends AbstractEvent
 
 		if (b == null) return;
 		String worldName = b.getWorld().getName();
-		if (!FileConfigurationManager.getHiddenRailsConfig().contains(HideRailsManager.path + "." + worldName)) return;
+		if (!FileConfigurationManager.getHiddenRailsConfig().contains(HideRailsManager.HIDDEN_RAILS_PATH + "." + worldName)) return;
 		if (HideRailsManager.getRailsToWorld(worldName) == null) return;
 
 		// Add block in trashList -> blockphysicevent
@@ -92,7 +92,7 @@ public class BreakBlockEvent extends AbstractEvent
 								delOneHiddenBlock(p, world, baseB, worldName);
 
 								// Block interactChangeBlock for admins
-								BreakBlockEvent.breakBlocks.add(p);
+								BreakBlockListener.breakBlocks.add(p);
 
 								// Change block around hidden broken blocks (for the player see broken block)
 								BukkitNMS.changeBlock(p, bl.getType(), bl.getData(), bl.getX(), bl.getY(), bl.getZ());
@@ -117,27 +117,12 @@ public class BreakBlockEvent extends AbstractEvent
 			world.getHiddenRails().remove(baseHBlock);
 
 			// Block interactChangeBlock for admins
-			BreakBlockEvent.breakBlocks.add(p);
+			BreakBlockListener.breakBlocks.add(p);
 
 			// Send broken hidden block message
 			MessagesManager.sendPluginMessage(p, Messages.SUCCESS_BREAK_RAIL);
 		}
 		// Save deleted blocks
 		HideRailsManager.saveWorld(worldName);
-	}
-
-
-	/*
-	 * Disable breaking block around hidden rail if player break hiddenrail
-	 */
-	@EventHandler (priority = EventPriority.MONITOR)
-	public void onPhysic(BlockPhysicsEvent e)
-	{
-		Block b = e.getBlock();
-
-		if (trashList.contains(b)) {
-			e.setCancelled(true);
-			trashList.remove(b);
-		}
 	}
 }

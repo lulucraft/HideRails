@@ -12,10 +12,11 @@ import java.util.List;
 
 import org.bukkit.Material;
 
-import com.sk89q.worldedit.bukkit.selections.Selection;
+//import com.sk89q.worldedit.bukkit.selections.Selection;
 
 import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.utils.data.MaterialData;
+import fr.lulucraft321.hiderails.utils.selectionsystem.Cuboid;
 
 public class BlocksBackup
 {
@@ -23,7 +24,8 @@ public class BlocksBackup
 	private List<String> changedBlocks = new ArrayList<>();
 	private MaterialData unHideBlocksType; // Only for unhide reverse
 
-	private Selection weSelection; // Only if replacement was done with Worldedit selection
+	private Cuboid hrSelection; // Only if replacement was done with HideRailsSystem selection
+	//private Selection weSelection; // Only if replacement was done with Worldedit selection
 	private List<Material> blocksType = new ArrayList<>();
 
 	public BackupType getType() {
@@ -51,12 +53,12 @@ public class BlocksBackup
 	}
 
 
-	public Selection getWeSelection() {
-		return weSelection;
+	public Cuboid getHrSelection() {
+		return hrSelection;
 	}
 
-	public void setWeSelection(Selection weSelection) {
-		this.weSelection = weSelection;
+	public void setHrSelection(Cuboid hrSelection) {
+		this.hrSelection = hrSelection;
 	}
 
 	public List<Material> getBlocksType() {

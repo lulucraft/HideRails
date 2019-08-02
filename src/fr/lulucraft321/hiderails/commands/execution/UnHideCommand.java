@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.commands.execution;
@@ -32,7 +32,7 @@ public class UnHideCommand extends AbstractCommand
 	public void execute(CommandSender sender, Command cmd, String[] args) {
 		if (sender instanceof Player) {
 			if (hasPermission()) {
-				Player p = (Player) sender;
+				final Player p = (Player) sender;
 				HideRailsManager.removeBlocks(p, p.getTargetBlock((Set<Material>) null, 25), true, false);
 			} else {
 				// Si sender n'est pas op ou n'a pas la perm

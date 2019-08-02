@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.managers;
@@ -17,8 +17,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
-import com.sk89q.worldedit.bukkit.selections.Selection;
-
 import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.enums.BackupType;
 import fr.lulucraft321.hiderails.enums.BlockReplacementType;
@@ -27,7 +25,8 @@ import fr.lulucraft321.hiderails.enums.Version;
 import fr.lulucraft321.hiderails.utils.backuputility.BlocksBackup;
 import fr.lulucraft321.hiderails.utils.backuputility.PlayerCommandBackup;
 import fr.lulucraft321.hiderails.utils.checkers.BlocksChecker;
-import fr.lulucraft321.hiderails.utils.checkers.WorldeditChecker;
+import fr.lulucraft321.hiderails.utils.checkers.HideRailsSelectionChecker;
+import fr.lulucraft321.hiderails.utils.selectionsystem.Cuboid;
 
 public class PlayerCommandBackupManager
 {
@@ -81,7 +80,8 @@ public class PlayerCommandBackupManager
 	public static void restoreBackup(Player p)
 	{
 		BlocksBackup backup = getLatestBlocksBackup(p);
-		Selection sel = backup.getWeSelection();
+		//Selection sel = backup.getWeSelection();
+		Cuboid sel = backup.getHrSelection();
 		Block bl = null;
 
 		boolean single;
@@ -115,8 +115,8 @@ public class PlayerCommandBackupManager
 			}
 			else
 			{
-				// Si le backup contient une worldedit selection
-				for (Location blockLoc : WorldeditChecker.getAllValidRails(backup.getWeSelection(), backup.getBlocksType())) {
+				// Si le backup contient une HideRails selection
+				for (Location blockLoc : HideRailsSelectionChecker.getAllValidRails(backup.getHrSelection(), backup.getBlocksType())) {
 					bl = Bukkit.getWorld(blockLoc.getWorld().getName()).getBlockAt(blockLoc);
 					BlockState state = bl.getState();
 					bl.setType(state.getType());
@@ -131,7 +131,7 @@ public class PlayerCommandBackupManager
 					state.update(true);
 				}
 
-				HideRailsManager.removeSelectionBlocks(p, backup.getWeSelection(), false, backup.getBlocksType());
+				HideRailsManager.removeSelectionBlocks(p, backup.getHrSelection(), false, backup.getBlocksType());
 			}
 		}
 

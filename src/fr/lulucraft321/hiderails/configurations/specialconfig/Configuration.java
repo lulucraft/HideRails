@@ -2,19 +2,19 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.configurations.specialconfig;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import fr.lulucraft321.hiderails.reflection.BukkitNMS;
 
 public class Configuration
 {
@@ -203,8 +203,8 @@ public class Configuration
 
 	private String readFileContent() {
 		try {
-			return FileUtils.readFileToString(this.configFile, StandardCharsets.UTF_8);
-		} catch (IOException e) {
+			return BukkitNMS.readFileContent(this.configFile);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 
@@ -213,10 +213,10 @@ public class Configuration
 
 	private void writeFileContent(CharSequence fileContext) {
 		try {
-			FileUtils.write(this.configFile, fileContext, StandardCharsets.UTF_8);
+			BukkitNMS.writeFileContent(this.configFile, fileContext);
 
 			this.reloadConfig();
-		} catch (IOException e) {
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}

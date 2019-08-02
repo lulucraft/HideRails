@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.commands.execution;
@@ -19,7 +19,7 @@ import fr.lulucraft321.hiderails.enums.Messages;
 import fr.lulucraft321.hiderails.managers.HideRailsManager;
 import fr.lulucraft321.hiderails.managers.MessagesManager;
 import fr.lulucraft321.hiderails.utils.abstractclass.AbstractCommand;
-import fr.lulucraft321.hiderails.utils.checkers.Checker;
+import fr.lulucraft321.hiderails.utils.checkers.JavaChecker;
 
 public class WaterProtectionCommand extends AbstractCommand
 {
@@ -40,7 +40,7 @@ public class WaterProtectionCommand extends AbstractCommand
 
 				if (world.contains(Bukkit.getServer().getWorld(worldInput))) {
 					// args[2] == boolean value
-					String bInput = Checker.getBoolean(args[2].toLowerCase().toString());
+					String bInput = JavaChecker.getBoolean(args[2].toLowerCase().toString());
 
 					if (bInput == null) {
 						MessagesManager.sendHelpPluginMessage(p);

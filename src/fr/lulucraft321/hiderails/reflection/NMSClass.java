@@ -138,8 +138,8 @@ public class NMSClass
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 */
-	public static Object invokeMethod(Method method, Object methodName, Object methodParams) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	public static Object invokeMethod(Method method, Object inst, Object... methodParams) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
-		return method.invoke(methodName, methodParams);
+		return method.invoke(inst, methodParams);
 	}
 }

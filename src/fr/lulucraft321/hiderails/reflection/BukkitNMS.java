@@ -2,15 +2,18 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.reflection;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -47,6 +50,11 @@ public class BukkitNMS
 	private static Constructor<?> packet_particles_constructor;
 	private static Method particles_method;
 
+	/* CONFIGURATIONS */
+	private static Class<?> fileUtils_class;
+	private static Method readFileContent_method;
+	private static Method writeFileContent_method;
+
 	static {
 		packet_class = NMSClass.getNMSClass("Packet");
 		try {
@@ -63,7 +71,7 @@ public class BukkitNMS
 			if (HideRails.version == Version.v1_12) {
 				// Get "IBlockData fromLegacy(int i)" method
 				fromLegacyData_method = NMSClass.getMethod(block_class, "fromLegacyData", int.class);
-			} else if (HideRails.version == Version.v1_13) {
+			} else if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) {
 				// Get "IBlockData getBlockData()" method
 				block_data_method = NMSClass.getMethod(block_class, "getBlockData", null);
 			}
@@ -87,7 +95,7 @@ public class BukkitNMS
 				} catch (NoSuchMethodException | SecurityException e) {
 					e.printStackTrace();
 				}
-			} else if (HideRails.version == Version.v1_13) {
+			} else if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) {
 				enum_particle_class = NMSClass.getNMSClass("ParticleParam");
 				try {
 					packet_particles_constructor = NMSClass.getConstructor(packet_play_out_world_particles,
@@ -97,19 +105,59 @@ public class BukkitNMS
 				}
 			}
 			// ------------------------------------------------------------------------------------------------------------------- //
-		} catch (SecurityException | NoSuchFieldException | NoSuchMethodException e) {
+
+
+			// -------------------------------------------------- CONFIGURATIONS ------------------------------------------------- //
+			if (HideRails.version == Version.v1_14) fileUtils_class = Class.forName("org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils");
+			else fileUtils_class = Class.forName("org.apache.commons.io.FileUtils");
+			readFileContent_method = NMSClass.getMethod(fileUtils_class, "readFileToString", File.class, Charset.class); // params : File.class, Charset.class / return : String.class
+			writeFileContent_method = NMSClass.getMethod(fileUtils_class, "write", File.class, CharSequence.class, Charset.class); // params : File.class, CharSequence.class, Charset.class / return : void
+			// ------------------------------------------------------------------------------------------------------------------- //
+		} catch (SecurityException | NoSuchFieldException | NoSuchMethodException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public BukkitNMS() {
 		this.version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-		HideRails.version = this.version.contains("1_13") ? Version.v1_13 : Version.v1_12;
+		HideRails.version = this.version.contains("1_13") ? Version.v1_13 : this.version.contains("1_14") ? Version.v1_14 : Version.v1_12;
 		if (HideRails.version == Version.v1_12) {
 			if (this.version.contains("1_8")) {
 				Version.v1_12.setOldVersion(true);
 			}
 		}
+	}
+
+
+	/**
+	 * Read file content
+	 * 
+	 * @param configFile
+	 * @return fileContent
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	public static String readFileContent(File configFile) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		return (String) NMSClass.invokeMethod(readFileContent_method, "readFileToString", configFile, StandardCharsets.UTF_8);
+	}
+
+	/**
+	 * Write file content
+	 * 
+	 * @param configFile
+	 * @param fileContext
+	 * @return String
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	public static String writeFileContent(File configFile, CharSequence fileContext) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		return (String) NMSClass.invokeMethod(writeFileContent_method, "write", configFile, fileContext, StandardCharsets.UTF_8);
 	}
 
 
@@ -148,10 +196,10 @@ public class BukkitNMS
 			Object block_data = null;
 			if (HideRails.version == Version.v1_12) {
 				block_data = NMSClass.invokeMethod(fromLegacyData_method, craftMagicNumber, data);
-			} else if (HideRails.version == Version.v1_13) {
+			} else if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) {
 				// replace "block_data = CraftMagicNumbers.getBlock(material).getBlockData();"
 				Object iMe = NMSClass.invokeMethod(craftMagicNumbers_method, craftMagicNumber, material);
-				block_data = block_data_method.invoke(iMe, null);
+				block_data = NMSClass.invokeMethod(block_data_method, iMe, null);
 			}
 
 			/*
@@ -205,7 +253,7 @@ public class BukkitNMS
 							new int[]{speed}
 							);
 			sendPacket(p, packet);
-		} else if (HideRails.version == Version.v1_13) {
+		} else if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) {
 			p.spawnParticle(Particle.valueOf(((Enum<ParticleName_v1_13>) particleName).name().toUpperCase()), loc.getX(), loc.getY(), loc.getZ(), 0, 0d, 0d, 0d, amount);
 		}
 	}

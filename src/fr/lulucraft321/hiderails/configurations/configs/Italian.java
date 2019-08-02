@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.configurations.configs;
@@ -21,7 +21,7 @@ public class Italian extends FileConfigurationManager implements AbstractLangCon
 	public void setupConfig()
 	{
 		// IT.yml
-		FileConfigurationManager.itLangFile = new File(FileConfigurationManager.path, "IT.yml");
+		FileConfigurationManager.itLangFile = new File(FileConfigurationManager.LANG_PATH, "IT.yml");
 		if(!FileConfigurationManager.itLangFile.exists())
 		{
 			try {
@@ -46,12 +46,15 @@ public class Italian extends FileConfigurationManager implements AbstractLangCon
 			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "water_protection_status_already", "&cLa protezione sott'acqua nel mondo %world% è già %status%");
 			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "no_backup", "&cNessun backup disponibile !");
 			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "return_backup_success", "&2Backup ripristinato con successo !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "worldedit_not_installed", "&cIl Plugin WorldEdit non è installato in questo server !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "worldedit_no_selection", "&cDevi prima selezionare una regione con WorldEdit !");
+			//FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "worldedit_not_installed", "&cIl Plugin WorldEdit non è installato in questo server !");
+			//FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "worldedit_no_selection", "&cDevi prima selezionare una regione con WorldEdit !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "hiderails_no_selection", "&cYou must first select region with wooden-axe!");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "hiderails_selection_pos", "&8You have selected position &e%pos%");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "selection_message_status", "&8You have &e%status% &8selection messages!");
 			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "display_hidden_blocks", "&2Hai %hide% i blocchi nascosti per te !");
 			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "invalid_player", "&cIl giocatore non può essere trovato");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "update_found", "§bNuovo aggiornamento disponibile !\n§o%link%");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "kick_spam_hidden_block", "§cNon spammare blocchi perfavore !!");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "update_found", "&bNuovo aggiornamento disponibile !\n&o%link%");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "kick_spam_hidden_block", "&cNon spammare blocchi perfavore !!");
 
 			// Sauveguarde des modifs
 			try {
@@ -73,12 +76,15 @@ public class Italian extends FileConfigurationManager implements AbstractLangCon
 			checkConfContains(FileConfigurationManager.itLangConfig, "water_protection_status_already", "&cLa protezione sott'acqua nel mondo %world% è già %status%");
 			checkConfContains(FileConfigurationManager.itLangConfig, "no_backup", "&cNessun backup disponibile !");
 			checkConfContains(FileConfigurationManager.itLangConfig, "return_backup_success", "&2Backup ripristinato con successo !");
-			checkConfContains(FileConfigurationManager.itLangConfig, "worldedit_not_installed", "&cIl Plugin WorldEdit non è installato in questo server !");
-			checkConfContains(FileConfigurationManager.itLangConfig, "worldedit_no_selection", "&cDevi prima selezionare una regione con WorldEdit !");
+			//checkConfContains(FileConfigurationManager.itLangConfig, "worldedit_not_installed", "&cIl Plugin WorldEdit non è installato in questo server !");
+			//checkConfContains(FileConfigurationManager.itLangConfig, "worldedit_no_selection", "&cDevi prima selezionare una regione con WorldEdit !");
+			checkConfContains(FileConfigurationManager.itLangConfig, "hiderails_no_selection", "&cYou must first select region with wooden-axe!");
+			checkConfContains(FileConfigurationManager.itLangConfig, "hiderails_selection_pos", "&8You have selected position &e%pos%");
+			checkConfContains(FileConfigurationManager.itLangConfig, "selection_message_status", "&8You have &e%status% &8selection messages!");
 			checkConfContains(FileConfigurationManager.itLangConfig, "display_hidden_blocks", "&2Hai %hide% i blocchi nascosti per te !");
 			checkConfContains(FileConfigurationManager.itLangConfig, "invalid_player", "&cIl giocatore non può essere trovato");
-			checkConfContains(FileConfigurationManager.itLangConfig, "update_found", "§bNuovo aggiornamento disponibile !\n§o%link%");
-			checkConfContains(FileConfigurationManager.itLangConfig, "kick_spam_hidden_block", "§cNon spammare blocchi perfavore !!");
+			checkConfContains(FileConfigurationManager.itLangConfig, "update_found", "&bNuovo aggiornamento disponibile !\n&o%link%");
+			checkConfContains(FileConfigurationManager.itLangConfig, "kick_spam_hidden_block", "&cNon spammare blocchi perfavore !!");
 
 			// Sauveguarde des modifs
 			try {

@@ -2,11 +2,14 @@
  * Copyright Java Code
  * All right reserved.
  *
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.utils.checkers;
 
-public class Checker
+import org.bukkit.Material;
+
+public class JavaChecker
 {
 	public static boolean isInt(String check)
 	{
@@ -29,5 +32,10 @@ public class Checker
 			return "false";
 		}
 		return null;
+	}
+
+	public static Material enumCheck(String materialString)
+	{
+		return Enum.valueOf(Material.class, materialString);
 	}
 }

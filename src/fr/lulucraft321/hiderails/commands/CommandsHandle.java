@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.commands;
@@ -11,7 +11,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import fr.lulucraft321.hiderails.HideRails;
 import fr.lulucraft321.hiderails.commands.execution.DisplayCommand;
 import fr.lulucraft321.hiderails.commands.execution.DisplayOtherCommand;
 import fr.lulucraft321.hiderails.commands.execution.HelpCommand;
@@ -21,12 +20,12 @@ import fr.lulucraft321.hiderails.commands.execution.HideSelectionCommand;
 import fr.lulucraft321.hiderails.commands.execution.HideSingleCommand;
 import fr.lulucraft321.hiderails.commands.execution.ReloadCommand;
 import fr.lulucraft321.hiderails.commands.execution.RestoreBackupCommand;
+import fr.lulucraft321.hiderails.commands.execution.SelectionMessageCommand;
 import fr.lulucraft321.hiderails.commands.execution.UnHideCommand;
 import fr.lulucraft321.hiderails.commands.execution.UnHideSelectionBlockTypeCommand;
 import fr.lulucraft321.hiderails.commands.execution.UnHideSelectionCommand;
 import fr.lulucraft321.hiderails.commands.execution.UnHideSingleCommand;
 import fr.lulucraft321.hiderails.commands.execution.WaterProtectionCommand;
-import fr.lulucraft321.hiderails.enums.Version;
 import fr.lulucraft321.hiderails.utils.abstractclass.AbstractCommand;
 
 public class CommandsHandle implements CommandExecutor
@@ -53,6 +52,10 @@ public class CommandsHandle implements CommandExecutor
 					a = new DisplayCommand(sender);
 					break;
 
+				case "selectionmessage":
+					a = new SelectionMessageCommand(sender);
+					break;
+
 				case "return":
 				case "undo":
 					a = new RestoreBackupCommand(sender);
@@ -64,7 +67,7 @@ public class CommandsHandle implements CommandExecutor
 				case "showselection":
 				case "showselect":
 				case "showsel":
-					if (HideRails.version == Version.v1_12) a = new UnHideSelectionCommand(sender);
+					a = new UnHideSelectionCommand(sender);
 					break;
 
 				case "unhide":
@@ -106,7 +109,7 @@ public class CommandsHandle implements CommandExecutor
 				case "hideselection":
 				case "hideselect":
 				case "hidesel":
-					if (HideRails.version == Version.v1_12) a = new HideSelectionCommand(sender);
+					a = new HideSelectionCommand(sender);
 					break;
 
 				case "unhideselection":
@@ -115,7 +118,7 @@ public class CommandsHandle implements CommandExecutor
 				case "showselection":
 				case "showselect":
 				case "showsel":
-					if (HideRails.version == Version.v1_12) a = new UnHideSelectionBlockTypeCommand(sender);
+					a = new UnHideSelectionBlockTypeCommand(sender);
 					break;
 
 				case "hide":
@@ -147,7 +150,7 @@ public class CommandsHandle implements CommandExecutor
 				case "hideselection":
 				case "hideselect":
 				case "hidesel":
-					if (HideRails.version == Version.v1_12) a = new HideSelectionBlockTypeCommand(sender);
+					a = new HideSelectionBlockTypeCommand(sender);
 					break;
 
 				case "waterprotection":
