@@ -24,11 +24,11 @@ public class JavaChecker
 
 	public static String getBoolean(String input)
 	{
-		if(input.contains("true") || input.contains("allow") || input.contains("yes")) {
+		if(input.contains("true") || input.contains("allow") || input.contains("yes") || input.contains("enable")) {
 			return "true";
 		}
 
-		if(input.contains("false") || input.contains("deny") || input.contains("no")) {
+		if(input.contains("false") || input.contains("deny") || input.contains("no") || input.contains("disable")) {
 			return "false";
 		}
 		return null;

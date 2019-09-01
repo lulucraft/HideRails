@@ -177,10 +177,13 @@ public class Configuration
 	 * 
 	 * @param path
 	 * @param value
+	 * @param replaceable
 	 */
-	public void editDefault(String path, Object value) {
+	public void editDefault(String path, Object value, String replaceable) {
 		String fileContext = readFileContent();
+
 		String rm = path.replace(".", ":\n  ") + ": ";
+		rm = rm.replace(replaceable, ""); // Patch multi lines replace bug
 		fileContext = fileContext.replace(rm + this.get(path), rm + value);
 
 		writeFileContent(fileContext);

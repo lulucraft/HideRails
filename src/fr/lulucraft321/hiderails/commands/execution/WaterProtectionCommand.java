@@ -38,6 +38,7 @@ public class WaterProtectionCommand extends AbstractCommand
 				List<World> world = Bukkit.getWorlds();
 				String worldInput = String.valueOf(args[1]);
 
+				// Change redstone protection status for one world
 				if (world.contains(Bukkit.getServer().getWorld(worldInput))) {
 					// args[2] == boolean value
 					String bInput = JavaChecker.getBoolean(args[2].toLowerCase().toString());
@@ -47,7 +48,15 @@ public class WaterProtectionCommand extends AbstractCommand
 					} else {
 						HideRailsManager.setWaterProtection(p, worldInput, Boolean.parseBoolean(bInput));
 					}
-				} else {
+				}
+				// Change redstone protection status for all worlds
+				else if (worldInput.equalsIgnoreCase("all") || worldInput.equalsIgnoreCase("_all_")) {
+					String bInput = JavaChecker.getBoolean(args[2].toLowerCase().toString());
+
+					HideRailsManager.setWaterProtection(p, (worldInput.equalsIgnoreCase("all") ? "_all_" : worldInput), Boolean.parseBoolean(bInput));
+				}
+				// Error of world input
+				else {
 					MessagesManager.sendPluginMessage(p, Messages.INVALID_WORLDNAME);
 				}
 

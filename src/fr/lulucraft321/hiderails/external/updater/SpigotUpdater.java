@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -90,21 +91,19 @@ public class SpigotUpdater extends Thread
 					connection = (HttpURLConnection)this.url.openConnection();
 					connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 					connection.setRequestMethod("GET");
-					BufferedReader e = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-					String e11 = "";
+					BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+					String content = "";
 
-					for(String line = null; (line = e.readLine()) != null; e11 = e11 + line) {
-						;
+					String line = null;
+					while ((line = in.readLine()) != null) {
+						content += line;
 					}
 
-					e.close();
+					in.close();
 					JSONObject json = null;
-
 					try {
-						json = (JSONObject)(new JSONParser()).parse(e11);
-					} catch (ParseException var9) {
-						;
-					}
+						json = (JSONObject)new JSONParser().parse(content);
+					} catch (ParseException ex) {}
 
 					String currentVersion = null;
 					if(json != null && json.containsKey("version")) {
@@ -123,28 +122,26 @@ public class SpigotUpdater extends Thread
 						return;
 					}
 
+					final ConsoleCommandSender sender = Bukkit.getServer().getConsoleSender();
 					if(!currentVersion.equals(this.plugin.getDescription().getVersion())) {
 						HideRailsManager.maj_available = true;
-						Bukkit.getServer().getConsoleSender().sendMessage(MessagesManager.PREFIX + ChatColor.AQUA + "[Updater] Found new version: " + currentVersion + "! (Your version is " + this.plugin.getDescription().getVersion() + ")");
-						Bukkit.getServer().getConsoleSender().sendMessage(MessagesManager.PREFIX + ChatColor.AQUA + "[Updater] Download here: http://www.spigotmc.org/resources/" + this.id);
+						sender.sendMessage(MessagesManager.PREFIX + ChatColor.AQUA + "[Updater] Found new version: " + currentVersion + "! (Your version is " + this.plugin.getDescription().getVersion() + ")");
+						sender.sendMessage(MessagesManager.PREFIX + ChatColor.AQUA + "[Updater] Download here: http://www.spigotmc.org/resources/" + this.id);
 					} else if(this.log) {
-						Bukkit.getServer().getConsoleSender().sendMessage(MessagesManager.PREFIX + ChatColor.GREEN + "[Updater] Plugin is up-to-date.");
+						sender.sendMessage(MessagesManager.PREFIX + ChatColor.GREEN + "[Updater] Plugin is up-to-date.");
 					}
-				} catch (IOException var10) {
-					if(this.log) {
-						if(connection != null) {
-							try {
-								int e1 = connection.getResponseCode();
-								this.plugin.getLogger().warning("[Updater] API connection returned response code " + e1);
-							} catch (IOException var8) {
-								;
-							}
-						}
-
-						var10.printStackTrace();
-					}
-				}
-
+				} catch (IOException e) {
+		            if (this.log) {
+		                if (connection != null) {
+		                    try {
+		                        final int code = connection.getResponseCode();
+		                        this.plugin.getLogger().warning("[Updater] API connection returned response code " + code);
+		                    }
+		                    catch (IOException ex2) {}
+		                }
+		                e.printStackTrace();
+		            }
+		        }
 			}
 		}
 	}

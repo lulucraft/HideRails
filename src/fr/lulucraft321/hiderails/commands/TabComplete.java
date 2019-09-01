@@ -18,13 +18,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import fr.lulucraft321.hiderails.utils.checkers.JavaChecker;
-
 public class TabComplete implements TabCompleter
 {
 	private static final String[] COMMANDS1 = { "help", "reload", "hide", "unhide", "show", "hideone", "unhideone", "hideselection", "unhideselection", "display", "selectionmessage", "return", "undo", "waterprotection" }; // /hiderails "COMMANDS1"
 	private static final String[] COMMANDS2 = { "hide", "hideselection", "unhideselection", "show", "unhide", "showone", "waterprotection" }; // /hiderails "COMMANDS2" "materialType"
 	private static final String[] COMMANDS3 = { "waterprotection" }; // /hiderails "COMMANDS3" "world" "value"
+	private static final String[] BOOLEAN = { "true", "false", "enable", "disable" };
 	public static final List<String> BLOCK_TYPE = new ArrayList<>();
 
 	@Override
@@ -70,6 +69,8 @@ public class TabComplete implements TabCompleter
 							for(World world : Bukkit.getServer().getWorlds())
 							{
 								completions.add(world.getName());
+								for (String all : new String[]{"all","_all_"})
+									completions.add(all);
 							}
 							return completions;
 						}
@@ -106,12 +107,11 @@ public class TabComplete implements TabCompleter
 						{
 							if(list.startsWith(args[0]))
 							{
-								if(args[1].startsWith(world.getName()))
+								if(args[1].startsWith(world.getName()) || args[1].startsWith("all") || args[1].startsWith("_all_"))
 								{
-									String b = JavaChecker.getBoolean(args[2]);
-
-									if(b != null)
-										completions.add(b);
+									for (String b : BOOLEAN)
+										if (b.startsWith(args[2]))
+											completions.add(b);
 								}
 							}
 						}

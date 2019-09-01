@@ -57,10 +57,11 @@ public class BlockClickListener extends AbstractListener
 
 				if (itType != null) {
 					boolean b = false;
+
 					if (HideRails.version == Version.v1_12) {
 						if (itType == JavaChecker.enumCheck("WOOD_AXE")) b = true;
 					} else if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) {
-						if (itType == JavaChecker.enumCheck("LEGACY_WOOD_AXE")) b = true;
+						if (itType == JavaChecker.enumCheck("LEGACY_WOOD_AXE") || itType == JavaChecker.enumCheck("WOODEN_AXE")) b = true;
 					}
 
 					if (b) {

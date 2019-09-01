@@ -118,19 +118,23 @@ public class HideRailsManager
 
 		TabComplete.BLOCK_TYPE.clear();
 		if (hr) {
-			TabComplete.BLOCK_TYPE.add("rails");
+			if (HideRails.version == Version.v1_12) TabComplete.BLOCK_TYPE.add("rails");
+			if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) TabComplete.BLOCK_TYPE.add("rail");
 		}
 		if (hs) {
-			TabComplete.BLOCK_TYPE.add("sign");
+			if (HideRails.version == Version.v1_14) TabComplete.BLOCK_TYPE.add("oak_sign");
+			else TabComplete.BLOCK_TYPE.add("sign");
 		}
 		if (hr) {
 			TabComplete.BLOCK_TYPE.add("redstone");
 		}
 		if (hc) {
-			TabComplete.BLOCK_TYPE.add("command");
+			if (HideRails.version == Version.v1_12) TabComplete.BLOCK_TYPE.add("command");
+			if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) TabComplete.BLOCK_TYPE.add("command_block");
 		}
 		if (hb) {
-			TabComplete.BLOCK_TYPE.add("iron_fence");
+			if (HideRails.version == Version.v1_12) TabComplete.BLOCK_TYPE.add("iron_fence");
+			if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) TabComplete.BLOCK_TYPE.add("iron_bars");
 		}
 
 		HideRailsManager.maj = config.getBoolean("adminsUpdateMessage");
@@ -272,13 +276,13 @@ public class HideRailsManager
 	 */
 	public static void setWaterProtection(Player p, String worldName, boolean b)
 	{
-		String path = RedstoneInWaterListeners.path + "." + worldName;
+		final String path = RedstoneInWaterListeners.PATH_POINT + worldName;
 
 		if (FileConfigurationManager.getConfig().contains(path))
 		{
 			if (FileConfigurationManager.getConfig().getBoolean(path) != b)
 			{
-				FileConfigurationManager.getConfig().editDefault(path, b);
+				FileConfigurationManager.getConfig().editDefault(path, b, "redstoneWaterProtection:");
 				MessagesManager.sendChangeStatusMessage(p, Messages.SUCCESS_CHANGE_WATER_PROTECTION_STATUS, worldName, b);
 			} else {
 				MessagesManager.sendAlreadyStatusMessage(p, Messages.WATER_PROTECTION_STATUS_ALREADY, worldName, b);

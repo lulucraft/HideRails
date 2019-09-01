@@ -30,7 +30,7 @@ public class HideRailsSelectionChecker
 		return cd;
 	}
 
-	private static List<Location> getAllBlocksLocationInWeSelection(Cuboid selection)
+	private static List<Location> getAllBlocksLocationInHideRailsSelection(Cuboid selection)
 	{
 		Location p1 = selection.getVector1().toLocation(selection.getWorld()); // Minimum point of HideRails Selection
 		Location p2 = selection.getVector2().toLocation(selection.getWorld()); // Maximum point of HideRails Selection
@@ -53,7 +53,7 @@ public class HideRailsSelectionChecker
 
 	public static List<Location> getAllValidRails(Cuboid selection, List<Material> types)
 	{
-		List<Location> railsLocsTemp = HideRailsSelectionChecker.getAllBlocksLocationInWeSelection(selection);
+		List<Location> railsLocsTemp = HideRailsSelectionChecker.getAllBlocksLocationInHideRailsSelection(selection);
 		List<Location> railsLocs = new ArrayList<>();
 
 		boolean rails = false;
@@ -61,7 +61,7 @@ public class HideRailsSelectionChecker
 		boolean commandBlocks = false;
 		boolean redstone = false;
 		boolean signs = false;
-		if ((types == null) || (types.isEmpty()))
+		if (types == null || types.isEmpty())
 		{
 			rails = true;
 			ironBars = true;
