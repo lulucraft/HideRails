@@ -20,10 +20,10 @@ public class Configuration
 {
 	private ConfigurationsHandle configHandler;
 
-	protected final static String headPrefix = "_head_";
-	protected final static String headerPrefix = "_header_";
-	protected final static String commPrefix = "_com_";
-	protected final static String voidPrefix = "_null_";
+	protected final static String HEAD_PREFIX = "_head_";
+	protected final static String HEADER_PREFIX = "_header_";
+	protected final static String COMMENT_PREFIX = "_com_";
+	protected final static String VOID_PREFIX = "_null_";
 
 	private int headNbr = 1;
 	private int headerNbr = 1;
@@ -54,7 +54,7 @@ public class Configuration
 		int i = 0;
 		for (String line : header) {
 			// First line
-			if (i == (header.size()-header.size())) {
+			if (i == 0) {
 				this.set(serializeHeadPrefix(), line);
 			}
 			this.set(serializeHeaderPrefix(), line);
@@ -62,7 +62,7 @@ public class Configuration
 			// End line
 			if (i == header.size()) {
 				this.set(serializeHeadPrefix(), line);
-				this.set(serializeVoidPrefix(), Configuration.voidPrefix);
+				this.set(serializeVoidPrefix(), VOID_PREFIX);
 			}
 		}
 	}
@@ -73,7 +73,7 @@ public class Configuration
 	 * @return serialized
 	 */
 	private String serializeHeadPrefix() {
-		return Configuration.headPrefix + this.headNbr++;
+		return HEAD_PREFIX + this.headNbr++;
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class Configuration
 	 * @return serialized
 	 */
 	private String serializeHeaderPrefix() {
-		return Configuration.headerPrefix + this.headerNbr++;
+		return HEADER_PREFIX + this.headerNbr++;
 	}
 
 
@@ -234,7 +234,7 @@ public class Configuration
 		String path = serializeVoidPrefix();
 
 		if (!this.config.contains(path)) {
-			this.set(path, Configuration.voidPrefix);
+			this.set(path, VOID_PREFIX);
 		}
 
 		return this;
@@ -246,7 +246,7 @@ public class Configuration
 	 * @return serialized
 	 */
 	private String serializeVoidPrefix() {
-		return Configuration.voidPrefix + this.voidNbr++;
+		return VOID_PREFIX + this.voidNbr++;
 	}
 
 
@@ -310,7 +310,7 @@ public class Configuration
 	 * @return serialized comment
 	 */
 	private String serializeCommentPrefix() {
-		return Configuration.commPrefix + this.comNbr++;
+		return COMMENT_PREFIX + this.comNbr++;
 	}
 
 

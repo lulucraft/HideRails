@@ -32,7 +32,6 @@ public class DisplayOtherCommand extends AbstractCommand
 			Player pl = Bukkit.getPlayer(String.valueOf(args[1]));
 			if (pl != null) {
 				HideRailsManager.displayBlocks(pl);
-				MessagesManager.sendDisplayChangeMessage(sender, Messages.DISPLAY_HIDDEN_BLOCKS, HideRailsManager.displayBlocksPlayers.contains(pl));
 			} else {
 				MessagesManager.sendPluginMessage(sender, Messages.INVALID_PLAYER);
 			}

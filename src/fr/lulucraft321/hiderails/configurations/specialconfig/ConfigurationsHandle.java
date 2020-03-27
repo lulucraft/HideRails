@@ -16,20 +16,17 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
 
-import org.bukkit.plugin.Plugin;
-
 import fr.lulucraft321.hiderails.HideRails;
 
 public class ConfigurationsHandle
 {
-	private final Plugin plugin = HideRails.getInstance();
-	private final File path = plugin.getDataFolder();
+	private final File PLUGIN_PATH = HideRails.getInstance().getDataFolder();
 
 	public Configuration createConfig(String fileName, List<String> header, String existingResource) throws IOException {
-		final File f = new File(path, fileName);
+		final File f = new File(PLUGIN_PATH, fileName);
 
-		if (!path.exists()) {
-			path.mkdirs();
+		if (!PLUGIN_PATH.exists()) {
+			PLUGIN_PATH.mkdirs();
 		}
 
 		if (!f.exists()) {
@@ -50,8 +47,8 @@ public class ConfigurationsHandle
 	 * @param existingResource
 	 */
 	public void cloneConfig(String fileName, String existingResource) {
-		final File confF = new File(path, fileName);
-		final File confFile = new File(path, existingResource);
+		final File confF = new File(PLUGIN_PATH, fileName);
+		final File confFile = new File(PLUGIN_PATH, existingResource);
 
 		if (confFile.exists()) {
 			try (InputStream in = new FileInputStream(confFile)) {
@@ -74,27 +71,27 @@ public class ConfigurationsHandle
 	protected String prepareConfigString(String configString) {
 		String[] lines = configString.split("\n");
 		StringBuilder configLines = new StringBuilder("");
-		
+
 		for(String line : lines) {
-			
+
 			/*
 			 * If file is new
 			 */
 			if (line.startsWith("_"))
 			{
 				// Fist line to Header
-				if (line.startsWith(Configuration.headPrefix)) {
+				if (line.startsWith(Configuration.HEAD_PREFIX)) {
 					configLines.append(line.replace(line, "#############################################################"));
 				}
 				// Text line to Header
-				else if (line.startsWith(Configuration.headerPrefix)) {
+				else if (line.startsWith(Configuration.HEADER_PREFIX)) {
 					String ser_value = line.split(": ")[1].toString();
-					
+
 					// Number ok space between border and text
 					// 60 is size of head (#####...) -1
 					int nbr = ser_value.length();
 					int bText = (60-nbr)/2;
-					
+
 					// even (pair)
 					if ((nbr & 1) == 0) {
 						configLines.append(line.replace(line, "#" + repeat(bText) + ser_value + repeat(bText-1) + "#"));
@@ -103,35 +100,35 @@ public class ConfigurationsHandle
 					else {
 						configLines.append(line.replace(line, "#" + repeat(bText) + ser_value + repeat(bText) + "#"));
 					}
-					
+
 				}
 				// Retours à la ligne
-				else if (line.startsWith(Configuration.voidPrefix)) {
+				else if (line.startsWith(Configuration.VOID_PREFIX)) {
 					String ser_path = line.substring(0, line.split(": ")[0].length()).toString();
-					configLines.append(line.replace(ser_path + ": " + Configuration.voidPrefix, ""));
+					configLines.append(line.replace(ser_path + ": " + Configuration.VOID_PREFIX, ""));
 				}
 				// Commentaires
-				else if (line.startsWith(Configuration.commPrefix)) {
+				else if (line.startsWith(Configuration.COMMENT_PREFIX)) {
 					String ser_path = line.substring(0, line.split(": ")[0].length()).toString();
 					configLines.append(line.replace(ser_path + ": ", "# "));
 				}
 				else {
 					configLines.append(line);
 				}
-				
+
 			}
 			// Ligne de config
 			else {
 				configLines.append(line);
 			}
-			
+
 			configLines.append("\n");
-			
+
 		}
-		
+
 		return configLines.toString();
 	}
-	
+
 	private String repeat(int count) {
 		// \0 is null character
 		// Replace number with space

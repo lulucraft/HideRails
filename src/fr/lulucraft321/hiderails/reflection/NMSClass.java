@@ -2,7 +2,7 @@
  * Copyright Java Code
  * All right reserved.
  *
- * @author lulucraft321
+ * @author Nepta_
  */
 
 package fr.lulucraft321.hiderails.reflection;
@@ -14,10 +14,10 @@ import java.lang.reflect.Method;
 
 public class NMSClass
 {
-	private static String version;
+	private final static String VERSION;
 
 	static {
-		version = new BukkitNMS().version;
+		VERSION = new BukkitNMS().VERSION;
 	}
 
 	/**
@@ -28,7 +28,7 @@ public class NMSClass
 	public static Class<?> getNMSClass(String className)
 	{
 		try {
-			return Class.forName("net.minecraft.server." + version + "." + className);
+			return Class.forName("net.minecraft.server." + VERSION + "." + className);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;
@@ -43,7 +43,7 @@ public class NMSClass
 	public static Class<?> getOBCClass(String className)
 	{
 		try {
-			return Class.forName("org.bukkit.craftbukkit." + version + "." + className);
+			return Class.forName("org.bukkit.craftbukkit." + VERSION + "." + className);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;

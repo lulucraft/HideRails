@@ -28,7 +28,7 @@ public class SpamPlayerDataManager
 	 * @return
 	 */
 	public static SpamPlayerData getSpamPlayerData(Player player) {
-		for (SpamPlayerData data : SpamPlayerDataManager.playersData) {
+		for (SpamPlayerData data : playersData) {
 			if (data.getPlayer() == player) {
 				return data;
 			}
@@ -44,7 +44,7 @@ public class SpamPlayerDataManager
 	 * @return int
 	 */
 	public static int getSpamNumber(Player player) {
-		SpamPlayerData data = SpamPlayerDataManager.getSpamPlayerData(player);
+		SpamPlayerData data = getSpamPlayerData(player);
 		if (data != null) {
 			return data.getSpam();
 		}
@@ -59,12 +59,12 @@ public class SpamPlayerDataManager
 	 * @param task
 	 */
 	public static void addPlayerSpamTask(Player player, BukkitTask task) {
-		SpamPlayerData data = SpamPlayerDataManager.getSpamPlayerData(player);
+		SpamPlayerData data = getSpamPlayerData(player);
 		if (data != null) {
 			data.getTasks().add(task);
 			data.setSpam(data.getSpam()+1);
 		} else {
-			SpamPlayerDataManager.playersData.add(new SpamPlayerData(player, task));
+			playersData.add(new SpamPlayerData(player, task));
 		}
 	}
 
@@ -74,13 +74,13 @@ public class SpamPlayerDataManager
 	 * @param player
 	 */
 	public static void delPlayer(Player player) {
-		SpamPlayerData data = SpamPlayerDataManager.getSpamPlayerData(player);
+		SpamPlayerData data = getSpamPlayerData(player);
 		if (data != null) {
 			for (BukkitTask task : data.getTasks()) {
 				if (task.getOwner() == HideRails.getInstance())
 					Bukkit.getScheduler().cancelTask(task.getTaskId());
 			}
-			SpamPlayerDataManager.playersData.remove(data);
+			playersData.remove(data);
 		}
 	}
 
@@ -92,7 +92,7 @@ public class SpamPlayerDataManager
 	 * @return
 	 */
 	public static BukkitTask getPendingTask(Player player) {
-		SpamPlayerData data = SpamPlayerDataManager.getSpamPlayerData(player);
+		SpamPlayerData data = getSpamPlayerData(player);
 		if (data != null)
 			data.getPendingTask();
 
@@ -106,7 +106,7 @@ public class SpamPlayerDataManager
 	 * @param bukkitTask
 	 */
 	public static void setPendingTask(Player player, BukkitTask t) {
-		SpamPlayerData data = SpamPlayerDataManager.getSpamPlayerData(player);
+		SpamPlayerData data = getSpamPlayerData(player);
 		if (data != null)
 			data.setPendingTask(t);
 	}

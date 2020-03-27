@@ -33,28 +33,28 @@ public class Italian extends FileConfigurationManager implements AbstractLangCon
 
 			FileConfigurationManager.itLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.itLangFile);
 			FileConfigurationManager.itLangConfig.options().header("Grazie a Sitieno14 per la traduzione in italiano !").copyDefaults(true);
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "sender_type_error", "&cDevi essere un giocatore per poter eseguire questo comando !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "player_no_enough_permission", "&cNon hai il permesso per eseguire questo comando !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "rail_success_change", "&2Hai rimpiazzato i binari con %blocktype% !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "material_type_error", "&cQuesto blocco non esiste !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "rail_error", "&cIl blocco da te bersagliato non è un binario !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "rail_success_break", "&2Hai rotto un binario nascosto !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "rail_success_unhide", "&2Hai mostrato i binari !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "water_protection_status_success_change", "&2Tu hai %status% la protezione sott'acqua nel mondo %world%");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "invalid_worldname", "&cIl nome di questo mondo non è valido");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "plugin_success_reloaded", "&2Plugin ricaricato con successo !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "water_protection_status_already", "&cLa protezione sott'acqua nel mondo %world% è già %status%");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "no_backup", "&cNessun backup disponibile !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "return_backup_success", "&2Backup ripristinato con successo !");
-			//FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "worldedit_not_installed", "&cIl Plugin WorldEdit non è installato in questo server !");
-			//FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "worldedit_no_selection", "&cDevi prima selezionare una regione con WorldEdit !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "hiderails_no_selection", "&cYou must first select region with wooden-axe!");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "hiderails_selection_pos", "&8You have selected position &e%pos%");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "selection_message_status", "&8You have &e%status% &8selection messages!");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "display_hidden_blocks", "&2Hai %hide% i blocchi nascosti per te !");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "invalid_player", "&cIl giocatore non può essere trovato");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "update_found", "&bNuovo aggiornamento disponibile !\n&o%link%");
-			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.msgPath + "kick_spam_hidden_block", "&cNon spammare blocchi perfavore !!");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "sender_type_error", "&cDevi essere un giocatore per poter eseguire questo comando !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "player_no_enough_permission", "&cNon hai il permesso per eseguire questo comando !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_change", "&2Hai rimpiazzato i binari con %blocktype% !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "material_type_error", "&cQuesto blocco non esiste !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_error", "&cIl blocco da te bersagliato non è un binario !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_break", "&2Hai rotto un binario nascosto !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_unhide", "&2Hai mostrato i binari !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "water_protection_status_success_change", "&2Tu hai %status% la protezione sott'acqua nel mondo %world%");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "invalid_worldname", "&cIl nome di questo mondo non è valido");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "plugin_success_reloaded", "&2Plugin ricaricato con successo !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "water_protection_status_already", "&cLa protezione sott'acqua nel mondo %world% è già %status%");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "no_backup", "&cNessun backup disponibile !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "return_backup_success", "&2Backup ripristinato con successo !");
+			//FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "worldedit_not_installed", "&cIl Plugin WorldEdit non è installato in questo server !");
+			//FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "worldedit_no_selection", "&cDevi prima selezionare una regione con WorldEdit !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "hiderails_no_selection", "&cYou must first select region with wooden-axe!");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "hiderails_selection_pos", "&8You have selected position &e%pos%");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "selection_message_status", "&8You have &e%status% &8selection messages!");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "display_hidden_blocks", "&2Hai %hide% i blocchi nascosti per te !");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "invalid_player", "&cIl giocatore non può essere trovato");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "update_found", "&bNuovo aggiornamento disponibile !\n&o%link%");
+			FileConfigurationManager.itLangConfig.set(FileConfigurationManager.MSG_PATH + "kick_spam_hidden_block", "&cNon spammare blocchi perfavore !!");
 
 			// Sauveguarde des modifs
 			try {

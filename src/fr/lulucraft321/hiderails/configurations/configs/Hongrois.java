@@ -33,28 +33,28 @@ public class Hongrois extends FileConfigurationManager implements AbstractLangCo
 
 			FileConfigurationManager.huLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.huLangFile);
 			FileConfigurationManager.huLangConfig.options().header("Köszönöm Zsomi-nak hogy leforditotta magyarra !").copyDefaults(true);
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "sender_type_error", "&cEzt a parancsot csak játékosként hajtható végre !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "player_no_enough_permission", "&cNincs jogosultságod ehhez !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "rail_success_change", "&2Kicserélted a sínt a következő blokkra: %blocktype% !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "material_type_error", "&cEz a blokk nem létezik !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "rail_error", "&cA keresett blokk nem sín !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "rail_success_break", "&2Kiütöttél egy rejtett sínt !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "rail_success_unhide", "&2Megjelenítetted a sineket !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "water_protection_status_success_change", "&2Ez a(z) %status% státusza a víz alatti védelem ebben a világban %world%");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "invalid_worldname", "&cA világ neve hibás !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "plugin_success_reloaded", "&aA plugin sikeresen reloadolva(újratöltve)!");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "water_protection_status_already", "&cA víz alatti védelem a(z) %world% világban %status%");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "no_backup", "&cNincsenek mentések !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "return_backup_success", "&2Sikeresen vissza lett állítva a mentés !");
-			//FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "worldedit_not_installed", "&cNincs letöltve a szerverre a WorldEdit plugin !");
-			//FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "worldedit_no_selection", "&cElső lépés, hogy jelöld ki WorldEdit-el a területet !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "hiderails_no_selection", "&cYou must first select region with wooden-axe!");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "hiderails_selection_pos", "&8You have selected position &e%pos%");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "selection_message_status", "&8You have &e%status% &8selection messages!");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "display_hidden_blocks", "&2Szamoda a(z) %hide% blokk rejtett !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "invalid_player", "&cA játékos nem található !");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "update_found", "&bÙj frissitès elèrhető !\n&o%link%");
-			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.msgPath + "kick_spam_hidden_block", "&cNe spameld a blokkokat !!");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "sender_type_error", "&cEzt a parancsot csak játékosként hajtható végre !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "player_no_enough_permission", "&cNincs jogosultságod ehhez !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_change", "&2Kicserélted a sínt a következő blokkra: %blocktype% !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "material_type_error", "&cEz a blokk nem létezik !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_error", "&cA keresett blokk nem sín !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_break", "&2Kiütöttél egy rejtett sínt !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_unhide", "&2Megjelenítetted a sineket !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "water_protection_status_success_change", "&2Ez a(z) %status% státusza a víz alatti védelem ebben a világban %world%");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "invalid_worldname", "&cA világ neve hibás !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "plugin_success_reloaded", "&aA plugin sikeresen reloadolva(újratöltve)!");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "water_protection_status_already", "&cA víz alatti védelem a(z) %world% világban %status%");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "no_backup", "&cNincsenek mentések !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "return_backup_success", "&2Sikeresen vissza lett állítva a mentés !");
+			//FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "worldedit_not_installed", "&cNincs letöltve a szerverre a WorldEdit plugin !");
+			//FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "worldedit_no_selection", "&cElső lépés, hogy jelöld ki WorldEdit-el a területet !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "hiderails_no_selection", "&cYou must first select region with wooden-axe!");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "hiderails_selection_pos", "&8You have selected position &e%pos%");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "selection_message_status", "&8You have &e%status% &8selection messages!");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "display_hidden_blocks", "&2Szamoda a(z) %hide% blokk rejtett !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "invalid_player", "&cA játékos nem található !");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "update_found", "&bÙj frissitès elèrhető !\n&o%link%");
+			FileConfigurationManager.huLangConfig.set(FileConfigurationManager.MSG_PATH + "kick_spam_hidden_block", "&cNe spameld a blokkokat !!");
 
 			// Sauveguarde des modifs
 			try {

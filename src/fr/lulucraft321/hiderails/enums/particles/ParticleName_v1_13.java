@@ -5,7 +5,7 @@
  * @author Nepta_
  */
 
-package fr.lulucraft321.hiderails.enums;
+package fr.lulucraft321.hiderails.enums.particles;
 
 public enum ParticleName_v1_13
 {

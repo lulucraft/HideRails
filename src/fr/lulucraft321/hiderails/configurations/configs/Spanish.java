@@ -33,28 +33,28 @@ public class Spanish extends FileConfigurationManager implements AbstractLangCon
 
 			FileConfigurationManager.esLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.esLangFile);
 			FileConfigurationManager.esLangConfig.options().header("Gracias a zuhir por la traducción en español !").copyDefaults(true);
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "sender_type_error", "&cDebes ser un jugador para poder ejecutar ese comando.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "player_no_enough_permission", "&cNo tienes permiso para ejecutar ese comando.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "rail_success_change", "&2Has reemplazado los railes por %blocktype%.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "material_type_error", "&cEse bloque no existe.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "rail_error", "&cEl bloque al que miras no es un rail.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "rail_success_break", "&2Has destruido un rail oculto.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "rail_success_unhide", "&2Has hecho visibles los railes.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "water_protection_status_success_change", "&2La proteccion bajo el agua ahora es %status% en el mundo %world%.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "invalid_worldname", "&c&cEse mundo no existe.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "plugin_success_reloaded", "&2Plugin recargado correctamente.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "water_protection_status_already", "&cLa proteccion bajo el agua em el mundo %world% ya es %status%.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "no_backup", "&cNo hay copias de seguridad disponibles.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "return_backup_success", "&2Copia de seguridad reestablecida correctamente.");
-			//FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "worldedit_not_installed", "&cWorldedit no esta instalado.");
-			//FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "worldedit_no_selection", "&cPrimero debes seleccionar la region con Worldedit.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "hiderails_no_selection", "&cYou must first select region with wooden-axe!");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "hiderails_selection_pos", "&8You have selected position &e%pos%");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "selection_message_status", "&8You have &e%status% &8selection messages!");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "display_hidden_blocks", "&2Tienes los bloques invisibles en %hide%.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "invalid_player", "&cEl jugador no existe.");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "update_found", "&bNueva actualizacion disponible !\n&o%link%");
-			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.msgPath + "kick_spam_hidden_block", "&cNo spamees bloques por favor !!");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "sender_type_error", "&cDebes ser un jugador para poder ejecutar ese comando.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "player_no_enough_permission", "&cNo tienes permiso para ejecutar ese comando.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_change", "&2Has reemplazado los railes por %blocktype%.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "material_type_error", "&cEse bloque no existe.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_error", "&cEl bloque al que miras no es un rail.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_break", "&2Has destruido un rail oculto.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_unhide", "&2Has hecho visibles los railes.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "water_protection_status_success_change", "&2La proteccion bajo el agua ahora es %status% en el mundo %world%.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "invalid_worldname", "&c&cEse mundo no existe.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "plugin_success_reloaded", "&2Plugin recargado correctamente.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "water_protection_status_already", "&cLa proteccion bajo el agua em el mundo %world% ya es %status%.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "no_backup", "&cNo hay copias de seguridad disponibles.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "return_backup_success", "&2Copia de seguridad reestablecida correctamente.");
+			//FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "worldedit_not_installed", "&cWorldedit no esta instalado.");
+			//FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "worldedit_no_selection", "&cPrimero debes seleccionar la region con Worldedit.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "hiderails_no_selection", "&cYou must first select region with wooden-axe!");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "hiderails_selection_pos", "&8You have selected position &e%pos%");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "selection_message_status", "&8You have &e%status% &8selection messages!");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "display_hidden_blocks", "&2Tienes los bloques invisibles en %hide%.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "invalid_player", "&cEl jugador no existe.");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "update_found", "&bNueva actualizacion disponible !\n&o%link%");
+			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "kick_spam_hidden_block", "&cNo spamees bloques por favor !!");
 
 			// Sauveguarde des modifs
 			try {

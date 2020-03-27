@@ -1,3 +1,10 @@
+/**
+ * Copyright Java Code
+ * All right reserved.
+ *
+ * @author Nepta_
+ */
+
 package fr.lulucraft321.hiderails.managers;
 
 import java.io.File;
@@ -22,26 +29,27 @@ import fr.lulucraft321.hiderails.utils.checkers.JavaChecker;
 
 public class FileConfigurationManager
 {
-	public static String language;
-	public static String getLanguage() { return language; }
-
 	public static final String HIDERAILS_PATH = "plugins/HideRails";
 	public static final String LANG_PATH = HIDERAILS_PATH  + "/Languages";
-	private static File langFolder = new File(LANG_PATH);
-	private static File conf = new File(HIDERAILS_PATH, "config.yml");
+	public static final String MSG_PATH = "messages.";
 
-	public static final String msgPath = "messages.";
+	private static final File LANG_FOLDER = new File(LANG_PATH);
+	private static final File CONF = new File(HIDERAILS_PATH, "config.yml");
+
 	public static int viewDistance = 100;
 
 	private static File hiddenRailsFile;
 	private static File playersDataFile;
+
 	protected static File frLangFile;
 	protected static File enLangFile;
 	protected static File itLangFile;
 	protected static File huLangFile;
 	protected static File esLangFile;
 	protected static File deLangFile;
-	protected static File langFile;
+
+	private static String language = null;
+	public static String getLanguage() { return language; }
 
 	private static Configuration config = null;
 	public static Configuration getConfig() { return config; }
@@ -71,12 +79,12 @@ public class FileConfigurationManager
 			final File f = new File(HideRails.getInstance().getDataFolder(), "config.yml");
 			// Create config file
 			if (!f.exists()) {
-				FileConfigurationManager.config = new ConfigurationsHandle().createConfig("config.yml",
+				config = new ConfigurationsHandle().createConfig("config.yml",
 						Arrays.asList(
 								"                                                         ",
-								"Plugin HideRails by lulucraft321",
+								"Plugin HideRails by Nepta_",
 								"                                                         "), null);
-				FileConfigurationManager.config.addCommentedPath("language", "EN", new String[] {
+				config.addCommentedPath("language", "EN", new String[] {
 						"Language of all messages in plugin",
 						"You can create your custom language (copy and paste existing language file and remake it)"
 				})
@@ -105,12 +113,12 @@ public class FileConfigurationManager
 			}
 			// Load config file
 			else {
-				FileConfigurationManager.config = new ConfigurationsHandle().createConfig("config.yml", null, null);
-				FileConfigurationManager.config.reloadConfig();
+				config = new ConfigurationsHandle().createConfig("config.yml", null, null);
+				config.reloadConfig();
 
 				// If load failed
-				if (FileConfigurationManager.config == null) {
-					FileConfigurationManager.addCorruptConfig();
+				if (config == null) {
+					addCorruptConfig();
 				}
 			}
 
@@ -120,12 +128,12 @@ public class FileConfigurationManager
 
 
 		// Create lang folder if isn't exist
-		if (!langFolder.exists())
-			langFolder.mkdirs();
+		if (!LANG_FOLDER.exists())
+			LANG_FOLDER.mkdirs();
 
 
 		// Definission de la langue
-		FileConfigurationManager.language = FileConfigurationManager.config.getString("language");
+		language = config.getString("language");
 		if (language == null) {
 			addCorruptConfig();
 		}
@@ -134,52 +142,52 @@ public class FileConfigurationManager
 		/*
 		 * Check if lines exists
 		 */
-		if (!FileConfigurationManager.config.containsComment("Plugin HideRails by lulucraft321")) {
+		if (!config.containsComment("Plugin HideRails by lulucraft321") && !config.containsComment("Plugin HideRails by Nepta_")) {
 			addCorruptConfig();
 		}
 
 		// Distance entre les blocks masques et le joueur (distance d'envoie des packets)
-		if (!FileConfigurationManager.config.contains("viewDistance")) {
-			FileConfigurationManager.config.setCommentedPath("viewDistance", 120, "HiddenBlocks view distance");
+		if (!config.contains("viewDistance")) {
+			config.setCommentedPath("viewDistance", 120, "HiddenBlocks view distance");
 		} else {
-			String view = String.valueOf(FileConfigurationManager.config.get("viewDistance"));
+			String view = String.valueOf(config.get("viewDistance"));
 			if (JavaChecker.isInt(view)) {
-				FileConfigurationManager.viewDistance = Integer.parseInt(view);
+				viewDistance = Integer.parseInt(view);
 			}
 		}
 
 		// Activation du message new update lorsqu'un admin rejoint le serveur
-		if (!FileConfigurationManager.config.contains("adminsUpdateMessage")) {
-			FileConfigurationManager.config.setCommentedPath("adminsUpdateMessage", true, "Plugin update message sent when admin player join the server");
+		if (!config.contains("adminsUpdateMessage")) {
+			config.setCommentedPath("adminsUpdateMessage", true, "Plugin update message sent when admin player join the server");
 		}
 
-		if (!FileConfigurationManager.config.contains("hideRails")) {
-			FileConfigurationManager.config.setCommentedPath("hideRails", true, "Enable rails hidding");
+		if (!config.contains("hideRails")) {
+			config.setCommentedPath("hideRails", true, "Enable rails hidding");
 		}
-		if (!FileConfigurationManager.config.contains("hideIronBars")) {
-			FileConfigurationManager.config.setCommentedPath("hideIronBars", false, "Enable Iron bars hidding (ex: TC-HangRail hanging train)");
+		if (!config.contains("hideIronBars")) {
+			config.setCommentedPath("hideIronBars", false, "Enable Iron bars hidding (ex: TC-HangRail hanging train)");
 		}
-		if (!FileConfigurationManager.config.contains("hideCommandBlock")) {
-			FileConfigurationManager.config.setCommentedPath("hideCommandBlock", false, "Enable Command blocks hidding (include 3 types of command blocks)");
+		if (!config.contains("hideCommandBlock")) {
+			config.setCommentedPath("hideCommandBlock", false, "Enable Command blocks hidding (include 3 types of command blocks)");
 		}
-		if (!FileConfigurationManager.config.contains("hideRedstone")) {
-			FileConfigurationManager.config.setCommentedPath("hideRedstone", false, "Enable Redstone hidding (include levers, ...)");
+		if (!config.contains("hideRedstone")) {
+			config.setCommentedPath("hideRedstone", false, "Enable Redstone hidding (include levers, ...)");
 		}
-		if (!FileConfigurationManager.config.contains("hideSigns")) {
-			FileConfigurationManager.config.setCommentedPath("hideSigns", false, "Enable Signs hidding (ex: TrainCart sign)");
+		if (!config.contains("hideSigns")) {
+			config.setCommentedPath("hideSigns", false, "Enable Signs hidding (ex: TrainCart sign)");
 		}
 
 		// Particules sur les blocs masques si le joueur fait /hr display
-		if (!FileConfigurationManager.config.contains("hiddingBlocksParticles")) {
-			FileConfigurationManager.config.setCommentedPath("hiddingBlocksParticles", true, "Particle who spawn in hidden-blocks if player execute /hr display command");
+		if (!config.contains("hiddingBlocksParticles")) {
+			config.setCommentedPath("hiddingBlocksParticles", true, "Particle who spawn in hidden-blocks if player execute /hr display command");
 		}
 
 		// Players spam block clicks
-		if (!FileConfigurationManager.config.contains("kickSpamBlock")) {
-			FileConfigurationManager.config.setCommentedPath("kickSpamBlock", true, new String[] { "Enable or disable player spam block kick", "If you disable it, the players can spam sending packets and that can cause bugs !" });
+		if (!config.contains("kickSpamBlock")) {
+			config.setCommentedPath("kickSpamBlock", true, new String[] { "Enable or disable player spam block kick", "If you disable it, the players can spam sending packets and that can cause bugs !" });
 		}
-		if (!FileConfigurationManager.config.contains("maxSpamNumber")) {
-			FileConfigurationManager.config.setCommentedPath("maxSpamNumber", 4, new String[] { "Max block spam click number before kick player", "If number is high, bugs may increase !" });
+		if (!config.contains("maxSpamNumber")) {
+			config.setCommentedPath("maxSpamNumber", 4, new String[] { "Max block spam click number before kick player", "If number is high, bugs may increase !" });
 		}
 
 
@@ -236,11 +244,11 @@ public class FileConfigurationManager
 		if (!language.equals("FR") && !language.equals("EN") && !language.equals("IT") && !language.equals("HU") && !language.equals("ES") && !language.equals("DE"))
 		{
 			// Load custom language
-			File langFile = new File(LANG_PATH + "/" + FileConfigurationManager.config.getString("language") + ".yml");
+			File langFile = new File(LANG_PATH + "/" + config.getString("language") + ".yml");
 
 			// Chargement du fichier config lang
 			try {
-				FileConfigurationManager.config = new ConfigurationsHandle().createConfig("/Languages/" + FileConfigurationManager.config.getString("language") + ".yml", Arrays.asList("Custom language", "You can propose your language", "at https://www.spigotmc.org/resources/55158/ "), null).getConfig();
+				config = new ConfigurationsHandle().createConfig("/Languages/" + config.getString("language") + ".yml", Arrays.asList("Custom language", "You can propose your language", "at https://www.spigotmc.org/resources/55158/ "), null).getConfig();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -295,7 +303,7 @@ public class FileConfigurationManager
 	// -> Clonage et renommage de l'ancien par la date et l'heure
 	// + recreation d'un fichier config avec les parametres par defaut
 	private static void addCorruptConfig() {
-		File confFile = new File(conf.getAbsolutePath());
+		File confFile = new File(CONF.getAbsolutePath());
 		File confBack = new File(HIDERAILS_PATH + "/config_" + new SimpleDateFormat("yyyy-M-dd_hh.mm.ss").format(new Date()).toString() + ".yml");
 
 		if (confFile.exists()) {
@@ -366,7 +374,7 @@ public class FileConfigurationManager
 	 * Verification de chaque ligne a cause du changement de version
 	 */
 	protected static void checkConfContains(FileConfiguration langConfig, String path, String value) {
-		String finPath = msgPath + path;
+		String finPath = MSG_PATH + path;
 		if(!langConfig.contains(finPath))
 			langConfig.set(finPath, value);
 	}

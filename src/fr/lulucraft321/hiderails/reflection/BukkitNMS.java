@@ -22,13 +22,14 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 import fr.lulucraft321.hiderails.HideRails;
-import fr.lulucraft321.hiderails.enums.ParticleName_v1_12;
-import fr.lulucraft321.hiderails.enums.ParticleName_v1_13;
 import fr.lulucraft321.hiderails.enums.Version;
+import fr.lulucraft321.hiderails.enums.particles.ParticleName_v1_12;
+import fr.lulucraft321.hiderails.enums.particles.ParticleName_v1_13;
+import fr.lulucraft321.hiderails.enums.particles.ParticleName_v1_15;
 
 public class BukkitNMS
 {
-	public String version;
+	public final String VERSION;
 
 	/* General */
 	private static Class<?> packet_class;
@@ -68,10 +69,10 @@ public class BukkitNMS
 			block_change_pos_field = NMSClass.getField(block_change_class, "a");
 			block_change_pos_field.setAccessible(true);
 
-			if (HideRails.version == Version.v1_12) {
+			if (HideRails.version == Version.V1_12) {
 				// Get "IBlockData fromLegacy(int i)" method
 				fromLegacyData_method = NMSClass.getMethod(block_class, "fromLegacyData", int.class);
-			} else if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) {
+			} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
 				// Get "IBlockData getBlockData()" method
 				block_data_method = NMSClass.getMethod(block_class, "getBlockData", null);
 			}
@@ -84,7 +85,7 @@ public class BukkitNMS
 
 			// ---------------------------------------------------- PARTICLES ---------------------------------------------------- //
 			packet_play_out_world_particles = NMSClass.getNMSClass("PacketPlayOutWorldParticles");
-			if (HideRails.version == Version.v1_12 && !Version.v1_12.isOldVersion()) {
+			if (HideRails.version == Version.V1_12 && !Version.V1_12.isOldVersion()) {
 				enum_particle_class = NMSClass.getNMSClass("EnumParticle");
 				try {
 					packet_particles_constructor = NMSClass.getConstructor(packet_play_out_world_particles,
@@ -95,7 +96,7 @@ public class BukkitNMS
 				} catch (NoSuchMethodException | SecurityException e) {
 					e.printStackTrace();
 				}
-			} else if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) {
+			} else if (HideRails.version == Version.V1_13) {
 				enum_particle_class = NMSClass.getNMSClass("ParticleParam");
 				try {
 					packet_particles_constructor = NMSClass.getConstructor(packet_play_out_world_particles,
@@ -108,7 +109,7 @@ public class BukkitNMS
 
 
 			// -------------------------------------------------- CONFIGURATIONS ------------------------------------------------- //
-			if (HideRails.version == Version.v1_14) fileUtils_class = Class.forName("org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils");
+			if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) fileUtils_class = Class.forName("org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils");
 			else fileUtils_class = Class.forName("org.apache.commons.io.FileUtils");
 			readFileContent_method = NMSClass.getMethod(fileUtils_class, "readFileToString", File.class, Charset.class); // params : File.class, Charset.class / return : String.class
 			writeFileContent_method = NMSClass.getMethod(fileUtils_class, "write", File.class, CharSequence.class, Charset.class); // params : File.class, CharSequence.class, Charset.class / return : void
@@ -119,11 +120,15 @@ public class BukkitNMS
 	}
 
 	public BukkitNMS() {
-		this.version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-		HideRails.version = this.version.contains("1_13") ? Version.v1_13 : this.version.contains("1_14") ? Version.v1_14 : Version.v1_12;
-		if (HideRails.version == Version.v1_12) {
-			if (this.version.contains("1_8")) {
-				Version.v1_12.setOldVersion(true);
+		VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+		if (VERSION.contains("1_13")) HideRails.version = Version.V1_13;
+		else if (VERSION.contains("1_14")) HideRails.version = Version.V1_14;
+		else if (VERSION.contains("1_15")) HideRails.version = Version.V1_15;
+		else HideRails.version = Version.V1_12;
+
+		if (HideRails.version == Version.V1_12) {
+			if (VERSION.contains("1_8")) {
+				Version.V1_12.setOldVersion(true);
 			}
 		}
 	}
@@ -194,9 +199,9 @@ public class BukkitNMS
 			Object craftMagicNumber = NMSClass.invokeMethod(craftMagicNumbers_method, fromLegacyData_method, material);
 			// Get final IBlockData
 			Object block_data = null;
-			if (HideRails.version == Version.v1_12) {
+			if (HideRails.version == Version.V1_12) {
 				block_data = NMSClass.invokeMethod(fromLegacyData_method, craftMagicNumber, data);
-			} else if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) {
+			} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
 				// replace "block_data = CraftMagicNumbers.getBlock(material).getBlockData();"
 				Object iMe = NMSClass.invokeMethod(craftMagicNumbers_method, craftMagicNumber, material);
 				block_data = NMSClass.invokeMethod(block_data_method, iMe, null);
@@ -240,7 +245,7 @@ public class BukkitNMS
 		// If version is 1.8
 		if (HideRails.version.isOldVersion()) return;
 
-		if (HideRails.version == Version.v1_12) {
+		if (HideRails.version == Version.V1_12) {
 			Object packet =
 					NMSClass.newInstance(
 							packet_particles_constructor,
@@ -253,8 +258,10 @@ public class BukkitNMS
 							new int[]{speed}
 							);
 			sendPacket(p, packet);
-		} else if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) {
+		} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14) {
 			p.spawnParticle(Particle.valueOf(((Enum<ParticleName_v1_13>) particleName).name().toUpperCase()), loc.getX(), loc.getY(), loc.getZ(), 0, 0d, 0d, 0d, amount);
+		} else if (HideRails.version == Version.V1_15) {
+			p.spawnParticle(Particle.valueOf(((Enum<ParticleName_v1_15>) particleName).name().toUpperCase()), loc.getX(), loc.getY(), loc.getZ(), 0, 0d, 0d, 0d, amount);
 		}
 	}
 

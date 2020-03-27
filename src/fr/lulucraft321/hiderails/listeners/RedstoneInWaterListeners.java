@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockFromToEvent;
 
 import fr.lulucraft321.hiderails.HideRails;
@@ -25,7 +26,7 @@ public class RedstoneInWaterListeners extends AbstractListener
 		/*
 		 * 1.12
 		 */
-		if (HideRails.version == Version.v1_12) {
+		if (HideRails.version == Version.V1_12) {
 			redstoneBlocks = EnumSet.of(enumCheck("REDSTONE_WIRE"), new Material[] {
 					enumCheck("REDSTONE_TORCH_ON"),
 					enumCheck("REDSTONE_TORCH_OFF"),
@@ -47,7 +48,7 @@ public class RedstoneInWaterListeners extends AbstractListener
 		/*
 		 * 1.13 / 1.14
 		 */
-		else if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) {
+		else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
 			redstoneBlocks = EnumSet.of(enumCheck("LEGACY_REDSTONE_WIRE"), new Material[] {
 					enumCheck("LEGACY_REDSTONE_TORCH_ON"),
 					enumCheck("LEGACY_REDSTONE_TORCH_OFF"),
@@ -68,7 +69,7 @@ public class RedstoneInWaterListeners extends AbstractListener
 
 			EnumSet<Material> enumSet = null;
 			// api-version 1.13
-			if (HideRails.version == Version.v1_13) {
+			if (HideRails.version == Version.V1_13) {
 				enumSet = EnumSet.of(enumCheck("REDSTONE_TORCH"), new Material[] {
 						enumCheck("REDSTONE_WALL_TORCH"),
 						enumCheck("REDSTONE"),
@@ -92,7 +93,7 @@ public class RedstoneInWaterListeners extends AbstractListener
 				});
 			}
 			// api-version 1.14
-			else if (HideRails.version == Version.v1_14) {
+			else if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
 				enumSet = EnumSet.of(enumCheck("REDSTONE_TORCH"), new Material[] {
 						enumCheck("REDSTONE_WALL_TORCH"),
 						enumCheck("REDSTONE"),
@@ -129,7 +130,7 @@ public class RedstoneInWaterListeners extends AbstractListener
 		}
 	}
 
-	@EventHandler
+	@EventHandler (priority = EventPriority.HIGH)
 	public void onBlockFrom(BlockFromToEvent e)
 	{
 		final World w = e.getBlock().getLocation().getWorld();

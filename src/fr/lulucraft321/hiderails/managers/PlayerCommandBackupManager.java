@@ -36,7 +36,7 @@ public class PlayerCommandBackupManager
 	// Get backup command to player
 	public static PlayerCommandBackup getPlayerCommandBackups(Player player)
 	{
-		for (Entry<Player, PlayerCommandBackup> backup : PlayerCommandBackupManager.playerCommandBackups.entrySet()) {
+		for (Entry<Player, PlayerCommandBackup> backup : playerCommandBackups.entrySet()) {
 			if (backup.getKey().equals(player)) {
 				return backup.getValue();
 			}
@@ -96,7 +96,7 @@ public class PlayerCommandBackupManager
 					bl = Bukkit.getWorld(deserLoc.getWorld().getName()).getBlockAt(deserLoc);
 					BlockState state = bl.getState();
 					bl.setType(bl.getType());
-					if (HideRails.version == Version.v1_12) {
+					if (HideRails.version == Version.V1_12) {
 						try {
 							Block.class.getDeclaredMethod("setData", byte.class).invoke(bl, Byte.valueOf(bl.getData()));
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -120,7 +120,7 @@ public class PlayerCommandBackupManager
 					bl = Bukkit.getWorld(blockLoc.getWorld().getName()).getBlockAt(blockLoc);
 					BlockState state = bl.getState();
 					bl.setType(state.getType());
-					if (HideRails.version == Version.v1_12) {
+					if (HideRails.version == Version.V1_12) {
 						try {
 							Block.class.getDeclaredMethod("setData", byte.class).invoke(bl, state.getData().getData());
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -172,11 +172,11 @@ public class PlayerCommandBackupManager
 	 */
 	public static void restoreBackupRails(Player p)
 	{
-		BlocksBackup backup = PlayerCommandBackupManager.getLatestBlocksBackup(p);
+		BlocksBackup backup = getLatestBlocksBackup(p);
 
 		if(backup != null) {
 			if (!backup.getChangedBlocks().isEmpty()) {
-				PlayerCommandBackupManager.restoreBackup(p);
+				restoreBackup(p);
 			} else {
 				// If no block is to be restore
 				PlayerCommandBackup pBackup = getPlayerCommandBackups(p);

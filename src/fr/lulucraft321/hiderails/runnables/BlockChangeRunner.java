@@ -7,9 +7,6 @@
 
 package fr.lulucraft321.hiderails.runnables;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -31,8 +28,6 @@ public class BlockChangeRunner extends BukkitRunnable
 	@Override
 	public void run()
 	{
-		List<Player> players = new ArrayList<>();
-
 		for (HiddenRailsWorld hWorld : HideRailsManager.rails)
 		{
 			String hWorldName = hWorld.getWorldName();
@@ -40,10 +35,7 @@ public class BlockChangeRunner extends BukkitRunnable
 
 			if (world != null)
 			{
-				players.clear();
-				players.addAll(world.getPlayers());
-
-				for (Player p : players)
+				for (Player p : world.getPlayers())
 				{
 					World pWorld = p.getWorld();
 

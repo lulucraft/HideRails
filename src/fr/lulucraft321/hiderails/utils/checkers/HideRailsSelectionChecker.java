@@ -25,9 +25,7 @@ public class HideRailsSelectionChecker
 {
 	public static ClaimData getHideRailsSelection(Player player)
 	{
-		ClaimData cd = PlayerClaimDataManager.getPlayerClaimData(player);
-
-		return cd;
+		return PlayerClaimDataManager.getPlayerClaimData(player);
 	}
 
 	private static List<Location> getAllBlocksLocationInHideRailsSelection(Cuboid selection)

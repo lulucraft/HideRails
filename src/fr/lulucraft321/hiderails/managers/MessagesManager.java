@@ -18,11 +18,11 @@ import fr.lulucraft321.hiderails.managers.PlayerClaimDataManager.LocType;
 
 public class MessagesManager
 {
-	public static final String PREFIX = "§8[§6Hide§7Rails§8] ";
+	public static final String PLUGIN_PREFIX = "§8[§6Hide§7Rails§8] ";
 	private static final String MSG_PATH;
 
 	static {
-		MSG_PATH = FileConfigurationManager.msgPath;
+		MSG_PATH = FileConfigurationManager.MSG_PATH;
 	}
 
 	public static void loadAllMessages()
@@ -116,7 +116,7 @@ public class MessagesManager
 
 
 	public static String getColoredMessage(Messages messageType) {
-		return PREFIX + ChatColor.translateAlternateColorCodes('&', messageType.getMessage())
+		return PLUGIN_PREFIX + ChatColor.translateAlternateColorCodes('&', messageType.getMessage())
 		.replace("\\n", "\n")
 		.replace("%link%", "https://www.spigotmc.org/resources/55158/")
 		.replace("%pluginlink%", "https://www.spigotmc.org/resources/55158/")

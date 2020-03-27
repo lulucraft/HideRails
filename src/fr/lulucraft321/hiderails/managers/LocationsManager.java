@@ -22,8 +22,8 @@ import fr.lulucraft321.hiderails.utils.checkers.BlocksChecker;
 
 public class LocationsManager
 {
-	protected final static BlockFace[] faces = new BlockFace[]{ BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST };
-	protected final static BlockFace[] ladderFaces = new BlockFace[]{ BlockFace.UP, BlockFace.DOWN };
+	protected final static BlockFace[] FACES = new BlockFace[]{ BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST };
+	//protected final static BlockFace[] LADDER_FACES = new BlockFace[]{ BlockFace.UP, BlockFace.DOWN };
 
 	/**
 	 * Get connected Blocks
@@ -47,7 +47,7 @@ public class LocationsManager
 			{
 				Block newBlock = (Block) checked.get(next).getBlock();
 
-				for(BlockFace blockFace : LocationsManager.faces)
+				for(BlockFace blockFace : FACES)
 				{
 					Block newCheckBlock = newBlock.getRelative(blockFace);
 

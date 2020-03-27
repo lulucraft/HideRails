@@ -110,37 +110,37 @@ public class HideRailsManager
 	public static void initHideBlocksType() {
 		fr.lulucraft321.hiderails.configurations.specialconfig.Configuration config = FileConfigurationManager.getConfig();
 
-		HideRailsManager.hb = config.getBoolean("hideIronBars");
-		HideRailsManager.hr = config.getBoolean("hideRails");
-		HideRailsManager.hc = config.getBoolean("hideCommandBlock");
-		HideRailsManager.hd = config.getBoolean("hideRedstone");
-		HideRailsManager.hs = config.getBoolean("hideSigns");
+		hb = config.getBoolean("hideIronBars");
+		hr = config.getBoolean("hideRails");
+		hc = config.getBoolean("hideCommandBlock");
+		hd = config.getBoolean("hideRedstone");
+		hs = config.getBoolean("hideSigns");
 
 		TabComplete.BLOCK_TYPE.clear();
 		if (hr) {
-			if (HideRails.version == Version.v1_12) TabComplete.BLOCK_TYPE.add("rails");
-			if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) TabComplete.BLOCK_TYPE.add("rail");
+			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("rails");
+			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("rail");
 		}
 		if (hs) {
-			if (HideRails.version == Version.v1_14) TabComplete.BLOCK_TYPE.add("oak_sign");
+			if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("oak_sign");
 			else TabComplete.BLOCK_TYPE.add("sign");
 		}
 		if (hr) {
 			TabComplete.BLOCK_TYPE.add("redstone");
 		}
 		if (hc) {
-			if (HideRails.version == Version.v1_12) TabComplete.BLOCK_TYPE.add("command");
-			if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) TabComplete.BLOCK_TYPE.add("command_block");
+			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("command");
+			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("command_block");
 		}
 		if (hb) {
-			if (HideRails.version == Version.v1_12) TabComplete.BLOCK_TYPE.add("iron_fence");
-			if (HideRails.version == Version.v1_13 || HideRails.version == Version.v1_14) TabComplete.BLOCK_TYPE.add("iron_bars");
+			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("iron_fence");
+			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("iron_bars");
 		}
 
-		HideRailsManager.maj = config.getBoolean("adminsUpdateMessage");
-		HideRailsManager.hiddingBlocksParticles = config.getBoolean("hiddingBlocksParticles");
-		HideRailsManager.max_spam_nbr = config.getInt("maxSpamNumber");
-		HideRailsManager.spam_kick = config.getBoolean("kickSpamBlock");
+		maj = config.getBoolean("adminsUpdateMessage");
+		hiddingBlocksParticles = config.getBoolean("hiddingBlocksParticles");
+		max_spam_nbr = config.getInt("maxSpamNumber");
+		spam_kick = config.getBoolean("kickSpamBlock");
 	}
 
 
@@ -153,7 +153,7 @@ public class HideRailsManager
 
 		if (config.getConfigurationSection(HIDDEN_RAILS_PATH) == null) return;
 
-		HideRailsManager.rails.clear();
+		rails.clear();
 
 		for (String keys : config.getConfigurationSection(HIDDEN_RAILS_PATH).getKeys(false))
 		{
@@ -166,7 +166,7 @@ public class HideRailsManager
 				Byte data = LocationsManager.deserializeDataInSerializedLoc(loc);
 				HiddenRail rail = null;
 
-				if (HideRails.version == Version.v1_12) {
+				if (HideRails.version == Version.V1_12) {
 					// Adapt material name to good versions
 					String matName = mat.name().replace("LEGACY_", "");
 					mat = Material.matchMaterial(matName);
@@ -303,20 +303,20 @@ public class HideRailsManager
 	 */
 	public static void displayBlocks(Player p)
 	{
-		if (HideRailsManager.displayBlocksPlayers.contains(p)) {
-			HideRailsManager.displayBlocksPlayers.remove(p);
+		if (displayBlocksPlayers.contains(p)) {
+			displayBlocksPlayers.remove(p);
 
-			if (PlayerDisplayBlocks.run && HideRailsManager.displayBlocksPlayers.isEmpty()) {
+			if (PlayerDisplayBlocks.run && displayBlocksPlayers.isEmpty()) {
 				PlayerDisplayBlocks.run = false;
 				Bukkit.getScheduler().cancelTask(PlayerDisplayBlocks.taskId);
 			}
 		} else {
-			HideRailsManager.displayBlocksPlayers.add(p);
+			displayBlocksPlayers.add(p);
 
 			// Spawn particle for see hidden blocks for others players
 			if (!PlayerDisplayBlocks.run) {
 				// If particles enabled
-				if (HideRailsManager.hiddingBlocksParticles) {
+				if (hiddingBlocksParticles) {
 					PlayerDisplayBlocks.taskId = new PlayerDisplayBlocks().runTaskTimer(HideRails.getInstance(), 1L, 32L).getTaskId();
 					PlayerDisplayBlocks.run = true;
 				}
@@ -324,7 +324,7 @@ public class HideRailsManager
 
 			// Unhide hiddenBlocks only for player
 			String worldName = p.getWorld().getName();
-			for (HiddenRailsWorld hWorld : HideRailsManager.rails)
+			for (HiddenRailsWorld hWorld : rails)
 			{
 				for (HiddenRail rail : hWorld.getHiddenRails())
 				{
@@ -338,7 +338,7 @@ public class HideRailsManager
 			}
 		}
 
-		MessagesManager.sendDisplayChangeMessage(p, Messages.DISPLAY_HIDDEN_BLOCKS, HideRailsManager.displayBlocksPlayers.contains(p));
+		MessagesManager.sendDisplayChangeMessage(p, Messages.DISPLAY_HIDDEN_BLOCKS, displayBlocksPlayers.contains(p));
 	}
 
 
@@ -390,7 +390,7 @@ public class HideRailsManager
 					BlockState state = rail.getState();
 
 					rail.setType(rail.getType());
-					if (HideRails.version == Version.v1_12) {
+					if (HideRails.version == Version.V1_12) {
 						try {
 							Block.class.getDeclaredMethod("setData", byte.class).invoke(rail, entry.getValue().byteValue());
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -455,7 +455,7 @@ public class HideRailsManager
 		Material mat = matData.getMat();
 
 		if (mat != null)
-			HideRailsManager.saveChangedBlocks(player, targetBlock, blockType, mat, data, backup, single);
+			saveChangedBlocks(player, targetBlock, blockType, mat, data, backup, single);
 	}
 
 
@@ -551,7 +551,7 @@ public class HideRailsManager
 		Material mat = matData.getMat();
 
 		if (mat != null)
-			HideRailsManager.hideSelectionBlocks(player, selection, mat, data, backup, types);
+			hideSelectionBlocks(player, selection, mat, data, backup, types);
 	}
 
 	private static void hideSelectionBlocks(Player player, Cuboid selection, Material mat, byte data, boolean backup, List<Material> types)
@@ -658,7 +658,7 @@ public class HideRailsManager
 					Block rail = Bukkit.getWorld(worldName).getBlockAt(entry.getKey());
 					BlockState state = rail.getState();
 					rail.setType(rail.getType());
-					if (HideRails.version == Version.v1_12) {
+					if (HideRails.version == Version.V1_12) {
 						try {
 							Block.class.getDeclaredMethod("setData", byte.class).invoke(rail, entry.getValue().byteValue());
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

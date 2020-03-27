@@ -82,7 +82,7 @@ public class SpigotUpdater extends Thread
 		if(this.plugin.isEnabled()) {
 			if(this.enabled) {
 				if(this.log) {
-					Bukkit.getServer().getConsoleSender().sendMessage(MessagesManager.PREFIX + ChatColor.GREEN + "[Updater] Searching for updates.");
+					Bukkit.getServer().getConsoleSender().sendMessage(MessagesManager.PLUGIN_PREFIX + ChatColor.GREEN + "[Updater] Searching for updates.");
 				}
 
 				HttpURLConnection connection = null;
@@ -125,10 +125,10 @@ public class SpigotUpdater extends Thread
 					final ConsoleCommandSender sender = Bukkit.getServer().getConsoleSender();
 					if(!currentVersion.equals(this.plugin.getDescription().getVersion())) {
 						HideRailsManager.maj_available = true;
-						sender.sendMessage(MessagesManager.PREFIX + ChatColor.AQUA + "[Updater] Found new version: " + currentVersion + "! (Your version is " + this.plugin.getDescription().getVersion() + ")");
-						sender.sendMessage(MessagesManager.PREFIX + ChatColor.AQUA + "[Updater] Download here: http://www.spigotmc.org/resources/" + this.id);
+						sender.sendMessage(MessagesManager.PLUGIN_PREFIX + ChatColor.AQUA + "[Updater] Found new version: " + currentVersion + "! (Your version is " + this.plugin.getDescription().getVersion() + ")");
+						sender.sendMessage(MessagesManager.PLUGIN_PREFIX + ChatColor.AQUA + "[Updater] Download here: http://www.spigotmc.org/resources/" + this.id);
 					} else if(this.log) {
-						sender.sendMessage(MessagesManager.PREFIX + ChatColor.GREEN + "[Updater] Plugin is up-to-date.");
+						sender.sendMessage(MessagesManager.PLUGIN_PREFIX + ChatColor.GREEN + "[Updater] Plugin is up-to-date.");
 					}
 				} catch (IOException e) {
 		            if (this.log) {

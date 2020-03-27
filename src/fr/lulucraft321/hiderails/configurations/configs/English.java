@@ -33,28 +33,28 @@ public class English extends FileConfigurationManager implements AbstractLangCon
 
 			FileConfigurationManager.enLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.enLangFile);
 			FileConfigurationManager.enLangConfig.options().header("Translation by Nepta_").copyDefaults(true);
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "sender_type_error", "&cYou must be a player to execute this command!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "player_no_enough_permission", "&cYou do not have permission to execute this command!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "rail_success_change", "&2You have replaced the rails with %blocktype%!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "material_type_error", "&cThis bloc does not exist!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "rail_error", "&cThe target block is not a rail!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "rail_success_break", "&2You have broken a hidden rail!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "rail_success_unhide", "&2You have displayed the rails!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "water_protection_status_success_change", "&2You have %status% the under-water protection in %world%");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "invalid_worldname", "&cThis world name is invalid!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "plugin_success_reloaded", "&2Plugin successfully reloaded");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "water_protection_status_already", "&cThe underwater protection in %world% is already %status%");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "no_backup", "&cNo backup available!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "return_backup_success", "&2successfully restored backup!");
-			//FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "worldedit_not_installed", "&cWorldedit plugin is not installed on this server!");
-			//FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "worldedit_no_selection", "&cYou must first select region with Worldedit!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "hiderails_no_selection", "&cYou must first select region with wooden-axe!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "hiderails_selection_pos", "&8You have selected position &e%pos%");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "selection_message_status", "&8You have &e%status% &8selection messages!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "display_hidden_blocks", "&2You have %hide% the hidden blocks for you!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "invalid_player", "&cThe player cannot be found!");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "update_found", "&bNew update Available!\n&o%link%");
-			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.msgPath + "kick_spam_hidden_block", "&cDon't spam blocks please!!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "sender_type_error", "&cYou must be a player to execute this command!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "player_no_enough_permission", "&cYou do not have permission to execute this command!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_change", "&2You have replaced the rails with %blocktype%!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "material_type_error", "&cThis bloc does not exist!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_error", "&cThe target block is not a rail!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_break", "&2You have broken a hidden rail!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_unhide", "&2You have displayed the rails!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "water_protection_status_success_change", "&2You have %status% the under-water protection in %world%");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "invalid_worldname", "&cThis world name is invalid!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "plugin_success_reloaded", "&2Plugin successfully reloaded");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "water_protection_status_already", "&cThe underwater protection in %world% is already %status%");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "no_backup", "&cNo backup available!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "return_backup_success", "&2successfully restored backup!");
+			//FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "worldedit_not_installed", "&cWorldedit plugin is not installed on this server!");
+			//FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "worldedit_no_selection", "&cYou must first select region with Worldedit!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "hiderails_no_selection", "&cYou must first select region with wooden-axe!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "hiderails_selection_pos", "&8You have selected position &e%pos%");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "selection_message_status", "&8You have &e%status% &8selection messages!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "display_hidden_blocks", "&2You have %hide% the hidden blocks for you!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "invalid_player", "&cThe player cannot be found!");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "update_found", "&bNew update Available!\n&o%link%");
+			FileConfigurationManager.enLangConfig.set(FileConfigurationManager.MSG_PATH + "kick_spam_hidden_block", "&cDon't spam blocks please!!");
 
 			// Sauveguarde des modifs
 			try {

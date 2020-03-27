@@ -9,7 +9,7 @@ package fr.lulucraft321.hiderails.enums;
 
 public enum Version
 {
-	v1_12(false), v1_13(false), v1_14(false);
+	V1_12(false), V1_13(false), V1_14(false), V1_15(false);
 
 	private boolean oldVersion;
 
