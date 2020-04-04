@@ -85,11 +85,14 @@ public class BreakBlockListener extends AbstractListener
 
 							if (bLoc.equals(bLoc))
 							{
-								// Remove block around  hidden block
+								// Remove block around hidden block
 								world.getHiddenRails().remove(hRail);
 
 								// Remove broken hiddenBlock and send broken message to player
 								delOneHiddenBlock(p, world, baseB, worldName);
+
+								// Send broken hidden block message
+								MessagesManager.sendPluginMessage(p, Messages.SUCCESS_BREAK_RAIL);
 
 								// Block interactChangeBlock for admins
 								BreakBlockListener.breakBlocks.add(p);

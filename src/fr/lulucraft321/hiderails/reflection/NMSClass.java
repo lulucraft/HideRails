@@ -130,7 +130,7 @@ public class NMSClass
 	/**
 	 * 
 	 * @param method
-	 * @param methodName
+	 * @param methodInstance
 	 * @param methodParams
 	 * @return
 	 * 

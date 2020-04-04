@@ -263,8 +263,6 @@ public class BlocksChecker
 	 * @return
 	 */
 	public static boolean isSolid(Block block) {
-		boolean b = true;
-
 		if (isRail(block) || isSign(block)) {
 			return false;
 		}
@@ -281,7 +279,7 @@ public class BlocksChecker
 			}
 		}
 
-		return b;
+		return true;
 	}
 
 
@@ -394,12 +392,13 @@ public class BlocksChecker
 				// Material with NAME
 				if(isMaterial(input)) {
 					mat = Material.getMaterial(input.toUpperCase());
+					if (mat.name().contains("LEGACY_")) mat = null; // Add for remove console error (invalid block) with new changeBlock packet version (accept data)
 					data = 0;
 				}
 			}
 		}
 
-		if(mat == null) {
+		if(mat == null || mat.name().contains("LEGACY_")) { // Add check LEGACY to remove console error (invalid block) with new changeBlock packet version (accept data)
 			MessagesManager.sendPluginMessage(p, Messages.MATERIAL_TYPE_ERROR);
 		} else {
 			MessagesManager.sendRailChangeMessage(p, Messages.SUCCESS_CHANGE_RAIL, mat.name());

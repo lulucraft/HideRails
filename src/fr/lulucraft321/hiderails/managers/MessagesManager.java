@@ -57,26 +57,27 @@ public class MessagesManager
 		String displayColor2 = "§6";
 		String instruct = "";
 		// If version is 1.8
-		if (HideRails.version.isOldVersion()) {
+		/*if (HideRails.version.isOldVersion()) {
 			displayColor1 = "§c";
 			displayColor2 = "§c§m";
 			instruct = "§c§o > Only for 1.10+";
-		}
-		sender.sendMessage("\n" + "§8§l§m---------------§8§l[§6Hide§7Rails§8§l]§8§l§m---------------");
-		sender.sendMessage("\n" + "§f§l » §6/hiderails reload");
-		sender.sendMessage("§f§l » §6/hiderails help");
-		sender.sendMessage("\n" + "§f§l » §6/hiderails hideone \"§oblock:data§6\"");
+		}*/
+		sender.sendMessage("");
+		sender.sendMessage("§8§l§m---------------§8§l[§6Hide§7Rails§8§l]§8§l§m---------------\n");
+		sender.sendMessage("§f§l » §6/hiderails reload");
+		sender.sendMessage("§f§l » §6/hiderails help\n");
+		sender.sendMessage("§f§l » §6/hiderails hideone \"§oblock:data§6\"");
 		sender.sendMessage("§f§l » §6/hiderails hide \"§oblock:data§6\"");
 		sender.sendMessage("§f§l » §6/hiderails unhideone");
 		sender.sendMessage("§f§l » §6/hiderails unhide");
 		sender.sendMessage("§l » §6/hiderails hideselection \"block:data\"");
-		sender.sendMessage("§l » §6/hiderails unhideselection");
-		sender.sendMessage("\n" + "§f§l » §6/hiderails return");
+		sender.sendMessage("§l » §6/hiderails unhideselection\n");
+		sender.sendMessage("§f§l » §6/hiderails return");
 		sender.sendMessage(displayColor1 + "§l » " + displayColor2 + "/hiderails display" + instruct);
 		sender.sendMessage("§f§l » §6/hiderails selectionmessage");
 		sender.sendMessage("§f§l » §6/hiderails waterprotection \"§oworld§6\" \"§ovalue§6\"");
-		sender.sendMessage("§7§l » §6§o/hiderails display [\"player\"] §8(Command Block only)");
-		sender.sendMessage("\n" + "§8§l§m-------------------------------------\n§r§o Plugin by Nepta_ - Version " + HideRails.getInstance().getDescription().getVersion());
+		sender.sendMessage("§7§l » §6§o/hiderails display [\"player\"]\n");// §8(Command Block only)");
+		sender.sendMessage("§8§l§m-------------------------------------\n§r§o Plugin by Nepta_ - Version " + HideRails.getInstance().getDescription().getVersion());
 	}
 
 	public static void sendPluginMessage(CommandSender sender, Messages messageType)

@@ -167,6 +167,10 @@ public class HideRailsManager
 				HiddenRail rail = null;
 
 				if (HideRails.version == Version.V1_12) {
+					if (mat == null) {
+						System.err.println("[HideRails] <ERREUR> VOTRE FICHIER 'HiddenRails.yml' CONTIENT DES BLOCKS INVALIDES, VEUILLEZ METTRE A JOUR LES BLOCKS 'LEGAGY' OU SUPPRIMER VOTRE CONFIG !!!");
+						continue;
+					}
 					// Adapt material name to good versions
 					String matName = mat.name().replace("LEGACY_", "");
 					mat = Material.matchMaterial(matName);
@@ -451,11 +455,10 @@ public class HideRailsManager
 	private static void e(Player player, Block targetBlock, BlockReplacementType blockType, String input, boolean backup, boolean single)
 	{
 		MaterialData matData = BlocksChecker.getMatData(player, input);
-		byte data = matData.getData();
 		Material mat = matData.getMat();
 
 		if (mat != null)
-			saveChangedBlocks(player, targetBlock, blockType, mat, data, backup, single);
+			saveChangedBlocks(player, targetBlock, blockType, mat, matData.getData(), backup, single);
 	}
 
 
@@ -547,11 +550,10 @@ public class HideRailsManager
 	public static void hideSelectionBlocks(Player player, Cuboid selection, String input, boolean backup, List<Material> types)
 	{
 		MaterialData matData = BlocksChecker.getMatData(player, input);
-		byte data = matData.getData();
 		Material mat = matData.getMat();
 
 		if (mat != null)
-			hideSelectionBlocks(player, selection, mat, data, backup, types);
+			hideSelectionBlocks(player, selection, mat, matData.getData(), backup, types);
 	}
 
 	private static void hideSelectionBlocks(Player player, Cuboid selection, Material mat, byte data, boolean backup, List<Material> types)

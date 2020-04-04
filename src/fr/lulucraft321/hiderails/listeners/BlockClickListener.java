@@ -86,7 +86,7 @@ public class BlockClickListener extends AbstractListener
 		if (p.isOp() || p.hasPermission("hiderails.admin")) {
 			// If player click in hiddenSign
 			if (BlocksChecker.isSign(block)) {
-				final Sign s = (Sign) Bukkit.getServer().getWorld(block.getWorld().getName()).getBlockAt(blockLoc).getState();
+				Sign s = (Sign) Bukkit.getServer().getWorld(block.getWorld().getName()).getBlockAt(blockLoc).getState();
 				if (HideRailsManager.getHiddenRail(s.getLocation()) != null) {
 					s.setLine(0, s.getLine(0));
 					s.setLine(1, s.getLine(1));

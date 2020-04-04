@@ -40,8 +40,9 @@ public class BukkitNMS
 	private static Class<?> block_class;
 	private static Constructor<?> constructorBP;
 	private static Method fromLegacyData_method;
-	private static Method craftMagicNumbers_method;
-	private static Method block_data_method; // Only for 1.13
+	private static Method craftMagicNumbers_method_with_data;
+	private static Method craftMagicNumbers_method_without_data;
+	//private static Method block_data_method; // Only for 1.10
 	private static Field block_change_pos_field;
 	private static Field block_field;
 
@@ -55,6 +56,7 @@ public class BukkitNMS
 	private static Class<?> fileUtils_class;
 	private static Method readFileContent_method;
 	private static Method writeFileContent_method;
+
 
 	static {
 		packet_class = NMSClass.getNMSClass("Packet");
@@ -72,12 +74,21 @@ public class BukkitNMS
 			if (HideRails.version == Version.V1_12) {
 				// Get "IBlockData fromLegacy(int i)" method
 				fromLegacyData_method = NMSClass.getMethod(block_class, "fromLegacyData", int.class);
+
+				// Get Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
+				craftMagicNumbers_method_with_data = NMSClass.getMethod(craftMagicNumbersClass, "getBlock", Material.class);
 			} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
-				// Get "IBlockData getBlockData()" method
-				block_data_method = NMSClass.getMethod(block_class, "getBlockData", null);
+				if (HideRails.version == Version.V1_14) {
+					// Get "IBlockData getBlockData()" method
+					//block_data_method = NMSClass.getMethod(block_class, "getBlockData", null);
+
+					// Get Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
+					craftMagicNumbers_method_without_data = NMSClass.getMethod(craftMagicNumbersClass, "getBlock", Material.class);
+				}
+
+				// Get Method "getBlock(Material material, byte data)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material, data)
+				craftMagicNumbers_method_with_data = NMSClass.getMethod(craftMagicNumbersClass, "getBlock", Material.class, byte.class);
 			}
-			// Get Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
-			craftMagicNumbers_method = NMSClass.getMethod(craftMagicNumbersClass, "getBlock", Material.class);
 
 			block_field = NMSClass.getField(block_change_class, "block");
 			// ------------------------------------------------------------------------------------------------------------------- //
@@ -178,15 +189,24 @@ public class BukkitNMS
 	 */
 	public static void changeBlock(Player p, Material material, byte data, int x, int y, int z)
 	{
+		if (material == null) { // If material is LEGACY or invalid in HiddenRails config file (Only for older versions than 1.14)
+			System.err.println("[HideRails] <ERREUR> VOTRE FICHIER 'HiddenRails.yml' CONTIENT DES BLOCKS INVALIDES, VEUILLEZ METTRE A JOUR LES BLOCKS 'LEGAGY' OU SUPPRIMER VOTRE CONFIG !!");
+			return;
+		}
+
+		String baseMatName = material.name();
+
 		// Adapt material name to good versions
-		String matName = material.name().replace("LEGACY_", "");
+		String matName = baseMatName.replace("LEGACY_", "");
 		material = Material.matchMaterial(matName);
 
+		Object packet = null;
+		Object block_data = null;
 		try {
 			/*
 			 * Instanciation du packet PacketPlayOutBlockChange
 			 */
-			Object packet = NMSClass.newInstance(block_change_class);
+			packet = NMSClass.newInstance(block_change_class);
 
 			// Set blockChange location
 			Object blockPosition = NMSClass.newInstance(constructorBP, x, y, z);
@@ -195,16 +215,23 @@ public class BukkitNMS
 			/*
 			 * Replace "CraftMagicNumbers.getBlock(material).fromLegacyData(data)"
 			 */
-			// Invoke Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
-			Object craftMagicNumber = NMSClass.invokeMethod(craftMagicNumbers_method, fromLegacyData_method, material);
 			// Get final IBlockData
-			Object block_data = null;
+
 			if (HideRails.version == Version.V1_12) {
+				// Invoke Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
+				Object craftMagicNumber = NMSClass.invokeMethod(craftMagicNumbers_method_with_data, fromLegacyData_method, material);
 				block_data = NMSClass.invokeMethod(fromLegacyData_method, craftMagicNumber, data);
 			} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
+				// Invoke Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
+				//Object craftMagicNumber = NMSClass.invokeMethod(craftMagicNumbers_method, null, material);
+
 				// replace "block_data = CraftMagicNumbers.getBlock(material).getBlockData();"
-				Object iMe = NMSClass.invokeMethod(craftMagicNumbers_method, craftMagicNumber, material);
-				block_data = NMSClass.invokeMethod(block_data_method, iMe, null);
+				//Object iMe = NMSClass.invokeMethod(craftMagicNumbers_method, craftMagicNumber, material);
+				//block_data = NMSClass.invokeMethod(block_data_method, iMe, null);
+
+				// Invoke Method "getBlock(Material material, byte data)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material, data)
+				// replace "block_data = CraftMagicNumbers.getBlock(material, data);"
+				block_data = NMSClass.invokeMethod(craftMagicNumbers_method_with_data, null, material, data);
 			}
 
 			/*
@@ -216,8 +243,43 @@ public class BukkitNMS
 			 * Send Packet to player
 			 */
 			sendPacket(p, packet);
-		} catch (IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
-			e.printStackTrace();
+		}
+		catch (IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e)
+		{
+			if (e instanceof InvocationTargetException) {
+				/* If material is LEGACY or invalid */
+				if (HideRails.version == Version.V1_13) {
+					System.err.println("[HideRails] <ERREUR> VOTRE FICHIER 'HiddenRails.yml' CONTIENT DES BLOCKS INVALIDES, VEUILLEZ METTRE A JOUR LE BLOCK '" + baseMatName + "' OU SUPPRIMER VOTRE CONFIG !!!");
+				} else if (HideRails.version == Version.V1_14) {
+					/* Try without data */
+					try {
+						// Invoke Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
+						// replace "block_data = CraftMagicNumbers.getBlock(material).getBlockData();"
+						block_data = NMSClass.invokeMethod(craftMagicNumbers_method_without_data, null, material);
+
+						/* Set "block" field in PacketPlayOutBlockChange Class ("packet.block") */
+						block_field.set(packet, block_data);
+
+						/* Send Packet to player */
+						sendPacket(p, packet);
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e1) {
+						if (e instanceof InvocationTargetException)
+							System.err.println("[HideRails] <ERREUR> VOTRE FICHIER 'HiddenRails.yml' CONTIENT DES BLOCKS INVALIDES, VEUILLEZ METTRE A JOUR LE BLOCK '" + baseMatName + "' OU SUPPRIMER VOTRE CONFIG !!!");
+						else
+							e.printStackTrace();
+					}
+				} else if (HideRails.version == Version.V1_15) {
+					if (e instanceof InvocationTargetException)
+						System.err.println("[HideRails] <ERREUR> VOTRE FICHIER 'HiddenRails.yml' CONTIENT DES BLOCKS INVALIDES, VEUILLEZ METTRE A JOUR LE BLOCK '" + baseMatName + "' OU SUPPRIMER VOTRE CONFIG !!!");
+					else
+						e.printStackTrace();
+				} else {
+					e.printStackTrace();
+				}
+				//System.err.println("\nERREUR : " + e.getClass() + "\nCAUSE : " + e.getCause());
+			} else {
+				e.printStackTrace();
+			}
 		}
 	}
 
