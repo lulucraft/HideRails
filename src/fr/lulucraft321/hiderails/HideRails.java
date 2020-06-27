@@ -15,6 +15,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.lulucraft321.hiderails.commands.CommandsHandle;
 import fr.lulucraft321.hiderails.commands.TabComplete;
+import fr.lulucraft321.hiderails.commands.execution.DisplayCommand;
+import fr.lulucraft321.hiderails.commands.execution.DisplayOtherCommand;
+import fr.lulucraft321.hiderails.commands.execution.HideCommand;
+import fr.lulucraft321.hiderails.commands.execution.HideSelectionBlockTypeCommand;
+import fr.lulucraft321.hiderails.commands.execution.HideSelectionCommand;
+import fr.lulucraft321.hiderails.commands.execution.HideSingleCommand;
+import fr.lulucraft321.hiderails.commands.execution.ReloadCommand;
+import fr.lulucraft321.hiderails.commands.execution.RestoreBackupCommand;
+import fr.lulucraft321.hiderails.commands.execution.SelectionMessageCommand;
+import fr.lulucraft321.hiderails.commands.execution.UnHideCommand;
+import fr.lulucraft321.hiderails.commands.execution.UnHideSelectionBlockTypeCommand;
+import fr.lulucraft321.hiderails.commands.execution.UnHideSingleCommand;
+import fr.lulucraft321.hiderails.commands.execution.WaterProtectionCommand;
 import fr.lulucraft321.hiderails.enums.Version;
 import fr.lulucraft321.hiderails.external.metrics.Metrics;
 import fr.lulucraft321.hiderails.external.updater.SpigotUpdater;
@@ -78,5 +91,20 @@ public class HideRails extends JavaPlugin
 	{
 		getCommand("hiderails").setExecutor(new CommandsHandle());
 		getCommand("hiderails").setTabCompleter(new TabComplete());
+
+		new DisplayCommand();
+		new DisplayOtherCommand();
+		new HideCommand();
+		new HideSelectionBlockTypeCommand();
+		new HideSelectionCommand();
+		new HideSingleCommand();
+		new ReloadCommand();
+		new RestoreBackupCommand();
+		new SelectionMessageCommand();
+		new UnHideCommand();
+		new UnHideSelectionBlockTypeCommand();
+		new UnHideSelectionBlockTypeCommand();
+		new UnHideSingleCommand();
+		new WaterProtectionCommand();
 	}
 }

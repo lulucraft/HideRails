@@ -8,6 +8,7 @@
 package fr.lulucraft321.hiderails.commands.execution;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -25,45 +26,37 @@ import fr.lulucraft321.hiderails.utils.selectionsystem.Cuboid;
 
 public class UnHideSelectionBlockTypeCommand extends AbstractCommand
 {
-	public UnHideSelectionBlockTypeCommand(CommandSender sender) {
-		super(sender, "hiderails.unhideselection");
+	public UnHideSelectionBlockTypeCommand() {
+		super("unhideselection", "hiderails.unhideselection", 2,
+				Arrays.asList("unhideselect", "unhidesel", "showselection", "showselect", "showsel", "selectionunhide", "selectunhide", "selectionshow", "selectshow", "selshow"));
 	}
 
 	/*
 	 * UnHide hiddenBlocks type with HideRails selection
 	 */
 	public void execute(CommandSender sender, Command cmd, String[] args) {
-		if (sender instanceof Player) {
-			if (hasPermission()) {
-				final Player p = (Player) sender;
-				final ClaimData sel = HideRailsSelectionChecker.getHideRailsSelection(p);
+		final Player p = (Player) sender;
+		final ClaimData sel = HideRailsSelectionChecker.getHideRailsSelection(p);
 
-				if (sel == null) {
-					MessagesManager.sendPluginMessage(p, Messages.HIDERAILS_NO_SELECTION);
-					return;
-				}
-
-				final Cuboid cuboid = sel.getCuboid();
-				if (cuboid == null) {
-					MessagesManager.sendPluginMessage(p, Messages.HIDERAILS_NO_SELECTION);
-					return;
-				}
-
-				List<Material> types = new ArrayList<>();
-				String[] splitter = args[1].split(",");
-				for (int i = 0; i < splitter.length; i++) {
-					Material mat = Material.getMaterial(splitter[i].toUpperCase());
-					if (mat != null)
-						types.add(mat);
-				}
-
-				HideRailsManager.removeSelectionBlocks(p, cuboid, true, types);
-			} else {
-				// Si sender n'est pas op ou n'a pas la perm
-				MessagesManager.sendPluginMessage(sender, Messages.PLAYER_NO_ENOUGH_PERMISSION);
-			}
-		} else {
-			MessagesManager.sendPluginMessage(sender, Messages.SENDER_TYPE_ERROR);
+		if (sel == null) {
+			MessagesManager.sendPluginMessage(p, Messages.HIDERAILS_NO_SELECTION);
+			return;
 		}
+
+		final Cuboid cuboid = sel.getCuboid();
+		if (cuboid == null) {
+			MessagesManager.sendPluginMessage(p, Messages.HIDERAILS_NO_SELECTION);
+			return;
+		}
+
+		List<Material> types = new ArrayList<>();
+		String[] splitter = args[1].split(",");
+		for (int i = 0; i < splitter.length; i++) {
+			Material mat = Material.getMaterial(splitter[i].toUpperCase());
+			if (mat != null)
+				types.add(mat);
+		}
+
+		HideRailsManager.removeSelectionBlocks(p, cuboid, true, types);
 	}
 }

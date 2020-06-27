@@ -9,5 +9,5 @@ package fr.lulucraft321.hiderails.utils.abstractclass;
 
 public interface AbstractLangConfig
 {
-	abstract void setupConfig();
+	void setupConfig();
 }

@@ -7,6 +7,8 @@
 
 package fr.lulucraft321.hiderails.commands.execution;
 
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,8 +21,8 @@ import fr.lulucraft321.hiderails.utils.abstractclass.AbstractCommand;
 
 public class DisplayOtherCommand extends AbstractCommand
 {
-	public DisplayOtherCommand(CommandSender sender) {
-		super(sender, "hiderails.display.other");
+	public DisplayOtherCommand() {
+		super("display", "hiderails.display.other", 2, Arrays.asList("displayother", "otherdisplay"), true);
 	}
 
 	/*
@@ -28,16 +30,11 @@ public class DisplayOtherCommand extends AbstractCommand
 	 */
 	@Override
 	public void execute(CommandSender sender, Command cmd, String[] args) {
-		if (hasPermission()) {
-			Player pl = Bukkit.getPlayer(String.valueOf(args[1]));
-			if (pl != null) {
-				HideRailsManager.displayBlocks(pl);
-			} else {
-				MessagesManager.sendPluginMessage(sender, Messages.INVALID_PLAYER);
-			}
+		Player pl = Bukkit.getPlayer(String.valueOf(args[1]));
+		if (pl != null) {
+			HideRailsManager.displayBlocks(pl);
 		} else {
-			// Si sender n'est pas op ou n'a pas la perm
-			MessagesManager.sendPluginMessage(sender, Messages.PLAYER_NO_ENOUGH_PERMISSION);
+			MessagesManager.sendPluginMessage(sender, Messages.INVALID_PLAYER);
 		}
 	}
 }

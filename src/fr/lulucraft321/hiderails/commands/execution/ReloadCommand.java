@@ -7,6 +7,8 @@
 
 package fr.lulucraft321.hiderails.commands.execution;
 
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,24 +22,19 @@ import fr.lulucraft321.hiderails.utils.abstractclass.AbstractCommand;
 
 public class ReloadCommand extends AbstractCommand
 {
-	public ReloadCommand(CommandSender sender) {
-		super(sender, "hiderails.reload");
+	public ReloadCommand() {
+		super("reload", "hiderails.reload", 1, Arrays.asList("rel", "rl"), true);
 	}
 
 	@Override
 	public void execute(CommandSender sender, Command cmd, String[] args) {
-		if (hasPermission()) {
-			Bukkit.getServer().getScheduler().cancelTasks(HideRails.getInstance());
+		Bukkit.getServer().getScheduler().cancelTasks(HideRails.getInstance());
 
-			FileConfigurationManager.setupConfigs();
-			FileConfigurationManager.saveConfigs();
+		FileConfigurationManager.setupConfigs();
+		FileConfigurationManager.saveConfigs();
 
-			HideRailsManager.loadHideRails();
+		HideRailsManager.loadHideRails();
 
-			MessagesManager.sendPluginMessage(sender, Messages.SUCCESS_RELOAD);
-		} else {
-			// Si sender n'est pas op ou n'a pas la perm
-			MessagesManager.sendPluginMessage(sender, Messages.PLAYER_NO_ENOUGH_PERMISSION);
-		}
+		MessagesManager.sendPluginMessage(sender, Messages.SUCCESS_RELOAD);
 	}
 }

@@ -7,6 +7,7 @@
 
 package fr.lulucraft321.hiderails.commands.execution;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -23,8 +24,8 @@ import fr.lulucraft321.hiderails.utils.checkers.JavaChecker;
 
 public class WaterProtectionCommand extends AbstractCommand
 {
-	public WaterProtectionCommand(CommandSender sender) {
-		super(sender, "hiderails.waterprotection");
+	public WaterProtectionCommand() {
+		super("waterprotection", "hiderails.waterprotection", 3, Arrays.asList("waterprotect", "protectionwater", "protectwater"));
 	}
 
 	/*
@@ -32,41 +33,30 @@ public class WaterProtectionCommand extends AbstractCommand
 	 */
 	@Override
 	public void execute(CommandSender sender, Command cmd, String[] args) {
-		if (sender instanceof Player) {
-			if (hasPermission()) {
-				Player p = (Player) sender;
-				List<World> world = Bukkit.getWorlds();
-				String worldInput = String.valueOf(args[1]);
+		final Player p = (Player) sender;
+		List<World> world = Bukkit.getWorlds();
+		String worldInput = String.valueOf(args[1]);
 
-				// Change redstone protection status for one world
-				if (world.contains(Bukkit.getServer().getWorld(worldInput))) {
-					// args[2] == boolean value
-					String bInput = JavaChecker.getBoolean(args[2].toLowerCase().toString());
+		// Change redstone protection status for one world
+		if (world.contains(Bukkit.getServer().getWorld(worldInput))) {
+			// args[2] == boolean value
+			String bInput = JavaChecker.getBoolean(args[2].toLowerCase().toString());
 
-					if (bInput == null) {
-						MessagesManager.sendHelpPluginMessage(p);
-					} else {
-						HideRailsManager.setWaterProtection(p, worldInput, Boolean.parseBoolean(bInput));
-					}
-				}
-				// Change redstone protection status for all worlds
-				else if (worldInput.equalsIgnoreCase("all") || worldInput.equalsIgnoreCase("_all_")) {
-					String bInput = JavaChecker.getBoolean(args[2].toLowerCase().toString());
-
-					HideRailsManager.setWaterProtection(p, (worldInput.equalsIgnoreCase("all") ? "_all_" : worldInput), Boolean.parseBoolean(bInput));
-				}
-				// Error of world input
-				else {
-					MessagesManager.sendPluginMessage(p, Messages.INVALID_WORLDNAME);
-				}
-
+			if (bInput == null) {
+				MessagesManager.sendHelpPluginMessage(p);
 			} else {
-				// Si sender n'est pas op ou n'a pas la perm
-				MessagesManager.sendPluginMessage(sender, Messages.PLAYER_NO_ENOUGH_PERMISSION);
+				HideRailsManager.setWaterProtection(p, worldInput, Boolean.parseBoolean(bInput));
 			}
-		} else {
-			MessagesManager.sendPluginMessage(sender, Messages.SENDER_TYPE_ERROR);
+		}
+		// Change redstone protection status for all worlds
+		else if (worldInput.equalsIgnoreCase("all") || worldInput.equalsIgnoreCase("_all_")) {
+			String bInput = JavaChecker.getBoolean(args[2].toLowerCase().toString());
+
+			HideRailsManager.setWaterProtection(p, (worldInput.equalsIgnoreCase("all") ? "_all_" : worldInput), Boolean.parseBoolean(bInput));
+		}
+		// Error of world input
+		else {
+			MessagesManager.sendPluginMessage(p, Messages.INVALID_WORLDNAME);
 		}
 	}
-
 }

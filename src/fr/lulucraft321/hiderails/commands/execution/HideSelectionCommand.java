@@ -7,6 +7,8 @@
 
 package fr.lulucraft321.hiderails.commands.execution;
 
+import java.util.Arrays;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,8 +23,8 @@ import fr.lulucraft321.hiderails.utils.selectionsystem.Cuboid;
 
 public class HideSelectionCommand extends AbstractCommand
 {
-	public HideSelectionCommand(CommandSender sender) {
-		super(sender, "hiderails.hideselection");
+	public HideSelectionCommand() {
+		super("hideselection", "hiderails.hideselection", 2, Arrays.asList("hideselect", "hidesel", "selectionhide", "selhide"));
 	}
 
 	/*
@@ -30,31 +32,22 @@ public class HideSelectionCommand extends AbstractCommand
 	 */
 	@Override
 	public void execute(CommandSender sender, Command cmd, String[] args) {
-		if (sender instanceof Player) {
-			if (hasPermission()) {
-				final Player p = (Player) sender;
-				final ClaimData sel = HideRailsSelectionChecker.getHideRailsSelection(p);
+		final Player p = (Player) sender;
+		final ClaimData sel = HideRailsSelectionChecker.getHideRailsSelection(p);
 
-				if (sel == null) {
-					MessagesManager.sendPluginMessage(p, Messages.HIDERAILS_NO_SELECTION);
-					return;
-				}
-
-				final Cuboid cuboid = sel.getCuboid();
-				if (cuboid == null) {
-					MessagesManager.sendPluginMessage(p, Messages.HIDERAILS_NO_SELECTION);
-					return;
-				}
-
-				// args[1] == Material
-				HideRailsManager.hideSelectionBlocks(p, cuboid, args[1], true, null);
-			} else {
-				// Si sender n'est pas op ou n'a pas la perm
-				MessagesManager.sendPluginMessage(sender, Messages.PLAYER_NO_ENOUGH_PERMISSION);
-			}
-		} else {
-			MessagesManager.sendPluginMessage(sender, Messages.SENDER_TYPE_ERROR);
+		if (sel == null) {
+			MessagesManager.sendPluginMessage(p, Messages.HIDERAILS_NO_SELECTION);
+			return;
 		}
+
+		final Cuboid cuboid = sel.getCuboid();
+		if (cuboid == null) {
+			MessagesManager.sendPluginMessage(p, Messages.HIDERAILS_NO_SELECTION);
+			return;
+		}
+
+		// args[1] == Material
+		HideRailsManager.hideSelectionBlocks(p, cuboid, args[1], true, null);
 	}
 
 }
