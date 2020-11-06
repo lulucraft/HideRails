@@ -135,6 +135,7 @@ public class BukkitNMS
 		if (VERSION.contains("1_13")) HideRails.version = Version.V1_13;
 		else if (VERSION.contains("1_14")) HideRails.version = Version.V1_14;
 		else if (VERSION.contains("1_15")) HideRails.version = Version.V1_15;
+		else if (VERSION.contains("1_16")) HideRails.version = Version.V1_15;
 		else HideRails.version = Version.V1_12;
 
 		if (HideRails.version == Version.V1_12) {

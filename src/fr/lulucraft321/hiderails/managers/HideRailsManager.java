@@ -86,12 +86,12 @@ public class HideRailsManager
 	 * Join plugin update message (admins only)
 	 * If maj is available
 	 */
-	public static boolean maj_available;
+	public static boolean update_available;
 
 	/**
 	 * Enable or disable update message
 	 */
-	public static boolean maj = true;
+	public static boolean update = true;
 
 	/**
 	 * Max click number before kick player
@@ -137,7 +137,7 @@ public class HideRailsManager
 			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("iron_bars");
 		}
 
-		maj = config.getBoolean("adminsUpdateMessage");
+		update = config.getBoolean("adminsUpdateMessage");
 		hiddingBlocksParticles = config.getBoolean("hiddingBlocksParticles");
 		max_spam_nbr = config.getInt("maxSpamNumber");
 		spam_kick = config.getBoolean("kickSpamBlock");
@@ -409,14 +409,14 @@ public class HideRailsManager
 			}
 		}
 
-		// Creation d'un nouveau backup
+		// Create new backup
 		BlocksBackup bBackup = new BlocksBackup();
 		bBackup.setType(BackupType.UNHIDE);
 
 		for (HiddenRail rail : hRails) {
 			hiddenRails.delHiddenRail(rail);
 
-			// Sauveguarde des blocs changés dans le nouveau backup pour pouvoir retourner en arriere apres /hiderails undo
+			// Save updated blocks in new backup to allow return with /hiderails undo
 			bBackup.addChangedBlocks(LocationsManager.serialize(rail.getLocation()));
 			bBackup.setUnHideBlocksType(new MaterialData(rail.getMaterial(), rail.getData()));
 		}
@@ -484,11 +484,11 @@ public class HideRailsManager
 		World world = targetBlock.getWorld();
 		String worldName = world.getName();
 
-		// Creation d'un nouveau backup
+		// Create new backup
 		BlocksBackup bBackup = new BlocksBackup();
 		bBackup.setType(BackupType.HIDE);
 
-		// Stockage de tous les rails serialisés du monde worldName
+		// Stockage de tous les rails serialisÃ©s du monde worldName
 		List<String> hiddenRails = new ArrayList<>();
 		hiddenRails = FileConfigurationManager.getHiddenRailsConfig().getStringList(HIDDEN_RAILS_PATH + "." + worldName);
 		List<Location> hiddenRailsLocs = new ArrayList<>();
@@ -503,7 +503,7 @@ public class HideRailsManager
 				rail.setLocation(loc);
 				railsList.add(rail);
 
-				// Sauveguarde des blocs changés dans le nouveau backup pour pouvoir retourner en arriere apres /hiderails undo
+				// Sauveguarde des blocs changÃ©s dans le nouveau backup pour pouvoir retourner en arriere apres /hiderails undo
 				bBackup.addChangedBlocks(LocationsManager.serialize(loc));
 
 				// If version is not 1.8
@@ -569,7 +569,7 @@ public class HideRailsManager
 		bBackup.setBlocksType(types);
 		bBackup.setHrSelection(selection);
 
-		// Stockage de tous les rails serialisés du monde worldName
+		// Stockage de tous les rails serialisÃ©s du monde worldName
 		List<String> hiddenRails = new ArrayList<>();
 		hiddenRails = FileConfigurationManager.getHiddenRailsConfig().getStringList(HIDDEN_RAILS_PATH + "." + worldName);
 		List<Location> hiddenRailsLocs = new ArrayList<>();
@@ -588,7 +588,7 @@ public class HideRailsManager
 				rail.setLocation(loc);
 				railsList.add(rail);
 
-				// Sauveguarde des blocs changés dans le nouveau backup pour pouvoir retourner en arriere apres /hiderails undo
+				// Sauveguarde des blocs changÃ©s dans le nouveau backup pour pouvoir retourner en arriere apres /hiderails undo
 				bBackup.addChangedBlocks(LocationsManager.serialize(loc));
 
 				// If version is not 1.8
@@ -678,7 +678,7 @@ public class HideRailsManager
 		for (HiddenRail rail : hRails) {
 			hiddenRails.delHiddenRail(rail);
 
-			// Sauveguarde des blocs changés dans le nouveau backup pour pouvoir retourner en arriere apres /hiderails undo
+			// Sauveguarde des blocs changÃ©s dans le nouveau backup pour pouvoir retourner en arriere apres /hiderails undo
 			bBackup.addChangedBlocks(LocationsManager.serialize(rail.getLocation()));
 			bBackup.setUnHideBlocksType(new MaterialData(rail.getMaterial(), rail.getData()));
 		}

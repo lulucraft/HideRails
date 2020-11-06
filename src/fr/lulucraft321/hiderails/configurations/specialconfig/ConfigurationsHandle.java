@@ -102,12 +102,12 @@ public class ConfigurationsHandle
 					}
 
 				}
-				// Retours à la ligne
+				// Carriage return
 				else if (line.startsWith(Configuration.VOID_PREFIX)) {
 					String ser_path = line.substring(0, line.split(": ")[0].length()).toString();
 					configLines.append(line.replace(ser_path + ": " + Configuration.VOID_PREFIX, ""));
 				}
-				// Commentaires
+				// Comments
 				else if (line.startsWith(Configuration.COMMENT_PREFIX)) {
 					String ser_path = line.substring(0, line.split(": ")[0].length()).toString();
 					configLines.append(line.replace(ser_path + ": ", "# "));
@@ -117,7 +117,7 @@ public class ConfigurationsHandle
 				}
 
 			}
-			// Ligne de config
+			// Config line
 			else {
 				configLines.append(line);
 			}

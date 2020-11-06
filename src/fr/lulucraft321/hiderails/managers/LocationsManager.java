@@ -53,7 +53,6 @@ public class LocationsManager
 
 					if(newCheckBlock == null) continue;
 					if(checked.contains(newCheckBlock.getLocation())) continue;
-					if(checked.contains(newCheckBlock)) continue;
 
 					if(blockType == BlockReplacementType.RAILS || blockType == BlockReplacementType.IRON_BARS || blockType == BlockReplacementType.COMMAND_BLOCK || blockType == BlockReplacementType.REDSTONE
 							|| blockType == BlockReplacementType.SIGN)

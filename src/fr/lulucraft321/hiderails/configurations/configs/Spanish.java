@@ -32,7 +32,7 @@ public class Spanish extends FileConfigurationManager implements AbstractLangCon
 			}
 
 			FileConfigurationManager.esLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.esLangFile);
-			FileConfigurationManager.esLangConfig.options().header("Gracias a zuhir por la traducción en español !").copyDefaults(true);
+			FileConfigurationManager.esLangConfig.options().header("Gracias a zuhir por la traducciÃ³n en espaÃ±ol !").copyDefaults(true);
 			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "sender_type_error", "&cDebes ser un jugador para poder ejecutar ese comando.");
 			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "player_no_enough_permission", "&cNo tienes permiso para ejecutar ese comando.");
 			FileConfigurationManager.esLangConfig.set(FileConfigurationManager.MSG_PATH + "rail_success_change", "&2Has reemplazado los railes por %blocktype%.");
@@ -62,7 +62,7 @@ public class Spanish extends FileConfigurationManager implements AbstractLangCon
 			} catch (IOException e1) { System.err.println("Erreur lors de la sauveguarde du fichier de configuration \"" + FileConfigurationManager.esLangConfig.getName().toString() + "\" !"); }
 		} else {
 			FileConfigurationManager.esLangConfig = YamlConfiguration.loadConfiguration(FileConfigurationManager.esLangFile);
-			FileConfigurationManager.esLangConfig.options().header("Gracias a zuhir por la traducción en español !").copyDefaults(true);
+			FileConfigurationManager.esLangConfig.options().header("Gracias a zuhir por la traducciÃ³n en espaÃ±ol !").copyDefaults(true);
 			checkConfContains(FileConfigurationManager.esLangConfig, "sender_type_error", "&cYou must be a player to execute this command !");
 			checkConfContains(FileConfigurationManager.esLangConfig, "player_no_enough_permission", "&cNo tienes permiso para ejecutar ese comando.");
 			checkConfContains(FileConfigurationManager.esLangConfig, "rail_success_change", "&2Has reemplazado los railes por %blocktype%.");

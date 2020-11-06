@@ -105,10 +105,12 @@ public class NMSClass
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
 	 */
-	public static Object newInstance(Class<?> clazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	public static Object newInstance(Class<?> clazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
 	{
-		return clazz.newInstance();
+		return clazz.getDeclaredConstructor().newInstance();
 	}
 
 	/**

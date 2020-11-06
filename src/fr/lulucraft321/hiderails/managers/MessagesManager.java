@@ -18,7 +18,7 @@ import fr.lulucraft321.hiderails.managers.PlayerClaimDataManager.LocType;
 
 public class MessagesManager
 {
-	public static final String PLUGIN_PREFIX = "§8[§6Hide§7Rails§8] ";
+	public static final String PLUGIN_PREFIX = "Â§8[Â§6HideÂ§7RailsÂ§8] ";
 	private static final String MSG_PATH;
 
 	static {
@@ -54,21 +54,21 @@ public class MessagesManager
 	public static void sendHelpPluginMessage(CommandSender sender)
 	{
 		sender.sendMessage("");
-		sender.sendMessage("§8§l§m---------------§8§l[§6Hide§7Rails§8§l]§8§l§m---------------\n");
-		sender.sendMessage("§f§l » §6/hiderails reload");
-		sender.sendMessage("§f§l » §6/hiderails help\n");
-		sender.sendMessage("§f§l » §6/hiderails hideone \"§oblock:data§6\"");
-		sender.sendMessage("§f§l » §6/hiderails hide \"§oblock:data§6\"");
-		sender.sendMessage("§f§l » §6/hiderails unhideone");
-		sender.sendMessage("§f§l » §6/hiderails unhide");
-		sender.sendMessage("§f§l » §6/hiderails hideselection \"block:data\"");
-		sender.sendMessage("§f§l » §6/hiderails unhideselection\n");
-		sender.sendMessage("§f§l » §6/hiderails return");
-		sender.sendMessage("§f§l » §6/hiderails display");
-		sender.sendMessage("§f§l » §6/hiderails selectionmessage");
-		sender.sendMessage("§f§l » §6/hiderails waterprotection \"§oworld§6\" \"§ovalue§6\"");
-		sender.sendMessage("§7§l » §6§o/hiderails display [\"player\"]\n");// §8(Command Block only)");
-		sender.sendMessage("§8§l§m-------------------------------------\n§r§o Plugin by Nepta_ - Version " + HideRails.getInstance().getDescription().getVersion());
+		sender.sendMessage("Â§8Â§lÂ§m---------------Â§8Â§l[Â§6HideÂ§7RailsÂ§8Â§l]Â§8Â§lÂ§m---------------\n");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails reload");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails help\n");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails hideone \"Â§oblock:dataÂ§6\"");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails hide \"Â§oblock:dataÂ§6\"");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails unhideone");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails unhide");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails hideselection \"block:data\"");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails unhideselection\n");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails return");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails display");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails selectionmessage");
+		sender.sendMessage("Â§fÂ§l Â» Â§6/hiderails waterprotection \"Â§oworldÂ§6\" \"Â§ovalueÂ§6\"");
+		sender.sendMessage("Â§7Â§l Â» Â§6Â§o/hiderails display [\"player\"]\n");// Â§8(Command Block only)");
+		sender.sendMessage("Â§8Â§lÂ§m-------------------------------------\nÂ§rÂ§o Plugin by Nepta_ - Version " + HideRails.getInstance().getDescription().getVersion());
 	}
 
 	public static void sendPluginMessage(CommandSender sender, Messages messageType)
@@ -128,6 +128,6 @@ public class MessagesManager
 	}
 
 	private static String getColoredMessage(Messages messageType, LocType pos) {
-		return getColoredMessage(messageType).replace("%pos%", (pos == LocType.LOC1 ? "§e1" : "§e2"));
+		return getColoredMessage(messageType).replace("%pos%", (pos == LocType.LOC1 ? "Â§e1" : "Â§e2"));
 	}
 }

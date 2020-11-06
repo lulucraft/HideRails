@@ -26,9 +26,9 @@ public enum Messages
 	HIDERAILS_SELECTION_POS("vous avez selectionne la position avec succes"),
 	CHANGE_HIDERAILS_SELECTION_MESSAGE_STATUS("vous avez definit l'activation des messages de selection avec succes"),
 	DISPLAY_HIDDEN_BLOCKS("vous avez %status% le masquage des rails seulement poour vous"),
-	INVALID_PLAYER("le joueur entré est invalide"),
-	UPDATE_FOUND("une mise à jour du plugin est disponible !"),
-	KICK_SPAM_BLOCK("arrête de spam sur les blocs svp");
+	INVALID_PLAYER("le joueur entrÃ© est invalide"),
+	UPDATE_FOUND("une mise Ã  jour du plugin est disponible !"),
+	KICK_SPAM_BLOCK("arrÃªte de spam sur les blocs svp");
 
 	private String message;
 
