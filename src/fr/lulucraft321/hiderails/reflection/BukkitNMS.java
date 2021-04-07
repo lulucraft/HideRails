@@ -1,6 +1,5 @@
 /**
- * Copyright Java Code
- * All right reserved.
+ * Code under MIT license
  *
  * @author Nepta_
  */
