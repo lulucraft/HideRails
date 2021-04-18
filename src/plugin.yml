@@ -1,9 +1,9 @@
 name: HideRails
-version: 0.7.0-BETA
+version: 0.7.2-SNAPSHOT
 api-version: 1.13
 author: Nepta_
 description: Plugin for hide rails, ladder, redstone, signs and iron_bars - By Nepta_
-main: fr.lulucraft321.hiderails.HideRails
+main: fr.nepta.hiderails.HideRails
 load: POSTWORLD
 commands:
   hiderails:
