@@ -25,7 +25,7 @@ import fr.nepta.hiderails.managers.HideRailsManager;
 import fr.nepta.hiderails.managers.PlayerClaimDataManager;
 import fr.nepta.hiderails.managers.PlayerClaimDataManager.LocType;
 import fr.nepta.hiderails.models.railsdata.HiddenRail;
-import fr.nepta.hiderails.packets.BukkitNMS;
+import fr.nepta.hiderails.nms.BukkitNMS;
 import fr.nepta.hiderails.utils.BlocksChecker;
 import fr.nepta.hiderails.utils.JavaChecker;
 

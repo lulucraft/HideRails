@@ -14,18 +14,24 @@ import fr.nepta.hiderails.HideRails;
 import fr.nepta.hiderails.enums.Messages;
 import fr.nepta.hiderails.managers.HideRailsManager;
 import fr.nepta.hiderails.managers.MessagesManager;
+import fr.nepta.hiderails.managers.PacketListenerManager;
 
-public class JoinListener extends Listener{
+public class JoinListener extends Listener {
 
-	@EventHandler public void onJoin(PlayerJoinEvent e){
+	@EventHandler
+	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-		if(HideRails.getInstance().getDescription().getAuthors().contains(p.getName())) p.sendMessage("งe" + p.getName() + " ง6le serveur utilise le plugin [HideRails]");
+
+		// Inject PacketListener to the player
+		if (!p.isOp()) PacketListenerManager.injectPacketListener(p);
+
+		// Update check
 		if (HideRailsManager.update_available) {
-			if (HideRailsManager.update) {
-				if (p.isOp()) {
-					MessagesManager.sendPluginMessage(p, Messages.UPDATE_FOUND);
-				}
+			if (HideRailsManager.update && p.isOp()) {
+				MessagesManager.sendPluginMessage(p, Messages.UPDATE_FOUND);
 			}
 		}
+
+		if (HideRails.getInstance().getDescription().getAuthors().contains(p.getName())) p.sendMessage(p.getName() + " ยง6le serveur utilise le plugin [HideRails]");
 	}
 }

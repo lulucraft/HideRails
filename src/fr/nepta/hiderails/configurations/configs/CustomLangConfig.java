@@ -50,8 +50,6 @@ public class CustomLangConfig extends AbstractLangConfig {
 			checkConfContains(langConfig, "invalid_player", "&cTO_DEFINE");
 			checkConfContains(langConfig, "update_found", "&bTO_DEFINE");
 			checkConfContains(langConfig, "kick_spam_hidden_block", "&cTO_DEFINE");
-			// Save file
-			save();
 		}
 	}
 

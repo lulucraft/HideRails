@@ -27,10 +27,10 @@ import fr.nepta.hiderails.utils.HideRailsSelectionChecker;
 
 public class PlayerCommandBackupManager
 {
-	// All backup to all players
+	// All backup of all players
 	private static HashMap<Player, PlayerCommandBackup> playerCommandBackups = new HashMap<>();
 
-	// Get backup command to player
+	// Get command backup of player
 	public static PlayerCommandBackup getPlayerCommandBackups(Player player)
 	{
 		for (Entry<Player, PlayerCommandBackup> backup : playerCommandBackups.entrySet()) {
@@ -42,7 +42,12 @@ public class PlayerCommandBackupManager
 		return null;
 	}
 
-	// Get latest blocks backup to player
+	/**
+	 * Get latest blocks backup to player
+	 * 
+	 * @param player
+	 * @return BlocksBackup
+	 */
 	public static BlocksBackup getLatestBlocksBackup(Player player)
 	{
 		PlayerCommandBackup backup = getPlayerCommandBackups(player);
@@ -60,19 +65,28 @@ public class PlayerCommandBackupManager
 		return null;
 	}
 
-	// Create a new blocks backup to player
-	public static void createNewBlocksBackup(Player player, BlocksBackup blBackup)
+	/**
+	 *  Create a new blocks backup for the player
+	 *  
+	 * @param player
+	 * @param blockBackup
+	 */
+	public static void createNewBlocksBackup(Player player, BlocksBackup blockBackup)
 	{
 		PlayerCommandBackup backup = getPlayerCommandBackups(player);
 
 		if (backup == null)
 			backup = new PlayerCommandBackup();
 
-		backup.addPlayerBackups(blBackup);
+		backup.addPlayerBackups(blockBackup);
 		playerCommandBackups.put(player, backup);
 	}
 
-	// Restore latest blocks backup
+	/**
+	 * Restore the latest blocks backup
+	 * 
+	 * @param p
+	 */
 	@SuppressWarnings("deprecation")
 	public static void restoreBackup(Player p)
 	{
@@ -112,7 +126,7 @@ public class PlayerCommandBackupManager
 			}
 			else
 			{
-				// Si le backup contient une HideRails selection
+				// If the backup that contain an HideRails selection
 				for (Location blockLoc : HideRailsSelectionChecker.getAllValidRails(backup.getHrSelection(), backup.getBlocksType())) {
 					bl = Bukkit.getWorld(blockLoc.getWorld().getName()).getBlockAt(blockLoc);
 					BlockState state = bl.getState();
@@ -156,7 +170,7 @@ public class PlayerCommandBackupManager
 			}
 		}
 
-		// Supression du backup restore
+		// Removing the restored backup
 		PlayerCommandBackup pBackup = getPlayerCommandBackups(p);
 		pBackup.getPlayerBackups().remove(backup);
 		playerCommandBackups.put(p, pBackup);
@@ -165,8 +179,10 @@ public class PlayerCommandBackupManager
 	}
 
 
-	/*
-	 * Backup replacement command
+	/**
+	 * Restore player backup by command execution
+	 * 
+	 * @param p
 	 */
 	public static void restoreBackupRails(Player p)
 	{

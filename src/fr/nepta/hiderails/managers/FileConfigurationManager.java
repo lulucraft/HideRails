@@ -50,8 +50,7 @@ public class FileConfigurationManager
 
 	private static FileConfiguration hiddenRailsConfig = null;
 	private static FileConfiguration playersDataConfig = null;
-
-	private static AbstractLangConfig langConfig;
+	private static AbstractLangConfig langConfig = null;
 
 	public static FileConfiguration getHiddenRailsConfig() { return hiddenRailsConfig; }
 	public static FileConfiguration getPlayersDataConfig() { return playersDataConfig; }
@@ -60,8 +59,10 @@ public class FileConfigurationManager
 
 	/**
 	 * Make all configs and check lines
+	 * 
+	 * @throws IOException 
 	 */
-	public static void setupConfigs()
+	public static void setupConfigs() throws IOException
 	{
 		try {
 			final File f = new File(HideRails.getInstance().getDataFolder(), "config.yml");
@@ -189,7 +190,7 @@ public class FileConfigurationManager
 			try {
 				hiddenRailsFile.createNewFile();
 			} catch (IOException e) {
-				System.out.println("Erreur lors de la creation du fichier de configuration \"" + hiddenRailsConfig.getName().toString() + "\" !");
+				MessagesManager.LOGGER.warning("Error when creating the configuration file \"" + hiddenRailsConfig.getName().toString() + "\" !");
 				return;
 			}
 		}
@@ -207,7 +208,7 @@ public class FileConfigurationManager
 			try {
 				playersDataFile.createNewFile();
 			} catch (IOException e) {
-				System.out.println("Erreur lors de la creation du fichier de configuration \"" + playersDataConfig.getName().toString() + "\" !");
+				MessagesManager.LOGGER.warning("Error when creating the configuration file \"" + playersDataConfig.getName().toString() + "\" !");
 				return;
 			}
 		}
@@ -215,23 +216,9 @@ public class FileConfigurationManager
 		//
 
 
-		//		/*
-		//		 * Init all config files
-		//		 */
-		//		new English().setupConfig();
-		//		new French().setupConfig();
-		//		new Hongrois().setupConfig();
-		//		new Italian().setupConfig();
-		//		new Spanish().setupConfig();
-		//		new German().setupConfig();
-
-
-
-		//		if (!language.equals("FR") && !language.equals("EN") && !language.equals("IT") && !language.equals("HU") && !language.equals("ES") && !language.equals("DE"))
-		//		{
-		//
-		//		} else {
-
+//		/*
+//		* Init all config files
+//		*/
 		// Create config and load all messages
 		switch (language) {
 		case "FR":
@@ -271,6 +258,7 @@ public class FileConfigurationManager
 			break;
 		}
 		langConfig.setupConfig();// Check if all lines exist
+		langConfig.save();// Save file
 		langConfig.loadConfig();
 
 
@@ -303,8 +291,10 @@ public class FileConfigurationManager
 	 * <br>- Clone and rename old file by the current date and hour
 	 * <br>- and create new file with the default parameters
 	 * </p>
+	 * 
+	 * @throws IOException 
 	 */
-	private static void addCorruptConfig() {
+	private static void addCorruptConfig() throws IOException {
 		File confFile = new File(CONF.getAbsolutePath());
 		File confBack = new File(HIDERAILS_PATH + "/config_" + new SimpleDateFormat("yyyy-M-dd_hh.mm.ss").format(new Date()).toString() + ".yml");
 
@@ -324,22 +314,20 @@ public class FileConfigurationManager
 		try {
 			hiddenRailsConfig.save(hiddenRailsFile);
 		} catch (IOException e) {
-			System.out.println("Erreur lors de la sauveguarde du fichier de configuration \"" + hiddenRailsConfig.getName().toString() + "\"");
+			MessagesManager.LOGGER.warning("Error when saving the configuration file \"" + hiddenRailsConfig.getName() + "\"");
 		}
 
 		try {
 			playersDataConfig.save(playersDataFile);
 		} catch (IOException e) {
-			System.out.println("Erreur lors de la sauveguarde du fichier de configuration \"" + playersDataConfig.getName().toString() + "\"");
+			MessagesManager.LOGGER.warning("Error when saving the configuration file \"" + playersDataConfig.getName() + "\"");
 		}
 
-
-		langConfig.save();
-		//		try {
-		//			frLangConfig.save(frLangFile);
-		//		} catch (IOException e) {
-		//			System.out.println("Erreur lors de la sauveguarde du fichier de configuration \"" + frLangConfig.getName().toString() + "\"");
-		//		}
+		try {
+			langConfig.save();
+		} catch (IOException e) {
+			MessagesManager.LOGGER.warning("Error when saving the configuration file \"" + langConfig.getFile().getName() + "\"");
+		}
 	}
 
 

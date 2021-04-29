@@ -6,6 +6,9 @@
  */
 package fr.nepta.hiderails.managers;
 
+import java.util.logging.Logger;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,12 +21,17 @@ import fr.nepta.hiderails.managers.PlayerClaimDataManager.LocType;
 public class MessagesManager
 {
 	public static final String PLUGIN_PREFIX = "§8[§6Hide§7Rails§8] ";
+	public static final Logger LOGGER = Bukkit.getLogger();
+
 	private static final String MSG_PATH;
 
 	static {
 		MSG_PATH = FileConfigurationManager.MSG_PATH;
 	}
 
+	/**
+	 * Load all plugin messages
+	 */
 	public static void loadAllMessages()
 	{
 		FileConfiguration lang_conf = FileConfigurationManager.getLangConfig().getConfig();
@@ -50,6 +58,11 @@ public class MessagesManager
 		Messages.KICK_SPAM_BLOCK.setMessage(lang_conf.getString(MSG_PATH + "kick_spam_hidden_block"));
 	}
 
+	/**
+	 * Send plugin help to sender
+	 * 
+	 * @param sender
+	 */
 	public static void sendHelpPluginMessage(CommandSender sender)
 	{
 		sender.sendMessage("");

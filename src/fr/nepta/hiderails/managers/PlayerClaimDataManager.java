@@ -41,14 +41,14 @@ public class PlayerClaimDataManager
 	}
 
 	/*
-	 * Save selection maked by command execution
+	 * Save selection defined by command execution
 	 */
-	public static void setPos(Player p, LocType locType) {
-		setPos(p, p.getLocation(), locType);
-
-		// Send message
-		if (!blackListedMsgPlayers.contains(p)) MessagesManager.sendSelectPosMessage(p, locType);
-	}
+//	public static void setPos(Player p, LocType locType) {
+//		setPos(p, p.getLocation(), locType);
+//
+//		// Send message
+//		if (!blackListedMsgPlayers.contains(p)) MessagesManager.sendSelectPosMessage(p, locType);
+//	}
 
 	public static void setPos(Player player, Location loc, LocType locType) {
 		if (playersClaim.containsKey(player)) {

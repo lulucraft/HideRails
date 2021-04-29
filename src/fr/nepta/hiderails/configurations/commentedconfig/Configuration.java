@@ -13,7 +13,7 @@ import java.util.List;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import fr.nepta.hiderails.packets.BukkitNMS;
+import fr.nepta.hiderails.nms.BukkitNMS;
 
 public class Configuration
 {

@@ -59,16 +59,15 @@ public class HideRailsSelectionChecker
 		boolean commandBlocks = false;
 		boolean redstone = false;
 		boolean signs = false;
-		if (types == null || types.isEmpty())
-		{
+
+		if (types == null || types.isEmpty()) {
 			rails = true;
 			ironBars = true;
 			commandBlocks = true;
 			redstone = true;
 			signs = true;
 		} else {
-			for (Material type : types)
-			{
+			for (Material type : types) {
 				if (BlocksChecker.isRail(type)) {
 					rails = true;
 				}

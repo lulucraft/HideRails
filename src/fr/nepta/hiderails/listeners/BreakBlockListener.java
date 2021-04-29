@@ -23,7 +23,7 @@ import fr.nepta.hiderails.managers.HideRailsManager;
 import fr.nepta.hiderails.managers.MessagesManager;
 import fr.nepta.hiderails.models.railsdata.HiddenRail;
 import fr.nepta.hiderails.models.railsdata.HiddenRailsWorld;
-import fr.nepta.hiderails.packets.BukkitNMS;
+import fr.nepta.hiderails.nms.BukkitNMS;
 import fr.nepta.hiderails.utils.BlocksChecker;
 
 public class BreakBlockListener extends Listener

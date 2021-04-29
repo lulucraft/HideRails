@@ -15,6 +15,7 @@ import java.io.IOException;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import fr.nepta.hiderails.managers.FileConfigurationManager;
+import fr.nepta.hiderails.managers.MessagesManager;
 
 public class HungarianLangConfig extends AbstractLangConfig
 {
@@ -34,7 +35,7 @@ public class HungarianLangConfig extends AbstractLangConfig
 			try {
 				huLangFile.createNewFile();
 			} catch (IOException e) {
-				System.out.println("Error when creating file \"" + huLangFile.getName() + "\" !");
+				MessagesManager.LOGGER.warning("Error when creating file \"" + huLangFile.getName() + "\" !");
 				return;
 			}
 
@@ -88,7 +89,5 @@ public class HungarianLangConfig extends AbstractLangConfig
 			checkConfContains(huLangConfig, "update_found", "&bÙj frissitès elèrhető !\n&o%link%");
 			checkConfContains(huLangConfig, "kick_spam_hidden_block", "&cNe spameld a blokkokat !!");
 		}
-		// Save file
-		save();
 	}
 }

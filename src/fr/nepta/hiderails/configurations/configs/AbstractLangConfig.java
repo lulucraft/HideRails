@@ -56,15 +56,15 @@ public abstract class AbstractLangConfig {
 	/**
 	 * Save language file
 	 * 
+	 * @throws IOException 
 	 */
-	public void save() {
-		try {
-			this.langConfig.save(langFile);
-		} catch (IOException e) {
-			System.out.println("Erreur lors de la sauveguarde du fichier de configuration \"" + langConfig.getName().toString() + "\"");
-		}
+	public void save() throws IOException {
+		this.langConfig.save(langFile);
 	}
 
 
+	/**
+	 * Define config sections and default values
+	 */
 	public abstract void setupConfig();
 }

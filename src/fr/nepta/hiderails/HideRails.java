@@ -56,10 +56,11 @@ import fr.nepta.hiderails.listeners.BlockPhysicListener;
 import fr.nepta.hiderails.listeners.BreakBlockListener;
 import fr.nepta.hiderails.listeners.JoinListener;
 import fr.nepta.hiderails.listeners.PosCommandListener;
+import fr.nepta.hiderails.listeners.QuitListener;
 import fr.nepta.hiderails.listeners.RedstoneInWaterListeners;
 import fr.nepta.hiderails.managers.FileConfigurationManager;
 import fr.nepta.hiderails.managers.HideRailsManager;
-import fr.nepta.hiderails.packets.BukkitNMS;
+import fr.nepta.hiderails.nms.BukkitNMS;
 
 public class HideRails extends JavaPlugin
 {
@@ -77,16 +78,20 @@ public class HideRails extends JavaPlugin
 		new BukkitNMS();
 
 		// Init and setup all custom configs
-		FileConfigurationManager.setupConfigs();
+		try {
+			FileConfigurationManager.setupConfigs();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		FileConfigurationManager.saveConfigs();
 
 		registerListeners();
 		registerCommands();
 
-		// Chargement de tous les rails masques
+		// Load all hidden rails
 		HideRailsManager.loadHideRails();
 
-		// Verification MAJ
+		// Check updates
 		try {
 			new SpigotUpdater(this, 55158, false);
 		} catch (IOException e) {
@@ -102,6 +107,7 @@ public class HideRails extends JavaPlugin
 		new BreakBlockListener();
 		new RedstoneInWaterListeners();
 		new JoinListener();
+		new QuitListener();
 		new BlockClickListener();
 		new BlockPhysicListener();
 		new PosCommandListener();

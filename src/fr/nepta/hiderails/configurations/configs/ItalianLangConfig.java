@@ -15,6 +15,7 @@ import java.io.IOException;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import fr.nepta.hiderails.managers.FileConfigurationManager;
+import fr.nepta.hiderails.managers.MessagesManager;
 
 public class ItalianLangConfig extends AbstractLangConfig
 {
@@ -34,7 +35,7 @@ public class ItalianLangConfig extends AbstractLangConfig
 			try {
 				itLangFile.createNewFile();
 			} catch (IOException e) {
-				System.out.println("Error when creating file \"" + itLangFile.getName() + "\" !");
+				MessagesManager.LOGGER.warning("Error when creating file \"" + itLangFile.getName() + "\" !");
 				return;
 			}
 
@@ -88,7 +89,5 @@ public class ItalianLangConfig extends AbstractLangConfig
 			checkConfContains(itLangConfig, "update_found", "&bNuovo aggiornamento disponibile !\n&o%link%");
 			checkConfContains(itLangConfig, "kick_spam_hidden_block", "&cNon spammare blocchi perfavore !!");
 		}
-		// Save file
-		save();
 	}
 }

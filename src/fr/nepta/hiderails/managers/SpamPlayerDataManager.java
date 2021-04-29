@@ -25,7 +25,7 @@ public class SpamPlayerDataManager
 	 * Get spam data of player
 	 * 
 	 * @param player
-	 * @return
+	 * @return SpamPlayerData
 	 */
 	public static SpamPlayerData getSpamPlayerData(Player player) {
 		for (SpamPlayerData data : playersData) {
@@ -41,7 +41,7 @@ public class SpamPlayerDataManager
 	 * Get player clicks number
 	 * 
 	 * @param player
-	 * @return int
+	 * @return number of clicks
 	 */
 	public static int getSpamNumber(Player player) {
 		SpamPlayerData data = getSpamPlayerData(player);
@@ -89,7 +89,7 @@ public class SpamPlayerDataManager
 	 * Get deletion task to player
 	 * 
 	 * @param player
-	 * @return
+	 * @return BukkitTask
 	 */
 	public static BukkitTask getPendingTask(Player player) {
 		SpamPlayerData data = getSpamPlayerData(player);

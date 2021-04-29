@@ -4,7 +4,7 @@
  * 
  * @author Nepta_
  */
-package fr.nepta.hiderails.packets;
+package fr.nepta.hiderails.nms;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -25,6 +25,9 @@ import fr.nepta.hiderails.enums.Version;
 import fr.nepta.hiderails.enums.particles.ParticleName_v1_12;
 import fr.nepta.hiderails.enums.particles.ParticleName_v1_13;
 import fr.nepta.hiderails.enums.particles.ParticleName_v1_15;
+import fr.nepta.hiderails.listeners.PacketListener;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelPipeline;
 
 public class BukkitNMS
 {
@@ -33,7 +36,10 @@ public class BukkitNMS
 	/* General */
 	private static Method handle_method;
 	private static Method sendPacket_method;
+	private static Method block_position_method;
 	private static Field playerConnection_field;
+	private static Field networkManager_field;
+	private static Field channel_field;
 
 	/* BLOCKS */
 	private static Class<?> block_change_class;
@@ -44,8 +50,14 @@ public class BukkitNMS
 	private static Method craftMagicNumbers_method_with_data;
 	private static Method craftMagicNumbers_method_without_data;
 	//private static Method block_data_method; // Only for 1.10
+	private static Method get_x_block_position_method;
+	private static Method get_y_block_position_method;
+	private static Method get_z_block_position_method;
 	private static Field block_change_pos_field;
 	private static Field block_field;
+
+	private static Class<?> packet_play_out_in_use_item;
+	private static Method moving_object_position_block_field;
 
 	/* PARTICLES */
 	private static Class<?> packet_play_out_world_particles;
@@ -57,6 +69,8 @@ public class BukkitNMS
 	private static Class<?> fileUtils_class;
 	private static Method readFileContent_method;
 	private static Method writeFileContent_method;
+
+	private static Class<?> base_block_position_class;
 
 	static {
 		/*
@@ -77,14 +91,22 @@ public class BukkitNMS
 		 * Init packets classes, fields and methods
 		 */
 		try {
-			// Replace ((CraftPlayer) player).getHandle()
+			// Replace : ((CraftPlayer) player).getHandle()
 			handle_method = NMSClass.getMethod(NMSClass.getOBCClass("entity.CraftPlayer"), "getHandle");
-			// Replace ((CraftPlayer) player).getHandle().playerConnection
+			// Replace : ((CraftPlayer) player).getHandle().playerConnection
 			playerConnection_field = NMSClass.getField(NMSClass.getNMSClass("EntityPlayer"), "playerConnection");
-			// Replace((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+
+			// Replace : ((CraftPlayer) player).getHandle().playerConnection.networkManager
+			networkManager_field = NMSClass.getNMSClass("PlayerConnection").getDeclaredField("networkManager");
+			// Replace : ((CraftPlayer) player).getHandle().playerConnection.networkManager.channel
+			channel_field = NMSClass.getNMSClass("NetworkManager").getDeclaredField("channel");
+
+			// Replace : ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 			sendPacket_method = NMSClass.getMethod(NMSClass.getNMSClass("PlayerConnection"), "sendPacket", NMSClass.getNMSClass("Packet"));
 
 			// ----------------------------------------------------- BLOCKS ------------------------------------------------------ //
+			packet_play_out_in_use_item = NMSClass.getNMSClass("PacketPlayInUseItem");
+
 			block_change_class = NMSClass.getNMSClass("PacketPlayOutBlockChange");
 			craftMagicNumbersClass = NMSClass.getOBCClass("util.CraftMagicNumbers");
 			block_class = NMSClass.getNMSClass("Block");
@@ -93,6 +115,7 @@ public class BukkitNMS
 
 			block_change_pos_field = NMSClass.getField(block_change_class, "a");
 			block_change_pos_field.setAccessible(true);
+
 
 			if (HideRails.version == Version.V1_12) {
 				// Get "IBlockData fromLegacy(int i)" method
@@ -114,6 +137,22 @@ public class BukkitNMS
 			}
 
 			block_field = NMSClass.getField(block_change_class, "block");
+
+
+			/* PacketPlayInUseItem */
+			// Replace method : MovingObjectPositionBlock c()
+			moving_object_position_block_field = NMSClass.getMethod(packet_play_out_in_use_item, "c", null);
+
+			// Replace method : BlockPosition getBlockPosition()
+			block_position_method = NMSClass.getNMSClass("MovingObjectPositionBlock").getDeclaredMethod("getBlockPosition", null);
+
+			base_block_position_class = NMSClass.getNMSClass("BaseBlockPosition");
+			// Replace method : int getX()
+			get_x_block_position_method = base_block_position_class.getDeclaredMethod("getX", null);
+			// Replace method : int getY()
+			get_y_block_position_method = base_block_position_class.getDeclaredMethod("getY", null);
+			// Replace method : int getZ()
+			get_z_block_position_method = base_block_position_class.getDeclaredMethod("getZ", null);
 			// ------------------------------------------------------------------------------------------------------------------- //
 
 
@@ -153,9 +192,7 @@ public class BukkitNMS
 		}
 	}
 
-	public BukkitNMS() {
-		
-	}
+	public BukkitNMS() {}
 
 
 	/**
@@ -361,5 +398,166 @@ public class BukkitNMS
 
 		Object playerConnection = playerConnection_field.get(handle_method.invoke(player));
 		NMSClass.invokeMethod(sendPacket_method, playerConnection, packet);
+	}
+
+
+	/**
+	 * 
+	 * @param player
+	 * @return the pipeline of player
+	 * 
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	private static ChannelPipeline getChannelPipeline(Player player) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+	{
+		Object playerConnection = playerConnection_field.get(handle_method.invoke(player));
+		Object networkManager = networkManager_field.get(playerConnection);
+
+		return ((Channel) channel_field.get(networkManager)).pipeline();
+	}
+
+	/**
+	 * 
+	 * @param player
+	 * 
+	 * @param packetListener
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws SecurityException 
+	 * @throws NoSuchFieldException 
+	 * @throws NoSuchMethodException 
+	 */
+	public static void injectChannelPipeline(Player player, PacketListener packetListener) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, SecurityException, NoSuchMethodException
+	{
+		getChannelPipeline(player).addBefore("packet_handler", player.getName(), packetListener);
+	}
+
+
+	/**
+	 * 
+	 * @param player
+	 * @param packetListener
+	 * 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
+	 */
+	public static void removeChannelPipeline(Player player, PacketListener packetListener) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+	{
+		ChannelPipeline cp = getChannelPipeline(player);
+		String pName = player.getName();
+
+		if (cp.get(pName) != null) {
+			cp.remove(pName);
+		}
+	}
+
+
+	/**
+	 * Get PacketPlayOutInUseItem class
+	 * 
+	 * @return PacketPlayInUseItem class
+	 */
+	public static Class<?> getPacketPlayOutInUseItem() {
+		return packet_play_out_in_use_item;
+	}
+
+
+	/**
+	 * 
+	 * 
+	 * @param ppoiui
+	 * 
+	 * @return the packet data
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 */
+	public static Object getMovingObjectPositionBlock(Object ppoiui) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		return NMSClass.invokeMethod(moving_object_position_block_field, ppoiui, null);
+	}
+
+	/**
+	 * Get value of BlockPosition field of PacketPlayOutInUseItem packet.
+	 * <p>The {@code mopb} param is an instance of MovingObjectPositionBlock.</p>
+	 * 
+	 * @param mopb
+	 * @return BlockPosition
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	public static Object getBlockPosition(Object mopb) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		return block_position_method.invoke(mopb, null);
+	}
+
+	// Lazy kikoolol method :D
+	/*public static int getXBlockPosition(Object ppoiui) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		Object bp = getBlockPosition(ppoiui);
+		return Integer.parseInt(
+				bp.toString()
+				.replace("BlockPosition{", "")
+				.replace("}", "")
+				.replace("x=", "")
+				.replace("y=", "")
+				.replace("z=", "")
+				.split(", ")[0]);
+	}*/
+
+	/**
+	 * Get X position from BlockPosition
+	 * 
+	 * @param blockPosition
+	 * @return x block pos
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	public static int getXBlockPosition(Object blockPosition) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		Object x = get_x_block_position_method.invoke(blockPosition, null);
+		return Integer.parseInt(x.toString());
+	}
+
+	/**
+	 * Get Y position from BlockPosition
+	 * 
+	 * @param blockPosition
+	 * @return y block pos
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	public static int getYBlockPosition(Object blockPosition) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		Object y = get_y_block_position_method.invoke(blockPosition, null);
+		return Integer.parseInt(y.toString());
+	}
+
+	/**
+	 * Get Z position from BlockPosition
+	 * 
+	 * @param blockPosition
+	 * @return z block pos
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	public static int getZBlockPosition(Object blockPosition) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		Object z = get_z_block_position_method.invoke(blockPosition, null);
+		return Integer.parseInt(z.toString());
 	}
 }

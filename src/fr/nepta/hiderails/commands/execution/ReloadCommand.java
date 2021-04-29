@@ -6,6 +6,7 @@
  */
 package fr.nepta.hiderails.commands.execution;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import org.bukkit.Bukkit;
@@ -28,7 +29,11 @@ public class ReloadCommand extends AbstractCommand
 	public void execute(CommandSender sender, String[] args) {
 		Bukkit.getServer().getScheduler().cancelTasks(HideRails.getInstance());
 
-		FileConfigurationManager.setupConfigs();
+		try {
+			FileConfigurationManager.setupConfigs();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		FileConfigurationManager.saveConfigs();
 
 		HideRailsManager.loadHideRails();

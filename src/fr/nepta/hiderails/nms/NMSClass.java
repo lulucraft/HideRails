@@ -4,7 +4,7 @@
  * 
  * @author Nepta_
  */
-package fr.nepta.hiderails.packets;
+package fr.nepta.hiderails.nms;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

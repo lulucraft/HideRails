@@ -19,8 +19,7 @@ public class PosCommandListener extends Listener
 	 * HideRails selection system (detect worldedit command)
 	 */
 	@EventHandler
-	public void onPlayerCommand(PlayerCommandPreprocessEvent e)
-	{
+	public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
 		String[] args = e.getMessage().split(" ");
 
 		if (args.length < 2) {

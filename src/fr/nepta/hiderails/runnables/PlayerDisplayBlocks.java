@@ -25,7 +25,7 @@ import fr.nepta.hiderails.enums.particles.ParticleName_v1_15;
 import fr.nepta.hiderails.managers.HideRailsManager;
 import fr.nepta.hiderails.models.railsdata.HiddenRail;
 import fr.nepta.hiderails.models.railsdata.HiddenRailsWorld;
-import fr.nepta.hiderails.packets.BukkitNMS;
+import fr.nepta.hiderails.nms.BukkitNMS;
 
 public class PlayerDisplayBlocks extends BukkitRunnable
 {

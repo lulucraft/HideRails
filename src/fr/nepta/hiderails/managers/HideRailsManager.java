@@ -35,7 +35,7 @@ import fr.nepta.hiderails.models.backuputility.BlocksBackup;
 import fr.nepta.hiderails.models.railsdata.HiddenRail;
 import fr.nepta.hiderails.models.railsdata.HiddenRailsWorld;
 import fr.nepta.hiderails.models.selectionsystem.Cuboid;
-import fr.nepta.hiderails.packets.BukkitNMS;
+import fr.nepta.hiderails.nms.BukkitNMS;
 import fr.nepta.hiderails.runnables.BlockChangeRunner;
 import fr.nepta.hiderails.runnables.PlayerDisplayBlocks;
 import fr.nepta.hiderails.utils.BlocksChecker;
@@ -252,7 +252,7 @@ public class HideRailsManager
 
 
 	/**
-	 * Get hiddenBlock with location
+	 * Get hidden block from location
 	 * 
 	 * @param location
 	 * @return HiddenRail
@@ -275,7 +275,7 @@ public class HideRailsManager
 
 
 	/**
-	 * Water redstone protection
+	 * Redstone protection in water
 	 * 
 	 * @param player
 	 * @param worldName
@@ -329,7 +329,7 @@ public class HideRailsManager
 				}
 			}
 
-			// Un hide hidden blocks only for player
+			// Un-hide hidden blocks only for player
 			String worldName = p.getWorld().getName();
 			for (HiddenRailsWorld hWorld : rails)
 			{
@@ -351,7 +351,7 @@ public class HideRailsManager
 
 
 	/**
-	 * UnHide hiddenBlocks with command
+	 * Un hide hidden blocks by command
 	 * 
 	 * @param player
 	 * @param targetBlock
