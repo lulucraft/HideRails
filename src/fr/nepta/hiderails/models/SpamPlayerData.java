@@ -1,10 +1,9 @@
 /**
- * Copyright Java Code
- * All right reserved.
- *
+ * Copyright
+ * Code under MIT license
+ * 
  * @author Nepta_
  */
-
 package fr.nepta.hiderails.models;
 
 import java.util.ArrayList;

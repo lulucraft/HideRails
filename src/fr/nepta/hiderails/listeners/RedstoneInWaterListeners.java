@@ -132,8 +132,7 @@ public class RedstoneInWaterListeners extends Listener
 	}
 
 	@EventHandler (priority = EventPriority.HIGH)
-	public void onBlockFrom(BlockFromToEvent e)
-	{
+	public void onBlockFrom(BlockFromToEvent e) {
 		World w = e.getBlock().getLocation().getWorld();
 		Configuration c = FileConfigurationManager.getConfig();
 		String PATH_WORLD = PATH_POINT + w.getName();

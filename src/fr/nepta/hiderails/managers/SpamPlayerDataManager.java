@@ -1,10 +1,9 @@
 /**
- * Copyright Java Code
- * All right reserved.
- *
+ * Copyright
+ * Code under MIT license
+ * 
  * @author Nepta_
  */
-
 package fr.nepta.hiderails.managers;
 
 import java.util.ArrayList;

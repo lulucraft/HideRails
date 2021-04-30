@@ -6,6 +6,6 @@
  */
 package fr.nepta.hiderails.enums;
 
-public enum BlockReplacementType {
-	RAIL, IRON_BAR, COMMAND_BLOCK, REDSTONE, SIGN;
+public enum EnumDirection {
+	DOWN, UP, NORTH, SOUTH, WEST, EAST;
 }

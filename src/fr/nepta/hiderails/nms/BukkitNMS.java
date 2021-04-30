@@ -1,6 +1,6 @@
 /**
  * Copyright
- * Code under MIT licence
+ * Code under MIT license
  * 
  * @author Nepta_
  */
@@ -21,6 +21,7 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 import fr.nepta.hiderails.HideRails;
+import fr.nepta.hiderails.enums.EnumDirection;
 import fr.nepta.hiderails.enums.Version;
 import fr.nepta.hiderails.enums.particles.ParticleName_v1_12;
 import fr.nepta.hiderails.enums.particles.ParticleName_v1_13;
@@ -50,9 +51,10 @@ public class BukkitNMS
 	private static Method craftMagicNumbers_method_with_data;
 	private static Method craftMagicNumbers_method_without_data;
 	//private static Method block_data_method; // Only for 1.10
-	private static Method get_x_block_position_method;
-	private static Method get_y_block_position_method;
-	private static Method get_z_block_position_method;
+	private static Method get_x_base_block_position_method;
+	private static Method get_y_base_block_position_method;
+	private static Method get_z_base_block_position_method;
+	private static Method get_direction_method;
 	private static Field block_change_pos_field;
 	private static Field block_field;
 
@@ -148,11 +150,14 @@ public class BukkitNMS
 
 			base_block_position_class = NMSClass.getNMSClass("BaseBlockPosition");
 			// Replace method : int getX()
-			get_x_block_position_method = base_block_position_class.getDeclaredMethod("getX", null);
+			get_x_base_block_position_method = base_block_position_class.getDeclaredMethod("getX", null);
 			// Replace method : int getY()
-			get_y_block_position_method = base_block_position_class.getDeclaredMethod("getY", null);
+			get_y_base_block_position_method = base_block_position_class.getDeclaredMethod("getY", null);
 			// Replace method : int getZ()
-			get_z_block_position_method = base_block_position_class.getDeclaredMethod("getZ", null);
+			get_z_base_block_position_method = base_block_position_class.getDeclaredMethod("getZ", null);
+
+			// Replace method : EnumDirection getDirection()
+			get_direction_method = NMSClass.getNMSClass("MovingObjectPositionBlock").getDeclaredMethod("getDirection", null);
 			// ------------------------------------------------------------------------------------------------------------------- //
 
 
@@ -523,7 +528,7 @@ public class BukkitNMS
 	 * @throws SecurityException
 	 */
 	public static int getXBlockPosition(Object blockPosition) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Object x = get_x_block_position_method.invoke(blockPosition, null);
+		Object x = get_x_base_block_position_method.invoke(blockPosition, null);
 		return Integer.parseInt(x.toString());
 	}
 
@@ -540,12 +545,12 @@ public class BukkitNMS
 	 * @throws SecurityException
 	 */
 	public static int getYBlockPosition(Object blockPosition) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Object y = get_y_block_position_method.invoke(blockPosition, null);
+		Object y = get_y_base_block_position_method.invoke(blockPosition, null);
 		return Integer.parseInt(y.toString());
 	}
 
 	/**
-	 * Get Z position from BlockPosition
+	 * Get Z position from BlockPosition or BaseBlockPosition (his superclass)
 	 * 
 	 * @param blockPosition
 	 * @return z block pos
@@ -557,7 +562,23 @@ public class BukkitNMS
 	 * @throws SecurityException
 	 */
 	public static int getZBlockPosition(Object blockPosition) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Object z = get_z_block_position_method.invoke(blockPosition, null);
+		Object z = get_z_base_block_position_method.invoke(blockPosition, null);
 		return Integer.parseInt(z.toString());
+	}
+
+	/**
+	 * Get direction from MovingObjectPositionBlock
+	 * 
+	 * @param movingObjectPositionBlock
+	 * @return EnumDirection
+	 * 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 */
+	public static EnumDirection getMovingObjectPositionBlockDirection(Object movingObjectPositionBlock) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Object dir = get_direction_method.invoke(movingObjectPositionBlock, null);
+		// Convert net.minecraft.server.EnumDirection to fr.nepta.hiderails.enums.EnumDirection
+		return EnumDirection.valueOf(dir.toString().toUpperCase());
 	}
 }

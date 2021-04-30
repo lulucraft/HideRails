@@ -1,6 +1,6 @@
 /**
  * Copyright
- * Code under MIT licence
+ * Code under MIT license
  * 
  * @author Nepta_
  */
@@ -32,7 +32,7 @@ import fr.nepta.hiderails.utils.JavaChecker;
 public class BlockClickListener extends Listener
 {
 	/*
-	 * Refresh hidden signs after clicking
+	 * Refresh hidden signs after click
 	 */
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e)
@@ -108,7 +108,7 @@ public class BlockClickListener extends Listener
 		}
 
 
-		// Renvoie des packets si le joueur n'est pas OP et qu'il clique sur un block masque
+		// Send the packets again if the player is not OP and if he clicks on hidden rail
 		List<Block> checked = BlocksChecker.getBlockFaceHiddenBlocks(block);
 		if (checked != null) {
 			if (!checked.isEmpty()) {

@@ -1,6 +1,6 @@
 /**
  * Copyright
- * Code under MIT licence
+ * Code under MIT license
  * 
  * @author Nepta_
  */

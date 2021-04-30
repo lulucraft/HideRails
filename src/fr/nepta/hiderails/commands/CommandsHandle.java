@@ -1,6 +1,6 @@
 /**
  * Copyright
- * Code under MIT licence
+ * Code under MIT license
  * 
  * @author Nepta_
  */
@@ -49,7 +49,6 @@ public class CommandsHandle implements CommandExecutor
 			MessagesManager.sendPluginMessage(sender, Messages.SENDER_TYPE_ERROR);
 			return false;
 		}
-
 
 		if (a.hasPermission(sender)) {
 			a.execute(sender, args);

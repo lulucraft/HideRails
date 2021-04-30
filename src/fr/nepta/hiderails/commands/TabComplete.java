@@ -1,6 +1,6 @@
 /**
  * Copyright
- * Code under MIT licence
+ * Code under MIT license
  * 
  * @author Nepta_
  */
@@ -28,11 +28,11 @@ public class TabComplete implements TabCompleter
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args)
 	{
-		if(sender instanceof Player)
+		if (sender instanceof Player)
 		{
 			Player p = (Player) sender;
 
-			if(p.isOp())
+			if (p.isOp())
 			{
 				List<String> commands1 = Arrays.asList(COMMANDS1);
 				List<String> commands2 = Arrays.asList(COMMANDS2);
@@ -40,81 +40,78 @@ public class TabComplete implements TabCompleter
 
 				List<String> completions = new ArrayList<>();
 
-				if(args.length == 1)
-				{
-					for(String list : commands1)
+				switch (args.length) {
+				case 1:// args.length == 1
+					for (String list : commands1)
 					{
-						if(list.startsWith(args[0]))
-						{
+						if (list.startsWith(args[0])) {
 							completions.add(list);
 						}
 					}
-				}
+					break;
 
-				if(args.length == 2)
-				{
-					for(String list : commands2)
+				case 2:// args.length == 2
+					for (String list : commands2)
 					{
-						if(list.startsWith(args[0]))
-						{
+						if (list.startsWith(args[0])) {
 							completions.add("");
 						}
 					}
 
-					for(String list : commands3)
+					for (String list : commands3)
 					{
-						if(list.startsWith(args[0]))
-						{
-							for(World world : Bukkit.getServer().getWorlds())
-							{
+						if (list.startsWith(args[0])) {
+							for (World world : Bukkit.getServer().getWorlds()) {
 								completions.add(world.getName());
-								for (String all : new String[]{"all","_all_"})
-									completions.add(all);
 							}
+							completions.add("all");
+							completions.add("_all_");
 							return completions;
 						}
 					}
 
 					if (args[0].equalsIgnoreCase("hideselection")) {
-						for(String list : BLOCK_TYPE) {
-							if(list.startsWith(args[1])) {
+						for (String list : BLOCK_TYPE) {
+							if (list.startsWith(args[1])) {
 								completions.add(list);
 							}
 						}
 					}
-
-					if (args[0].equalsIgnoreCase("unhideselection")) {
-						for(String list : BLOCK_TYPE) {
-							if(list.startsWith(args[1])) {
+					else if (args[0].equalsIgnoreCase("unhideselection")) {
+						for (String list : BLOCK_TYPE) {
+							if (list.startsWith(args[1])) {
 								completions.add(list);
 							}
 						}
 					}
-
-					if (args[0].startsWith("display")) {
+					else if (args[0].startsWith("display")) {
 						for (Player pls : Bukkit.getOnlinePlayers()) {
 							completions.add(pls.getName());
 						}
 					}
-				}
+					break;
 
-				if(args.length == 3)
-				{
-					for(World world : Bukkit.getServer().getWorlds())
+				case 3:// args.length == 3
+					for (World world : Bukkit.getServer().getWorlds())
 					{
-						for(String list : commands3)
+						for (String list : commands3)
 						{
-							if(list.startsWith(args[0]))
-							{
-								if(args[1].startsWith(world.getName()) || args[1].startsWith("all") || args[1].startsWith("_all_"))
-								{
-									for (String b : BOOLEAN)
-										if (b.startsWith(args[2]))
+							if (list.startsWith(args[0])) {
+								if (
+										args[1].startsWith(world.getName())
+										|| args[1].startsWith("all")
+										|| args[1].startsWith("_all_")
+										) {
+									for (String b : BOOLEAN) {
+										if (b.startsWith(args[2])) {
 											completions.add(b);
+										}
+									}
 								}
 							}
 						}
 					}
+					break;
 				}
 
 				return completions;
