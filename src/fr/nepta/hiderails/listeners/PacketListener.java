@@ -6,12 +6,23 @@
  */
 package fr.nepta.hiderails.listeners;
 
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
 import fr.nepta.hiderails.enums.EnumDirection;
+import fr.nepta.hiderails.managers.HideRailsManager;
+import fr.nepta.hiderails.models.railsdata.HiddenRail;
 import fr.nepta.hiderails.nms.BukkitNMS;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 
 public class PacketListener extends ChannelDuplexHandler {
+
+	private Player p;
+
+	public PacketListener(Player player) {
+		this.p = player;
+	}
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
@@ -37,7 +48,20 @@ public class PacketListener extends ChannelDuplexHandler {
 			int y = BukkitNMS.getYBlockPosition(bp);
 			int z = BukkitNMS.getZBlockPosition(bp);
 
-			if (
+			Location loc = new Location(p.getWorld(), x, y, z);
+			HiddenRail hr = HideRailsManager.getHiddenRail(loc);
+			System.err.println(loc.toString());
+			if (hr != null) {
+				Location hrLoc = hr.getLocation();
+				System.err.println(hrLoc.toString());
+				if (loc.equals(hrLoc)) {
+					return;
+				}
+
+				int hrX = hrLoc.getBlockX();
+				int hrY = hrLoc.getBlockY();
+				int hrZ = hrLoc.getBlockZ();
+				if (
 					x == -10 && y == 10 && z == 0
 					|| x == -10 && y == 9 && z == 0 && dir == EnumDirection.UP//Block y-1 (down)
 					|| x == -10 && y == 11 && z == 0 && dir == EnumDirection.DOWN//Block y+1 (up)
@@ -46,8 +70,9 @@ public class PacketListener extends ChannelDuplexHandler {
 					|| x == -11 && y == 10 && z == 0 && dir == EnumDirection.EAST//Block x-1
 					|| x == -9 && y == 10 && z == 0 && dir == EnumDirection.WEST//Block x+1
 					) {
-				// TODO : ACTION
-				return;//Cancel packet read to avoid block update/unhide
+					// TODO : ACTION
+					return;//Cancel packet read to avoid block update/unhide
+				}
 			}
 		}
 

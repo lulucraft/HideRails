@@ -24,7 +24,7 @@ public class UnHideSingleCommand extends AbstractCommand
 	}
 
 	/*
-	 * UnHide single block
+	 * UnHide one hidden block
 	 */
 	@Override
 	public void execute(CommandSender sender, String[] args) {

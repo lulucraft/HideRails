@@ -45,10 +45,10 @@ public class BlockClickListener extends Listener
 
 		// HideRails selection system
 		if (p.isOp() || p.hasPermission("hiderails.admin") || p.hasPermission("hiderails.selection")) {
-			final ItemStack item = e.getItem();
+			ItemStack item = e.getItem();
 
 			if (item != null) {
-				final Material itType = item.getType();
+				Material itType = item.getType();
 
 				if (itType != null) {
 					boolean b = false;
@@ -61,7 +61,7 @@ public class BlockClickListener extends Listener
 
 					if (b) {
 						e.setCancelled(true);
-						final Action a = e.getAction();
+						Action a = e.getAction();
 
 						// Save selection pos1
 						if (a == Action.LEFT_CLICK_BLOCK)
@@ -79,7 +79,7 @@ public class BlockClickListener extends Listener
 		if (HideRailsManager.isInPlayerWhoDisplayedBlocks(p)) return;
 
 		if (p.isOp() || p.hasPermission("hiderails.admin")) {
-			// If player click in hiddenSign
+			// If player click on hiddenSign
 			if (BlocksChecker.isSign(block)) {
 				Sign s = (Sign) Bukkit.getServer().getWorld(block.getWorld().getName()).getBlockAt(blockLoc).getState();
 				if (HideRailsManager.getHiddenRail(s.getLocation()) != null) {
@@ -90,7 +90,7 @@ public class BlockClickListener extends Listener
 					s.update(true);
 				}
 			} else {
-				// If player click in block around hiddenSign
+				// If player click on block around hiddenSign
 				Block checkedBlock = BlocksChecker.getBlockFaceHiddenSign(block);
 				if (checkedBlock != null) {
 					if (BlocksChecker.isSign(checkedBlock)) {

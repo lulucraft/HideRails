@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import fr.nepta.hiderails.HideRails;
@@ -51,6 +52,7 @@ public class BukkitNMS
 	private static Method craftMagicNumbers_method_with_data;
 	private static Method craftMagicNumbers_method_without_data;
 	//private static Method block_data_method; // Only for 1.10
+	private static Method setData_method;
 	private static Method get_x_base_block_position_method;
 	private static Method get_y_base_block_position_method;
 	private static Method get_z_base_block_position_method;
@@ -73,6 +75,7 @@ public class BukkitNMS
 	private static Method writeFileContent_method;
 
 	private static Class<?> base_block_position_class;
+
 
 	static {
 		/*
@@ -125,6 +128,9 @@ public class BukkitNMS
 
 				// Get Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
 				craftMagicNumbers_method_with_data = NMSClass.getMethod(craftMagicNumbersClass, "getBlock", Material.class);
+
+				// Replace Block.setData(byte data);
+				setData_method = Block.class.getDeclaredMethod("setData", byte.class);
 			} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
 				if (HideRails.version == Version.V1_14) {
 					// Get "IBlockData getBlockData()" method
@@ -580,5 +586,22 @@ public class BukkitNMS
 		Object dir = get_direction_method.invoke(movingObjectPositionBlock, null);
 		// Convert net.minecraft.server.EnumDirection to fr.nepta.hiderails.enums.EnumDirection
 		return EnumDirection.valueOf(dir.toString().toUpperCase());
+	}
+
+
+	/**
+	 * Set block data
+	 * This method is only for 1.12 versions and it used to avoid
+	 * warnings in a code (other versions doesn't have this method)
+	 * 
+	 * @param block
+	 * @param data
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	public static void setData(Block block, byte data) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		setData_method.invoke(block, data);
 	}
 }

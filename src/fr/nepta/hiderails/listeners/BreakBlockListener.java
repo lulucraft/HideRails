@@ -9,7 +9,6 @@ package fr.nepta.hiderails.listeners;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -23,12 +22,11 @@ import fr.nepta.hiderails.managers.HideRailsManager;
 import fr.nepta.hiderails.managers.MessagesManager;
 import fr.nepta.hiderails.models.railsdata.HiddenRail;
 import fr.nepta.hiderails.models.railsdata.HiddenRailsWorld;
-import fr.nepta.hiderails.nms.BukkitNMS;
 import fr.nepta.hiderails.utils.BlocksChecker;
 
 public class BreakBlockListener extends Listener
 {
-	// Temporary cancellable blocks physic
+	// Temporary cancel blocks physic
 	protected static List<Block> trashList = new ArrayList<>();
 	// List of players who broken hidden block
 	protected static List<Player> breakBlocks = new ArrayList<>();
@@ -74,24 +72,22 @@ public class BreakBlockListener extends Listener
 						HiddenRail hRail = HideRailsManager.getHiddenRail(bLoc);
 
 						if (hRail != null) {
-							Block bl = Bukkit.getWorld(worldName).getBlockAt(bLoc);
+							// Remove block around hidden block
+							//world.getHiddenRails().remove(hRail);
 
-							if (bLoc.equals(bLoc)) {
-								// Remove block around hidden block
-								world.getHiddenRails().remove(hRail);
+							// Remove broken hiddenBlock and send broken message to the player
+							//delOneHiddenBlock(p, world, baseB, worldName);
 
-								// Remove broken hiddenBlock and send broken message to player
-								delOneHiddenBlock(p, world, baseB, worldName);
+							// Send broken hidden block message
+							MessagesManager.sendPluginMessage(p, Messages.SUCCESS_BREAK_RAIL);
 
-								// Send broken hidden block message
-								MessagesManager.sendPluginMessage(p, Messages.SUCCESS_BREAK_RAIL);
+							// Disable interactChangeBlock for admins
+							BreakBlockListener.breakBlocks.add(p);
 
-								// Block interactChangeBlock for admins
-								BreakBlockListener.breakBlocks.add(p);
-
-								// Change block around hidden broken blocks (for the player see broken block)
-								BukkitNMS.changeBlock(p, bl.getType(), bl.getData(), bl.getX(), bl.getY(), bl.getZ());
-							}
+							// Remove block around hidden block
+							HideRailsManager.removeBlocks(p, block, false, true);
+							// Show block around hidden broken blocks (enable the player to see the broken block)
+							//BukkitNMS.changeBlock(p, block.getType(), block.getData(), block.getX(), block.getY(), block.getZ());
 						}
 					}
 				}
@@ -106,12 +102,12 @@ public class BreakBlockListener extends Listener
 	}
 
 	private void delOneHiddenBlock(Player p, HiddenRailsWorld world, HiddenRail baseHBlock, String worldName) {
-		// If broken block is hiddenBlock
+		// If broken block is an hiddenBlock
 		if (baseHBlock != null) {
 			// Remove broken hidden block
 			world.getHiddenRails().remove(baseHBlock);
 
-			// Block interactChangeBlock for admins
+			// Disable interactChangeBlock for admins
 			BreakBlockListener.breakBlocks.add(p);
 
 			// Send broken hidden block message

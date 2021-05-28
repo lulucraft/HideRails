@@ -377,34 +377,33 @@ public class HideRailsManager
 
 		HashMap<Location, Byte> railsAndData = new HashMap<>();
 		String worldName = targetBlock.getWorld().getName();
+		HiddenRailsWorld hiddenRails = getWorldHiddenRails(worldName);
+
+		if (hiddenRails == null) return;
+		if (hiddenRails.getHiddenRails().isEmpty()) return;
 
 		for (Location rail : railsLocs) {
 			railsAndData.put(rail, Bukkit.getWorld(worldName).getBlockAt(rail).getState().getData().getData());
 		}
 
-		HiddenRailsWorld hiddenRails = getWorldHiddenRails(worldName);
 		List<HiddenRail> hRails = new ArrayList<>();
 
-		if (hiddenRails == null) return;
-		if (hiddenRails.getHiddenRails().isEmpty()) return;
+		for (HiddenRail hRail : hiddenRails.getHiddenRails()) {
+			for (Entry<Location, Byte> entry : railsAndData.entrySet()) {
+				Location loc = entry.getKey();
 
-		for (HiddenRail hRail : hiddenRails.getHiddenRails())
-		{
-			for (Entry<Location, Byte> entry : railsAndData.entrySet())
-			{
-				if (entry.getKey().equals(hRail.getLocation()))
-				{
-					Block rail = Bukkit.getWorld(worldName).getBlockAt(entry.getKey());
-					BlockState state = rail.getState();
+				if (loc.equals(hRail.getLocation())) {
+					Block block = Bukkit.getWorld(worldName).getBlockAt(loc);
+					BlockState state = block.getState();
 
-					rail.setType(rail.getType());
+					block.setType(block.getType());
 					if (HideRails.version == Version.V1_12) {
 						try {
-							Block.class.getDeclaredMethod("setData", byte.class).invoke(rail, entry.getValue().byteValue());
-						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							BukkitNMS.setData(block, entry.getValue().byteValue());
+						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
-						//rail.setData(entry.getValue().byteValue());
+						//block.setData(entry.getValue().byteValue());
 					}
 					state.update(true);
 
@@ -414,15 +413,20 @@ public class HideRailsManager
 		}
 
 		// Create new backup
-		BlocksBackup bBackup = new BlocksBackup();
-		bBackup.setType(BackupType.UNHIDE);
+		BlocksBackup bBackup = null;
+		if (backup) {
+			bBackup = new BlocksBackup();
+			bBackup.setType(BackupType.UNHIDE);
+		}
 
 		for (HiddenRail rail : hRails) {
 			hiddenRails.delHiddenRail(rail);
 
-			// Save updated blocks in new backup to allow to go back after execution of /hiderails undo
-			bBackup.addChangedBlocks(LocationsManager.serialize(rail.getLocation()));
-			bBackup.setUnHideBlocksType(new MaterialData(rail.getMaterial(), rail.getData()));
+			if (backup) {
+				// Save updated blocks in new backup to allow to go back after execution of /hiderails undo
+				bBackup.addChangedBlocks(LocationsManager.serialize(rail.getLocation()));
+				bBackup.setUnHideBlocksType(new MaterialData(rail.getMaterial(), rail.getData()));
+			}
 		}
 
 		if (backup) {
@@ -430,6 +434,7 @@ public class HideRailsManager
 			PlayerCommandBackupManager.createNewBlocksBackup(player, bBackup);
 		}
 
+		// Save all hidden blocks (and remove the broken blocks)
 		saveWorld(worldName);
 
 		MessagesManager.sendPluginMessage(player, Messages.SUCCESS_UNHIDE_RAIL);
@@ -507,7 +512,7 @@ public class HideRailsManager
 		}
 
 		for (Location loc : railsLocs) {
-			if (!hiddenRailsLocs.contains(loc)) { // Avoid duplicates in config file
+			if (!hiddenRailsLocs.contains(loc)) { // Avoid duplicates in the configuration file
 				HiddenRail rail = new HiddenRail(mat, data);
 				rail.setLocation(loc);
 				railsList.add(rail);
@@ -529,13 +534,12 @@ public class HideRailsManager
 		}
 
 		if (backup) {
-			// Save the new blocksBackup to player
+			// Save the new blocksBackup for player
 			PlayerCommandBackupManager.createNewBlocksBackup(player, bBackup);
 		}
 
 		HiddenRailsWorld railsWorld = null;
-		if (getWorldHiddenRails(worldName) == null)
-		{
+		if (getWorldHiddenRails(worldName) == null) {
 			railsWorld = new HiddenRailsWorld(world);
 		} else {
 			railsWorld = getWorldHiddenRails(worldName);
@@ -611,7 +615,7 @@ public class HideRailsManager
 		}
 
 		if (backup) {
-			// Save the new blocksBackup to player
+			// Save the new blocksBackup for player
 			PlayerCommandBackupManager.createNewBlocksBackup(player, bBackup);
 		}
 
@@ -624,7 +628,7 @@ public class HideRailsManager
 		// Add all created HiddenRail HiddenRailsWorld
 		for (int i = 0; i < railsList.size(); i++) railsWorld.addHiddenRails(railsList.get(i));
 
-		// Save all HiddenBlocks
+		// Save all hidden blocks
 		saveWorld(worldName);
 	}
 
@@ -647,10 +651,13 @@ public class HideRailsManager
 		String worldName = selection.getWorld().getName();
 
 		// Create new backup
-		BlocksBackup bBackup = new BlocksBackup();
-		bBackup.setType(BackupType.UNHIDE);
-		bBackup.setBlocksType(types);
-		bBackup.setHrSelection(selection);
+		BlocksBackup bBackup = null;
+		if (backup) {
+			bBackup = new BlocksBackup();
+			bBackup.setType(BackupType.UNHIDE);
+			bBackup.setBlocksType(types);
+			bBackup.setHrSelection(selection);
+		}
 
 		for (Location rail : railsLocs) {
 			railsAndData.put(rail, Bukkit.getWorld(worldName).getBlockAt(rail).getState().getData().getData());
@@ -668,16 +675,16 @@ public class HideRailsManager
 			{
 				if (entry.getKey().equals(hRail.getLocation()))
 				{
-					Block rail = Bukkit.getWorld(worldName).getBlockAt(entry.getKey());
-					BlockState state = rail.getState();
-					rail.setType(rail.getType());
+					Block block = Bukkit.getWorld(worldName).getBlockAt(entry.getKey());
+					BlockState state = block.getState();
+					block.setType(block.getType());
 					if (HideRails.version == Version.V1_12) {
 						try {
-							Block.class.getDeclaredMethod("setData", byte.class).invoke(rail, entry.getValue().byteValue());
-						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							BukkitNMS.setData(block, entry.getValue().byteValue());
+						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
-						//rail.setData(entry.getValue().byteValue());
+						//block.setData(entry.getValue().byteValue());
 					}
 					state.update(true);
 
@@ -695,11 +702,11 @@ public class HideRailsManager
 		}
 
 		if (backup) {
-			// Save the new blocksBackup to player
+			// Save the new blocksBackup for player
 			PlayerCommandBackupManager.createNewBlocksBackup(player, bBackup);
 		}
 
-		// Save all hiddenBlocks
+		// Save all hidden blocks
 		saveWorld(worldName);
 
 		MessagesManager.sendPluginMessage(player, Messages.SUCCESS_UNHIDE_RAIL);

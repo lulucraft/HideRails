@@ -51,7 +51,7 @@ public class HideRailsSelectionChecker
 	public static List<Location> getAllValidRails(Cuboid selection, List<Material> types)
 	{
 		List<Location> railsLocsTemp = HideRailsSelectionChecker.getAllBlocksLocationInHideRailsSelection(selection);
-		List<Location> railsLocs = new ArrayList<>();
+		List<Location> validRailsLocs = new ArrayList<>();
 
 		boolean rails = false;
 		boolean ironBars = false;
@@ -67,20 +67,39 @@ public class HideRailsSelectionChecker
 			signs = true;
 		} else {
 			for (Material type : types) {
-				if (BlocksChecker.isRail(type)) {
-					rails = true;
+				if (HideRailsManager.hr) {
+					if (BlocksChecker.isRail(type)) {
+						rails = true;
+						continue;
+					}
 				}
-				if (BlocksChecker.isIronBar(type)) {
-					ironBars = true;
+
+				if (HideRailsManager.hb) {
+					if (BlocksChecker.isIronBar(type)) {
+						ironBars = true;
+						continue;
+					}
 				}
-				if (BlocksChecker.isCommandBlock(type)) {
-					commandBlocks = true;
+
+				if (HideRailsManager.hc) {
+					if (BlocksChecker.isCommandBlock(type)) {
+						commandBlocks = true;
+						continue;
+					}
 				}
-				if (BlocksChecker.isRedstone(type)) {
-					redstone = true;
+
+				if (HideRailsManager.hd) {
+					if (BlocksChecker.isRedstone(type)) {
+						redstone = true;
+						continue;
+					}
 				}
-				if (BlocksChecker.isSign(type)) {
-					signs = true;
+
+				if (HideRailsManager.hs) {
+					if (BlocksChecker.isSign(type)) {
+						signs = true;
+						continue;
+					}
 				}
 			}
 		}
@@ -88,42 +107,42 @@ public class HideRailsSelectionChecker
 		for (Location blockLoc : railsLocsTemp) {
 			Block bl = Bukkit.getWorld(blockLoc.getWorld().getName()).getBlockAt(blockLoc);
 
-			if (BlocksChecker.isRail(bl)) {
-				if (HideRailsManager.hr) {
-					if (rails)
-						railsLocs.add(blockLoc);
+			if (rails) {
+				if (BlocksChecker.isRail(bl)) {
+					validRailsLocs.add(blockLoc);
+					continue;
 				}
 			}
 
-			if (BlocksChecker.isIronBar(bl)) {
-				if (HideRailsManager.hb) {
-					if (ironBars)
-						railsLocs.add(blockLoc);
+			if (ironBars) {
+				if (BlocksChecker.isIronBar(bl)) {
+					validRailsLocs.add(blockLoc);
+					continue;
 				}
 			}
 
-			if (BlocksChecker.isCommandBlock(bl)) {
-				if (HideRailsManager.hc) {
-					if (commandBlocks)
-						railsLocs.add(blockLoc);
+			if (commandBlocks) {
+				if (BlocksChecker.isCommandBlock(bl)) {
+					validRailsLocs.add(blockLoc);
+					continue;
 				}
 			}
 
-			if (BlocksChecker.isRedstone(bl)) {
-				if (HideRailsManager.hd) {
-					if (redstone)
-						railsLocs.add(blockLoc);
+			if (redstone) {
+				if (BlocksChecker.isRedstone(bl)) {
+					validRailsLocs.add(blockLoc);
+					continue;
 				}
 			}
 
-			if (BlocksChecker.isSign(bl)) {
-				if (HideRailsManager.hs) {
-					if (signs)
-						railsLocs.add(blockLoc);
+			if (signs) {
+				if (BlocksChecker.isSign(bl)) {
+					validRailsLocs.add(blockLoc);
+					continue;
 				}
 			}
 		}
 
-		return railsLocs;
+		return validRailsLocs;
 	}
 }

@@ -16,6 +16,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
+import com.sun.istack.internal.NotNull;
+
 import fr.nepta.hiderails.HideRails;
 import fr.nepta.hiderails.enums.BackupType;
 import fr.nepta.hiderails.enums.Messages;
@@ -31,7 +33,7 @@ public class PlayerCommandBackupManager
 	private static HashMap<Player, PlayerCommandBackup> playerCommandBackups = new HashMap<>();
 
 	// Get command backup of player
-	public static PlayerCommandBackup getPlayerCommandBackups(Player player)
+	public static PlayerCommandBackup getPlayerCommandBackups(@NotNull Player player)
 	{
 		for (Entry<Player, PlayerCommandBackup> backup : playerCommandBackups.entrySet()) {
 			if (backup.getKey().equals(player)) {
@@ -48,7 +50,7 @@ public class PlayerCommandBackupManager
 	 * @param player
 	 * @return BlocksBackup
 	 */
-	public static BlocksBackup getLatestBlocksBackup(Player player)
+	public static BlocksBackup getLatestBlocksBackup(@NotNull Player player)
 	{
 		PlayerCommandBackup backup = getPlayerCommandBackups(player);
 
@@ -71,7 +73,7 @@ public class PlayerCommandBackupManager
 	 * @param player
 	 * @param blockBackup
 	 */
-	public static void createNewBlocksBackup(Player player, BlocksBackup blockBackup)
+	public static void createNewBlocksBackup(@NotNull Player player, BlocksBackup blockBackup)
 	{
 		PlayerCommandBackup backup = getPlayerCommandBackups(player);
 
@@ -85,12 +87,12 @@ public class PlayerCommandBackupManager
 	/**
 	 * Restore the latest blocks backup
 	 * 
-	 * @param p
+	 * @param player
 	 */
 	@SuppressWarnings("deprecation")
-	public static void restoreBackup(Player p)
+	public static void restoreBackup(@NotNull Player player)
 	{
-		BlocksBackup backup = getLatestBlocksBackup(p);
+		BlocksBackup backup = getLatestBlocksBackup(player);
 		//Selection sel = backup.getWeSelection();
 		Cuboid sel = backup.getHrSelection();
 		Block bl = null;
@@ -122,7 +124,7 @@ public class PlayerCommandBackupManager
 
 				if (i > 1) single = false;
 				else single = true;
-				HideRailsManager.removeBlocks(p, bl, false, single);
+				HideRailsManager.removeBlocks(player, bl, false, single);
 			}
 			else
 			{
@@ -142,7 +144,7 @@ public class PlayerCommandBackupManager
 					state.update(true);
 				}
 
-				HideRailsManager.removeSelectionBlocks(p, backup.getHrSelection(), false, backup.getBlocksType());
+				HideRailsManager.removeSelectionBlocks(player, backup.getHrSelection(), false, backup.getBlocksType());
 			}
 		}
 
@@ -161,21 +163,21 @@ public class PlayerCommandBackupManager
 				else single = true;
 
 //				BlockReplacementType blockType = BlocksChecker.getBlockReplacementType(p, bl);
-//				HideRailsManager.saveChangedBlocks(p, bl, blockType, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false, single);
-				HideRailsManager.saveChangedBlocks(p, bl, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false, single);
+//				HideRailsManager.saveChangedBlocks(player, bl, blockType, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false, single);
+				HideRailsManager.saveChangedBlocks(player, bl, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false, single);
 			}
 			else
 			{
-				HideRailsManager.hideSelectionBlocks(p, sel, (backup.getUnHideBlocksType().getMat().toString()+":"+backup.getUnHideBlocksType().getData()), false, backup.getBlocksType());
+				HideRailsManager.hideSelectionBlocks(player, sel, (backup.getUnHideBlocksType().getMat().toString()+":"+backup.getUnHideBlocksType().getData()), false, backup.getBlocksType());
 			}
 		}
 
-		// Removing the restored backup
-		PlayerCommandBackup pBackup = getPlayerCommandBackups(p);
+		// Remove the restored backup
+		PlayerCommandBackup pBackup = getPlayerCommandBackups(player);
 		pBackup.getPlayerBackups().remove(backup);
-		playerCommandBackups.put(p, pBackup);
+		playerCommandBackups.put(player, pBackup);
 
-		MessagesManager.sendPluginMessage(p, Messages.RETURN_BACKUP_SUCCESS);
+		MessagesManager.sendPluginMessage(player, Messages.RETURN_BACKUP_SUCCESS);
 	}
 
 

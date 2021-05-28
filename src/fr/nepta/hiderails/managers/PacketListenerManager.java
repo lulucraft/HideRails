@@ -25,7 +25,7 @@ public class PacketListenerManager {
 	 * @param player
 	 */
 	public static void injectPacketListener(Player player) {
-		PacketListener packetListener = new PacketListener();
+		PacketListener packetListener = new PacketListener(player);
 
 		try {
 			BukkitNMS.injectChannelPipeline(player, packetListener);
