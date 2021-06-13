@@ -24,14 +24,17 @@ import org.bukkit.block.BlockState;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
+
 import fr.nepta.hiderails.HideRails;
-import fr.nepta.hiderails.commands.TabComplete;
 import fr.nepta.hiderails.enums.BackupType;
+import fr.nepta.hiderails.enums.BlockReplacementType;
 import fr.nepta.hiderails.enums.Messages;
 import fr.nepta.hiderails.enums.Version;
 import fr.nepta.hiderails.listeners.RedstoneInWaterListeners;
 import fr.nepta.hiderails.models.MaterialData;
-import fr.nepta.hiderails.models.backuputility.BlocksBackup;
+import fr.nepta.hiderails.models.backup.BlocksBackup;
 import fr.nepta.hiderails.models.railsdata.HiddenRail;
 import fr.nepta.hiderails.models.railsdata.HiddenRailsWorld;
 import fr.nepta.hiderails.models.selectionsystem.Cuboid;
@@ -94,12 +97,12 @@ public class HideRailsManager
 	/**
 	 * Max click number before kick player
 	 */
-//	public static int max_spam_nbr = 4;
+	//	public static int max_spam_nbr = 4;
 
 	/**
 	 * If kick spam is enable
 	 */
-//	public static boolean spam_kick = true;
+	//	public static boolean spam_kick = true;
 
 
 	/*
@@ -114,36 +117,36 @@ public class HideRailsManager
 		hd = config.getBoolean("hideRedstone");
 		hs = config.getBoolean("hideSigns");
 
-		TabComplete.BLOCK_TYPE.clear();
-		// Rails
-		if (hr) {
-			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("rail");
-			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("rail");
-		}
-		// Signs
-		if (hs) {
-			if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("sign");
-			else TabComplete.BLOCK_TYPE.add("sign");
-		}
-		// Redstone
-		if (hr) {
-			TabComplete.BLOCK_TYPE.add("redstone");
-		}
-		// Command blocks
-		if (hc) {
-			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("command");
-			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("command_block");
-		}
-		// Iron bars
-		if (hb) {
-			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("iron_fence");
-			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("iron_bar");
-		}
+		//		TabComplete.BLOCK_TYPE.clear();
+		//		// Rails
+		//		if (hr) {
+		//			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("rail");
+		//			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("rail");
+		//		}
+		//		// Signs
+		//		if (hs) {
+		//			if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("sign");
+		//			else TabComplete.BLOCK_TYPE.add("sign");
+		//		}
+		//		// Redstone
+		//		if (hr) {
+		//			TabComplete.BLOCK_TYPE.add("redstone");
+		//		}
+		//		// Command blocks
+		//		if (hc) {
+		//			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("command");
+		//			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("command_block");
+		//		}
+		//		// Iron bars
+		//		if (hb) {
+		//			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("iron_fence");
+		//			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("iron_bar");
+		//		}
 
 		update = config.getBoolean("adminsUpdateMessage");
 		hiddingBlocksParticles = config.getBoolean("hiddingBlocksParticles");
-//		max_spam_nbr = config.getInt("maxSpamNumber");
-//		spam_kick = config.getBoolean("kickSpamBlock");
+		//		max_spam_nbr = config.getInt("maxSpamNumber");
+		//		spam_kick = config.getBoolean("kickSpamBlock");
 	}
 
 
@@ -257,7 +260,7 @@ public class HideRailsManager
 	 * @param location
 	 * @return HiddenRail
 	 */
-	public static HiddenRail getHiddenRail(Location location)
+	public static HiddenRail getHiddenRail(@Nullable Location location)
 	{
 		if (location == null) return null;
 		List<HiddenRail> hRails = getRailsToWorld(location.getWorld().getName());
@@ -359,19 +362,16 @@ public class HideRailsManager
 	 * @param single
 	 */
 	@SuppressWarnings("deprecation")
-	public static void removeBlocks(Player player, Block targetBlock, boolean backup, boolean single)
+	public static void removeBlocks(Player player, @NotNull Block targetBlock, boolean backup, boolean single)
 	{
 		if (!BlocksChecker.isRail(targetBlock) && !BlocksChecker.isIronBar(targetBlock) && !BlocksChecker.isCommandBlock(targetBlock) && !BlocksChecker.isRedstone(targetBlock) && !BlocksChecker.isSign(targetBlock)) {
 			MessagesManager.sendPluginMessage(player, Messages.RAIL_ERROR);
 			return;
 		}
 
-//		BlockReplacementType blockType = BlocksChecker.getBlockReplacementType(player, targetBlock);
-
 		List<Location> railsLocs = null;
 		if (!single)
-//			railsLocs = LocationsManager.getConnectedBlocks(targetBlock.getLocation(), blockType);
-			railsLocs = LocationsManager.getConnectedBlocks(targetBlock.getLocation());
+			railsLocs = LocationsManager.getConnectedBlocks(targetBlock.getLocation(), null);
 		else
 			railsLocs = Arrays.asList(targetBlock.getLocation());
 
@@ -458,19 +458,16 @@ public class HideRailsManager
 			return;
 		}
 
-//		e(player, targetBlock, BlocksChecker.getBlockReplacementType(player, targetBlock), input, backup, single);
-		e(player, targetBlock, input, backup, single);
+		e(player, targetBlock, null, input, backup, single);
 	}
 
-//	private static void e(Player player, Block targetBlock, BlockReplacementType blockType, String input, boolean backup, boolean single)
-	private static void e(Player player, Block targetBlock, String input, boolean backup, boolean single)
+	private static void e(Player player, @NotNull Block targetBlock, List<BlockReplacementType> types, String input, boolean backup, boolean single)
 	{
 		MaterialData matData = BlocksChecker.getMatData(player, input);
 		Material mat = matData.getMat();
 
 		if (mat != null)
-//			saveChangedBlocks(player, targetBlock, blockType, mat, matData.getData(), backup, single);
-			saveChangedBlocks(player, targetBlock, mat, matData.getData(), backup, single);
+			saveChangedBlocks(player, targetBlock, types, mat, matData.getData(), backup, single);
 	}
 
 
@@ -485,13 +482,11 @@ public class HideRailsManager
 	 * @param backup
 	 * @param single
 	 */
-//	protected static void saveChangedBlocks(Player player, Block targetBlock, BlockReplacementType blockType, Material mat, byte data, boolean backup, boolean single)
-	protected static void saveChangedBlocks(Player player, Block targetBlock, Material mat, byte data, boolean backup, boolean single)
+	protected static void saveChangedBlocks(Player player, @NotNull Block targetBlock, List<BlockReplacementType> types, Material mat, byte data, boolean backup, boolean single)
 	{
 		List<Location> railsLocs = null;
 		if (!single)
-//			railsLocs = LocationsManager.getConnectedBlocks(targetBlock.getLocation(), blockType);
-			railsLocs = LocationsManager.getConnectedBlocks(targetBlock.getLocation());
+			railsLocs = LocationsManager.getConnectedBlocks(targetBlock.getLocation(), types);
 		else
 			railsLocs = Arrays.asList(targetBlock.getLocation());
 		List<HiddenRail> railsList = new ArrayList<>();
@@ -499,8 +494,11 @@ public class HideRailsManager
 		String worldName = world.getName();
 
 		// Create new backup
-		BlocksBackup bBackup = new BlocksBackup();
-		bBackup.setType(BackupType.HIDE);
+		BlocksBackup bBackup = null;
+		if (backup) {
+			bBackup = new BlocksBackup();
+			bBackup.setType(BackupType.HIDE);
+		}
 
 		// Store all serialized rails of 'worldName'
 		List<String> hiddenRails = new ArrayList<>();
@@ -517,18 +515,15 @@ public class HideRailsManager
 				rail.setLocation(loc);
 				railsList.add(rail);
 
-				// Save updated blocks in new backup to back after /hiderails undo
-				bBackup.addChangedBlocks(LocationsManager.serialize(loc));
+				if (backup) {
+					// Save updated blocks in new backup to back after /hiderails undo
+					bBackup.addChangedBlocks(LocationsManager.serialize(loc));
+				}
 
 				// If version is not 1.8
 				if (!HideRails.version.isOldVersion()) {
 					// Spawn particle to see the block to hide
 					world.spawnParticle(Particle.HEART, loc, 5);
-//					if (blockType == BlockReplacementType.RAILS) world.spawnParticle(Particle.HEART, loc, 5);
-//					else if (blockType == BlockReplacementType.IRON_BARS) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
-//					else if (blockType == BlockReplacementType.COMMAND_BLOCK) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
-//					else if (blockType == BlockReplacementType.REDSTONE) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
-//					else if (blockType == BlockReplacementType.SIGN) world.spawnParticle(Particle.VILLAGER_ANGRY, loc, 5);
 				}
 			}
 		}
@@ -562,7 +557,7 @@ public class HideRailsManager
 	 * @param backup
 	 * @param types 
 	 */
-	public static void hideSelectionBlocks(Player player, Cuboid selection, String input, boolean backup, List<Material> types)
+	public static void hideSelectionBlocks(Player player, Cuboid selection, String input, boolean backup, List<BlockReplacementType> types)
 	{
 		MaterialData matData = BlocksChecker.getMatData(player, input);
 		Material mat = matData.getMat();
@@ -571,7 +566,7 @@ public class HideRailsManager
 			hideSelectionBlocks(player, selection, mat, matData.getData(), backup, types);
 	}
 
-	private static void hideSelectionBlocks(Player player, Cuboid selection, Material mat, byte data, boolean backup, List<Material> types)
+	private static void hideSelectionBlocks(Player player, @NotNull Cuboid selection, Material mat, byte data, boolean backup, List<BlockReplacementType> types)
 	{
 		World world = selection.getWorld();
 		String worldName = world.getName(); // Name of blocks replacement world
@@ -579,10 +574,13 @@ public class HideRailsManager
 		List<Location> railsLocs = HideRailsSelectionChecker.getAllValidRails(selection, types); // Definitly Locations of blocks replacement
 
 		// Create new backup
-		BlocksBackup bBackup = new BlocksBackup();
-		bBackup.setType(BackupType.HIDE);
-		bBackup.setBlocksType(types);
-		bBackup.setHrSelection(selection);
+		BlocksBackup bBackup = null;
+		if (backup) {
+			bBackup = new BlocksBackup();
+			bBackup.setType(BackupType.HIDE);
+			bBackup.setBlocksType(types);
+			bBackup.setHrSelection(selection);
+		}
 
 		// Storage of all serialized rails in world 'worldName'
 		List<String> hiddenRails = new ArrayList<>();
@@ -603,8 +601,10 @@ public class HideRailsManager
 				rail.setLocation(loc);
 				railsList.add(rail);
 
-				// Save updated blocks in new backup to back after /hiderails undo
-				bBackup.addChangedBlocks(LocationsManager.serialize(loc));
+				if (backup) {
+					// Save updated blocks in new backup to back after /hiderails undo
+					bBackup.addChangedBlocks(LocationsManager.serialize(loc));
+				}
 
 				// If version is not 1.8
 				if (!HideRails.version.isOldVersion()) {
@@ -635,7 +635,7 @@ public class HideRailsManager
 
 
 	/**
-	 * Remove hidden block from HideRails selection
+	 * Remove hidden blocks from HideRails selection
 	 * 
 	 * @param player
 	 * @param selection
@@ -643,7 +643,7 @@ public class HideRailsManager
 	 * @param types 
 	 */
 	@SuppressWarnings("deprecation")
-	public static void removeSelectionBlocks(Player player, Cuboid selection, boolean backup, List<Material> types)
+	public static void removeSelectionBlocks(Player player, @NotNull Cuboid selection, boolean backup, List<BlockReplacementType> types)
 	{
 		List<Location> railsLocs = HideRailsSelectionChecker.getAllValidRails(selection, types);
 
@@ -696,9 +696,11 @@ public class HideRailsManager
 		for (HiddenRail rail : hRails) {
 			hiddenRails.delHiddenRail(rail);
 
-			// Save updated blocks in new backup to back after /hiderails undo
-			bBackup.addChangedBlocks(LocationsManager.serialize(rail.getLocation()));
-			bBackup.setUnHideBlocksType(new MaterialData(rail.getMaterial(), rail.getData()));
+			if (backup) {
+				// Save updated blocks in new backup to back after /hiderails undo
+				bBackup.addChangedBlocks(LocationsManager.serialize(rail.getLocation()));
+				bBackup.setUnHideBlocksType(new MaterialData(rail.getMaterial(), rail.getData()));
+			}
 		}
 
 		if (backup) {
@@ -719,7 +721,7 @@ public class HideRailsManager
 	 * 
 	 * @param worldName
 	 */
-	public static void saveWorld(String worldName)
+	public static void saveWorld(@NotNull String worldName)
 	{
 		HiddenRailsWorld railsWorld = getWorldHiddenRails(worldName);
 		List<HiddenRail> railsList = new ArrayList<>();

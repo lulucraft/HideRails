@@ -27,51 +27,52 @@ public class PacketListener extends ChannelDuplexHandler {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
 
-		// Replace : if (packet instanceof PacketPlayInUseItem) {
-		if (packet.getClass().isAssignableFrom(BukkitNMS.getPacketPlayOutInUseItem())) {
-//			BlockPosition bp = ((MovingObjectPositionBlock) mopb).getBlockPosition();
-//			EnumDirection dir = ((MovingObjectPositionBlock) mopb).getDirection();
+		if (!p.isOp()) {
+			// Replace : if (packet instanceof PacketPlayInUseItem) {
+			if (packet.getClass().isAssignableFrom(BukkitNMS.getPacketPlayOutInUseItem())) {
+				// Replace : MovingObjectPositionBlock mopb = (PacketPlayInUseItem) packet.c();
+				Object mopb = BukkitNMS.getMovingObjectPositionBlock(packet);
+				// Replace : EnumDirection dir = mopb.getDirection();
+				EnumDirection dir = BukkitNMS.getMovingObjectPositionBlockDirection(mopb);
+				// Replace : BlockPosition bp = mopb.getBlockPosition();
+				Object bp = BukkitNMS.getBlockPosition(mopb);
+				// Replace : int x = bp.getX();
+				int x = BukkitNMS.getXBlockPosition(bp);
+				// Replace : int y = bp.getY();
+				int y = BukkitNMS.getYBlockPosition(bp);
+				// Replace : int z = bp.getZ();
+				int z = BukkitNMS.getZBlockPosition(bp);
 
-//			PacketPlayInUseItem p = (PacketPlayInUseItem) packet;
-//			MovingObjectPositionBlock c = p.c();
-//			BlockPosition bp = c.getBlockPosition();
+				Location loc = null;
+				HiddenRail hr = null;
+				switch (dir) {
+				case UP:
+					loc = new Location(p.getWorld(), x, y + 1, z);// Click in block y-1 (block down)
+					break;
+				case DOWN:
+					loc = new Location(p.getWorld(), x, y - 1, z);// Click in block y+1 (block up)
+					break;
+				case SOUTH:
+					loc = new Location(p.getWorld(), x, y, z + 1);// Click in block z-1
+					break;
+				case NORTH:
+					loc = new Location(p.getWorld(), x, y, z - 1);// Click in block z+1
+					break;
+				case EAST:
+					loc = new Location(p.getWorld(), x + 1, y, z);// Click in block x-1
+					break;
+				case WEST:
+					loc = new Location(p.getWorld(), x - 1, y, z);// Click in block x+1
+					break;
 
-//			int x = bp.getX();
-//			int y = bp.getY();
-//			int z = bp.getZ();
-//			EnumDirection dir = c.getDirection();
-
-			Object mopb = BukkitNMS.getMovingObjectPositionBlock(packet);
-			EnumDirection dir = BukkitNMS.getMovingObjectPositionBlockDirection(mopb);
-			Object bp = BukkitNMS.getBlockPosition(mopb);
-			int x = BukkitNMS.getXBlockPosition(bp);
-			int y = BukkitNMS.getYBlockPosition(bp);
-			int z = BukkitNMS.getZBlockPosition(bp);
-
-			Location loc = new Location(p.getWorld(), x, y, z);
-			HiddenRail hr = HideRailsManager.getHiddenRail(loc);
-			System.err.println(loc.toString());
-			if (hr != null) {
-				Location hrLoc = hr.getLocation();
-				System.err.println(hrLoc.toString());
-				if (loc.equals(hrLoc)) {
-					return;
+				default:
+					loc = new Location(p.getWorld(), x, y, z);
+					break;
 				}
 
-				int hrX = hrLoc.getBlockX();
-				int hrY = hrLoc.getBlockY();
-				int hrZ = hrLoc.getBlockZ();
-				if (
-					x == -10 && y == 10 && z == 0
-					|| x == -10 && y == 9 && z == 0 && dir == EnumDirection.UP//Block y-1 (down)
-					|| x == -10 && y == 11 && z == 0 && dir == EnumDirection.DOWN//Block y+1 (up)
-					|| x == -10 && y == 10 && z == -1 && dir == EnumDirection.SOUTH//Block z-1
-					|| x == -10 && y == 10 && z == 1 && dir == EnumDirection.NORTH//Block z+1
-					|| x == -11 && y == 10 && z == 0 && dir == EnumDirection.EAST//Block x-1
-					|| x == -9 && y == 10 && z == 0 && dir == EnumDirection.WEST//Block x+1
-					) {
-					// TODO : ACTION
-					return;//Cancel packet read to avoid block update/unhide
+				hr = HideRailsManager.getHiddenRail(loc);
+				if (hr != null) {
+					return;// Cancel packet read to avoid block update/unhide
 				}
 			}
 		}

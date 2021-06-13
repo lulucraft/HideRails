@@ -18,6 +18,7 @@ import org.bukkit.block.BlockFace;
 
 import com.sun.istack.internal.NotNull;
 
+import fr.nepta.hiderails.enums.BlockReplacementType;
 import fr.nepta.hiderails.utils.BlocksChecker;
 
 public class LocationsManager {
@@ -28,10 +29,9 @@ public class LocationsManager {
 	 * 
 	 * @param startLoc
 	 * @param blockType
-	 * @return
+	 * @return connected blocks locations
 	 */
-//	protected static List<Location> getConnectedBlocks(Location startLoc, BlockReplacementType blockType) {
-	protected static List<Location> getConnectedBlocks(Location startLoc) {
+	protected static List<Location> getConnectedBlocks(Location startLoc, List<BlockReplacementType> types) {
 		boolean checkFinished = false;
 		int next = 0;
 		int finishCheckCurrentBlock = 0;
@@ -49,17 +49,19 @@ public class LocationsManager {
 					if (newCheckBlock == null) continue;
 					if (checked.contains(newCheckBlock.getLocation())) continue;
 
-//					if (blockType == BlockReplacementType.RAILS || blockType == BlockReplacementType.IRON_BARS
-//							|| blockType == BlockReplacementType.COMMAND_BLOCK
-//							|| blockType == BlockReplacementType.REDSTONE || blockType == BlockReplacementType.SIGN) {
-						if (BlocksChecker.checkBlockIfActive(newCheckBlock)) {
+					for (BlockReplacementType type : (types != null ? (BlockReplacementType[]) types.toArray() : BlockReplacementType.values())) {
+						if ((type == BlockReplacementType.RAIL && BlocksChecker.checkBlockIfActive(newCheckBlock))
+								|| (type == BlockReplacementType.IRON_BAR && BlocksChecker.checkBlockIfActive(newCheckBlock))
+								|| (type == BlockReplacementType.COMMAND_BLOCK && BlocksChecker.checkBlockIfActive(newCheckBlock))
+								|| (type == BlockReplacementType.REDSTONE && BlocksChecker.checkBlockIfActive(newCheckBlock))
+								|| (type == BlockReplacementType.SIGN && BlocksChecker.checkBlockIfActive(newCheckBlock))) {
 							checked.add(newCheckBlock.getLocation());
 
 							finishCheckCurrentBlock = 0;
 						} else {
 							finishCheckCurrentBlock += 1;
 						}
-//					}
+					}
 
 					if (finishCheckCurrentBlock == 4) {
 						checkFinished = true;
@@ -75,9 +77,9 @@ public class LocationsManager {
 					break;
 				}
 			} else {
-//				finishCheckCurrentBlock = 0;
+				//finishCheckCurrentBlock = 0;
 				checkFinished = true;
-//				next = 0;
+				//next = 0;
 				break;
 			}
 
@@ -87,14 +89,27 @@ public class LocationsManager {
 		return checked;
 	}
 
+
 	/*
 	 * Serialisation
+	 */
+	/**
+	 * Serialize location
+	 * 
+	 * @param loc
+	 * @return serialized location
 	 */
 	public static String serialize(@NotNull Location loc) {
 		String splitter = ",";
 		return loc.getWorld().getName() + splitter + loc.getX() + splitter + loc.getY() + splitter + loc.getZ();
 	}
 
+	/**
+	 * Deserialize string location
+	 * 
+	 * @param loc
+	 * @return location
+	 */
 	protected static Location deserializeLoc(@NotNull String loc) {
 		String[] split = loc.split(",");
 		String[] last = s(split);

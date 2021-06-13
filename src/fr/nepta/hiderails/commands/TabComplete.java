@@ -17,13 +17,21 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import fr.nepta.hiderails.enums.BlockReplacementType;
+
 public class TabComplete implements TabCompleter
 {
 	private static final String[] COMMANDS1 = { "help", "reload", "hide", "unhide", "show", "hideone", "unhideone", "hideselection", "unhideselection", "display", "selectionmessage", "return", "undo", "waterprotection" }; // /hiderails "COMMANDS1"
 	private static final String[] COMMANDS2 = { "hide", "hideselection", "unhideselection", "show", "unhide", "showone", "waterprotection" }; // /hiderails "COMMANDS2" "materialType"
 	private static final String[] COMMANDS3 = { "waterprotection" }; // /hiderails "COMMANDS3" "world" "value"
 	private static final String[] BOOLEAN = { "true", "false", "enable", "disable" };
-	public static final List<String> BLOCK_TYPE = new ArrayList<>();
+	private static final List<String> BLOCK_TYPE = new ArrayList<>();
+
+	static {
+		for (BlockReplacementType bt : BlockReplacementType.values()) {
+			BLOCK_TYPE.add(bt.name().toLowerCase());
+		}
+	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args)

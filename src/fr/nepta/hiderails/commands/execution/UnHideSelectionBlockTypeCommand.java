@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.nepta.hiderails.commands.AbstractCommand;
+import fr.nepta.hiderails.enums.BlockReplacementType;
 import fr.nepta.hiderails.enums.Messages;
 import fr.nepta.hiderails.managers.HideRailsManager;
 import fr.nepta.hiderails.managers.MessagesManager;
@@ -47,12 +47,12 @@ public class UnHideSelectionBlockTypeCommand extends AbstractCommand
 			return;
 		}
 
-		List<Material> types = new ArrayList<>();
+		List<BlockReplacementType> types = new ArrayList<>();
 		String[] splitter = args[1].split(",");
 		for (int i = 0; i < splitter.length; i++) {
-			Material mat = Material.getMaterial(splitter[i].toUpperCase());
-			if (mat != null)
-				types.add(mat);
+			BlockReplacementType brt = BlockReplacementType.getBlockReplacementType(splitter[i]);
+			if (brt != null)
+				types.add(brt);
 		}
 
 		HideRailsManager.removeSelectionBlocks(p, cuboid, true, types);

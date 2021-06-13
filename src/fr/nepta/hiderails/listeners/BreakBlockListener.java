@@ -34,7 +34,6 @@ public class BreakBlockListener extends Listener
 	/*
 	 * Remove  hiddenBlocks to config
 	 */
-	@SuppressWarnings("deprecation")
 	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBreak(BlockBreakEvent e)
 	{

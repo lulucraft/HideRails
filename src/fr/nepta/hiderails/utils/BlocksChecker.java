@@ -18,8 +18,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
+import com.sun.istack.internal.NotNull;
+
 import fr.nepta.hiderails.HideRails;
-import fr.nepta.hiderails.enums.BlockReplacementType;
 import fr.nepta.hiderails.enums.Messages;
 import fr.nepta.hiderails.enums.Version;
 import fr.nepta.hiderails.managers.HideRailsManager;
@@ -30,7 +31,7 @@ public class BlocksChecker
 {
 	private final static BlockFace[] FACES = new BlockFace[]{ BlockFace.UP, BlockFace.DOWN, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST };
 
-	public static boolean isMaterial(String input)
+	public static boolean isMaterial(@NotNull String input)
 	{
 		if (input.contains(":")) {
 			String[] split = input.split(":");
@@ -46,7 +47,7 @@ public class BlocksChecker
 	 * @param block
 	 * @return
 	 */
-	public static boolean isRail(Block block) {
+	public static boolean isRail(@NotNull Block block) {
 		return isRail(block.getType());
 	}
 
@@ -86,7 +87,7 @@ public class BlocksChecker
 	 * @param block
 	 * @return is iron bar
 	 */
-	public static boolean isIronBar(Block block) {
+	public static boolean isIronBar(@NotNull Block block) {
 		return isIronBar(block.getType());
 	}
 
@@ -114,7 +115,7 @@ public class BlocksChecker
 	 * @param block
 	 * @return is command block
 	 */
-	public static boolean isCommandBlock(Block block) {
+	public static boolean isCommandBlock(@NotNull Block block) {
 		return isCommandBlock(block.getType());
 	}
 
@@ -146,7 +147,7 @@ public class BlocksChecker
 	 * @param block
 	 * @return is redstone
 	 */
-	public static boolean isRedstone(Block block) {
+	public static boolean isRedstone(@NotNull Block block) {
 		return isRedstone(block.getType());
 	}
 
@@ -185,7 +186,7 @@ public class BlocksChecker
 	 * @param block
 	 * @return block is a sign
 	 */
-	public static boolean isSign(Block block) {
+	public static boolean isSign(@NotNull Block block) {
 		return isSign(block.getType());
 	}
 
@@ -318,7 +319,7 @@ public class BlocksChecker
 	 * @param input
 	 * @return MaterialData
 	 */
-	public static MaterialData getMatData(Player p, String input)
+	public static MaterialData getMatData(Player p, @NotNull String input)
 	{
 		Material mat = null;
 		byte data = 0;
@@ -415,27 +416,27 @@ public class BlocksChecker
 		return false;
 	}
 
-	public static BlockReplacementType getBlockReplacementType(Player player, Block targetBlock)
-	{
-		BlockReplacementType blockType = null;
-
-		if (HideRailsManager.hr && isRail(targetBlock)) {
-			blockType = BlockReplacementType.RAIL;
-		} else if (HideRailsManager.hb && isIronBar(targetBlock)) {
-			blockType = BlockReplacementType.IRON_BAR;
-		} else if (HideRailsManager.hc && isCommandBlock(targetBlock)) {
-			blockType = BlockReplacementType.COMMAND_BLOCK;
-		} else if (HideRailsManager.hd && isRedstone(targetBlock)) {
-			blockType = BlockReplacementType.REDSTONE;
-		} else if (HideRailsManager.hs && isSign(targetBlock)) {
-			blockType = BlockReplacementType.SIGN;
-		}
-		// If the Material is invalid
-		else {
-			MessagesManager.sendPluginMessage(player, Messages.RAIL_ERROR);
-		}
-
-		System.err.println(blockType);
-		return blockType;
-	}
+//	public static BlockReplacementType getBlockReplacementType(Player player, Block targetBlock)
+//	{
+//		BlockReplacementType blockType = null;
+//
+//		if (HideRailsManager.hr && isRail(targetBlock)) {
+//			blockType = BlockReplacementType.RAIL;
+//		} else if (HideRailsManager.hb && isIronBar(targetBlock)) {
+//			blockType = BlockReplacementType.IRON_BAR;
+//		} else if (HideRailsManager.hc && isCommandBlock(targetBlock)) {
+//			blockType = BlockReplacementType.COMMAND_BLOCK;
+//		} else if (HideRailsManager.hd && isRedstone(targetBlock)) {
+//			blockType = BlockReplacementType.REDSTONE;
+//		} else if (HideRailsManager.hs && isSign(targetBlock)) {
+//			blockType = BlockReplacementType.SIGN;
+//		}
+//		// If the Material is invalid
+//		else {
+//			MessagesManager.sendPluginMessage(player, Messages.RAIL_ERROR);
+//		}
+//
+//		System.err.println(blockType);
+//		return blockType;
+//	}
 }

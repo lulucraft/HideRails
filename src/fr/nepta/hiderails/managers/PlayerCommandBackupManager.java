@@ -22,9 +22,10 @@ import fr.nepta.hiderails.HideRails;
 import fr.nepta.hiderails.enums.BackupType;
 import fr.nepta.hiderails.enums.Messages;
 import fr.nepta.hiderails.enums.Version;
-import fr.nepta.hiderails.models.backuputility.BlocksBackup;
-import fr.nepta.hiderails.models.backuputility.PlayerCommandBackup;
+import fr.nepta.hiderails.models.backup.BlocksBackup;
+import fr.nepta.hiderails.models.backup.PlayerCommandBackup;
 import fr.nepta.hiderails.models.selectionsystem.Cuboid;
+import fr.nepta.hiderails.nms.BukkitNMS;
 import fr.nepta.hiderails.utils.HideRailsSelectionChecker;
 
 public class PlayerCommandBackupManager
@@ -73,7 +74,7 @@ public class PlayerCommandBackupManager
 	 * @param player
 	 * @param blockBackup
 	 */
-	public static void createNewBlocksBackup(@NotNull Player player, BlocksBackup blockBackup)
+	public static void createNewBlocksBackup(@NotNull Player player, @NotNull BlocksBackup blockBackup)
 	{
 		PlayerCommandBackup backup = getPlayerCommandBackups(player);
 
@@ -93,7 +94,6 @@ public class PlayerCommandBackupManager
 	public static void restoreBackup(@NotNull Player player)
 	{
 		BlocksBackup backup = getLatestBlocksBackup(player);
-		//Selection sel = backup.getWeSelection();
 		Cuboid sel = backup.getHrSelection();
 		Block bl = null;
 
@@ -111,8 +111,8 @@ public class PlayerCommandBackupManager
 					bl.setType(bl.getType());
 					if (HideRails.version == Version.V1_12) {
 						try {
-							Block.class.getDeclaredMethod("setData", byte.class).invoke(bl, Byte.valueOf(bl.getData()));
-						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							BukkitNMS.setData(bl, bl.getData());
+						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
 						//bl.setData(Byte.valueOf(bl.getData()));
@@ -135,8 +135,8 @@ public class PlayerCommandBackupManager
 					bl.setType(state.getType());
 					if (HideRails.version == Version.V1_12) {
 						try {
-							Block.class.getDeclaredMethod("setData", byte.class).invoke(bl, state.getData().getData());
-						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							BukkitNMS.setData(bl, state.getData().getData());
+						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
 						//bl.setData(state.getData().getData());
@@ -162,9 +162,7 @@ public class PlayerCommandBackupManager
 				if (i > 1) single = false;
 				else single = true;
 
-//				BlockReplacementType blockType = BlocksChecker.getBlockReplacementType(p, bl);
-//				HideRailsManager.saveChangedBlocks(player, bl, blockType, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false, single);
-				HideRailsManager.saveChangedBlocks(player, bl, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false, single);
+				HideRailsManager.saveChangedBlocks(player, bl, null, backup.getUnHideBlocksType().getMat(), backup.getUnHideBlocksType().getData(), false, single);
 			}
 			else
 			{

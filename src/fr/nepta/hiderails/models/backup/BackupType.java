@@ -4,7 +4,7 @@
  * 
  * @author Nepta_
  */
-package fr.nepta.hiderails.models.backuputility;
+package fr.nepta.hiderails.models.backup;
 
 public enum BackupType
 {

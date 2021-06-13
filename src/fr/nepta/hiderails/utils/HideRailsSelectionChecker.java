@@ -11,10 +11,10 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import fr.nepta.hiderails.enums.BlockReplacementType;
 import fr.nepta.hiderails.managers.HideRailsManager;
 import fr.nepta.hiderails.managers.PlayerClaimDataManager;
 import fr.nepta.hiderails.models.ClaimData;
@@ -48,7 +48,7 @@ public class HideRailsSelectionChecker
 		return railsLocsTemp;
 	}
 
-	public static List<Location> getAllValidRails(Cuboid selection, List<Material> types)
+	public static List<Location> getAllValidRails(Cuboid selection, List<BlockReplacementType> types)
 	{
 		List<Location> railsLocsTemp = HideRailsSelectionChecker.getAllBlocksLocationInHideRailsSelection(selection);
 		List<Location> validRailsLocs = new ArrayList<>();
@@ -66,41 +66,45 @@ public class HideRailsSelectionChecker
 			redstone = true;
 			signs = true;
 		} else {
-			for (Material type : types) {
-				if (HideRailsManager.hr) {
-					if (BlocksChecker.isRail(type)) {
+			for (BlockReplacementType type : types) {
+				switch (type) {
+				case RAIL:
+					if (HideRailsManager.hr) {
 						rails = true;
 						continue;
 					}
-				}
+					break;
 
-				if (HideRailsManager.hb) {
-					if (BlocksChecker.isIronBar(type)) {
+				case IRON_BAR:
+					if (HideRailsManager.hb) {
 						ironBars = true;
 						continue;
 					}
-				}
+					break;
 
-				if (HideRailsManager.hc) {
-					if (BlocksChecker.isCommandBlock(type)) {
+				case COMMAND_BLOCK:
+					if (HideRailsManager.hc) {
 						commandBlocks = true;
 						continue;
 					}
-				}
+					break;
 
-				if (HideRailsManager.hd) {
-					if (BlocksChecker.isRedstone(type)) {
+				case REDSTONE:
+					if (HideRailsManager.hd) {
 						redstone = true;
 						continue;
 					}
-				}
+					break;
 
-				if (HideRailsManager.hs) {
-					if (BlocksChecker.isSign(type)) {
+				case SIGN:
+					if (HideRailsManager.hs) {
 						signs = true;
 						continue;
 					}
+					break;
+
 				}
+
 			}
 		}
 

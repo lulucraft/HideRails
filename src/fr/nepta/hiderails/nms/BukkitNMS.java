@@ -248,7 +248,7 @@ public class BukkitNMS
 	 * @param y
 	 * @param z
 	 */
-	public static void changeBlock(Player p, Material material, byte data, int x, int y, int z)
+	public static void changeBlock(Player player, Material material, byte data, int x, int y, int z)
 	{
 		if (material == null) { // If the material is LEGACY or invalid in HiddenRails config file (Only for older versions than 1.14)
 			System.err.println("[HideRails] <ERROR> THE 'HiddenRails.yml' FILE THAT CONTAINS INVALID BLOCKS, YOU MUST UPDATE THE 'LEGAGY' BLOCKS OR DELETE THE FILE!!");
@@ -277,7 +277,6 @@ public class BukkitNMS
 			 * Replace "CraftMagicNumbers.getBlock(material).fromLegacyData(data)"
 			 */
 			// Get final IBlockData
-
 			if (HideRails.version == Version.V1_12) {
 				// Invoke Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
 				Object craftMagicNumber = NMSClass.invokeMethod(craftMagicNumbers_method_with_data, fromLegacyData_method, material);
@@ -303,44 +302,35 @@ public class BukkitNMS
 			/*
 			 * Send Packet to player
 			 */
-			sendPacket(p, packet);
+			sendPacket(player, packet);
 		}
-		catch (IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e)
+		catch (InvocationTargetException e)
 		{
-			if (e instanceof InvocationTargetException) {
-				/* If material is LEGACY or invalid */
-				if (HideRails.version == Version.V1_13) {
+			/* If material is LEGACY or invalid */
+			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_15) {
+				System.err.println("[HideRails] <ERROR> THE 'HiddenRails.yml' FILE THAT CONTAINS INVALID BLOCKS, YOU MUST UPDATE THE BLOCK'" + baseMatName + "' OR DELETE THE FILE!!");
+			} else if (HideRails.version == Version.V1_14) {
+				/* Try without data */
+				try {
+					// Invoke Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
+					// replace "block_data = CraftMagicNumbers.getBlock(material).getBlockData();"
+					block_data = NMSClass.invokeMethod(craftMagicNumbers_method_without_data, null, material);
+
+					/* Set "block" field in PacketPlayOutBlockChange Class ("packet.block") */
+					block_field.set(packet, block_data);
+
+					/* Send Packet to player */
+					sendPacket(player, packet);
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e1) {
 					System.err.println("[HideRails] <ERROR> THE 'HiddenRails.yml' FILE THAT CONTAINS INVALID BLOCKS, YOU MUST UPDATE THE BLOCK'" + baseMatName + "' OR DELETE THE FILE!!");
-				} else if (HideRails.version == Version.V1_14) {
-					/* Try without data */
-					try {
-						// Invoke Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
-						// replace "block_data = CraftMagicNumbers.getBlock(material).getBlockData();"
-						block_data = NMSClass.invokeMethod(craftMagicNumbers_method_without_data, null, material);
-
-						/* Set "block" field in PacketPlayOutBlockChange Class ("packet.block") */
-						block_field.set(packet, block_data);
-
-						/* Send Packet to player */
-						sendPacket(p, packet);
-					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e1) {
-						if (e instanceof InvocationTargetException)
-							System.err.println("[HideRails] <ERROR> THE 'HiddenRails.yml' FILE THAT CONTAINS INVALID BLOCKS, YOU MUST UPDATE THE BLOCK'" + baseMatName + "' OR DELETE THE FILE!!");
-						else
-							e.printStackTrace();
-					}
-				} else if (HideRails.version == Version.V1_15) {
-					if (e instanceof InvocationTargetException)
-						System.err.println("[HideRails] <ERROR> THE 'HiddenRails.yml' FILE THAT CONTAINS INVALID BLOCKS, YOU MUST UPDATE THE BLOCK'" + baseMatName + "' OR DELETE THE FILE!!");
-					else
-						e.printStackTrace();
-				} else {
-					e.printStackTrace();
 				}
-				//System.err.println("\nERROR : " + e.getClass() + "\nCAUSE : " + e.getCause());
 			} else {
 				e.printStackTrace();
 			}
+		}
+		catch (IllegalArgumentException | IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException | NoSuchFieldException e)
+		{
+			e.printStackTrace();
 		}
 	}
 
@@ -363,7 +353,7 @@ public class BukkitNMS
 	 * @throws NoSuchFieldException
 	 */
 	@SuppressWarnings("unchecked")
-	public static void summonParticle(Player p, Location loc, Object particleName, int amount, int speed) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException
+	public static void summonParticle(Player player, Location loc, Object particleName, int amount, int speed) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException
 	{
 		// If the version is 1.8
 		if (HideRails.version.isOldVersion()) return;
@@ -380,11 +370,11 @@ public class BukkitNMS
 							amount,
 							new int[]{speed}
 							);
-			sendPacket(p, packet);
+			sendPacket(player, packet);
 		} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14) {
-			p.spawnParticle(Particle.valueOf(((Enum<ParticleName_v1_13>) particleName).name().toUpperCase()), loc.getX(), loc.getY(), loc.getZ(), 0, 0d, 0d, 0d, amount);
+			player.spawnParticle(Particle.valueOf(((Enum<ParticleName_v1_13>) particleName).name().toUpperCase()), loc.getX(), loc.getY(), loc.getZ(), 0, 0d, 0d, 0d, amount);
 		} else if (HideRails.version == Version.V1_15) {
-			p.spawnParticle(Particle.valueOf(((Enum<ParticleName_v1_15>) particleName).name().toUpperCase()), loc.getX(), loc.getY(), loc.getZ(), 0, 0d, 0d, 0d, amount);
+			player.spawnParticle(Particle.valueOf(((Enum<ParticleName_v1_15>) particleName).name().toUpperCase()), loc.getX(), loc.getY(), loc.getZ(), 0, 0d, 0d, 0d, amount);
 		}
 	}
 
@@ -407,12 +397,27 @@ public class BukkitNMS
 		// Stop console errors (pending player connection)
 		if (!player.isOnline()) return;
 
-		Object playerConnection = playerConnection_field.get(handle_method.invoke(player));
-		NMSClass.invokeMethod(sendPacket_method, playerConnection, packet);
+		NMSClass.invokeMethod(sendPacket_method, getPlayerConnection(player), packet);
 	}
 
 
 	/**
+	 * Get PlayerConnection of player
+	 * 
+	 * @param player
+	 * @return PlayerConnection object
+	 * 
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	private static Object getPlayerConnection(Player player) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		return playerConnection_field.get(handle_method.invoke(player));
+	}
+
+
+	/**
+	 * Get channel pipeline of player
 	 * 
 	 * @param player
 	 * @return the pipeline of player
@@ -423,13 +428,13 @@ public class BukkitNMS
 	 */
 	private static ChannelPipeline getChannelPipeline(Player player) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
 	{
-		Object playerConnection = playerConnection_field.get(handle_method.invoke(player));
-		Object networkManager = networkManager_field.get(playerConnection);
+		Object networkManager = networkManager_field.get(getPlayerConnection(player));
 
 		return ((Channel) channel_field.get(networkManager)).pipeline();
 	}
 
 	/**
+	 * Inject packet listener in channel pipeline of player
 	 * 
 	 * @param player
 	 * 
@@ -448,6 +453,7 @@ public class BukkitNMS
 
 
 	/**
+	 * Remove channel pipeline of player
 	 * 
 	 * @param player
 	 * @param packetListener
@@ -461,9 +467,8 @@ public class BukkitNMS
 		ChannelPipeline cp = getChannelPipeline(player);
 		String pName = player.getName();
 
-		if (cp.get(pName) != null) {
+		if (cp.get(pName) != null)
 			cp.remove(pName);
-		}
 	}
 
 
@@ -593,6 +598,7 @@ public class BukkitNMS
 	 * Set block data
 	 * This method is only for 1.12 versions and it used to avoid
 	 * warnings in a code (other versions doesn't have this method)
+	 * (Not NMS)
 	 * 
 	 * @param block
 	 * @param data
@@ -602,6 +608,7 @@ public class BukkitNMS
 	 * @throws InvocationTargetException
 	 */
 	public static void setData(Block block, byte data) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		//Block.class.getDeclaredMethod("setData", byte.class).invoke(block, data);
 		setData_method.invoke(block, data);
 	}
 }
