@@ -17,7 +17,7 @@ hideIronBars: false
 hideCommandBlock: false
 # Enable Redstone hidding (include levers, ...)
 hideRedstone: false
-# 'Enable Signs hidding (ex: TrainCart sign)'
+# Enable Signs hidding (ex: TrainCart sign)
 hideSigns: false
 
 # Particle who spawn in hidden-blocks if player execute /hr display command

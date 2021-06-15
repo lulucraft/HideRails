@@ -47,7 +47,7 @@ public class RedstoneInWaterListeners extends Listener
 		/*
 		 * 1.13 / 1.14
 		 */
-		else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
+		else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) {
 			redstoneBlocks = EnumSet.of(enumCheck("LEGACY_REDSTONE_WIRE"), new Material[] {
 					enumCheck("LEGACY_REDSTONE_TORCH_ON"),
 					enumCheck("LEGACY_REDSTONE_TORCH_OFF"),
@@ -92,7 +92,7 @@ public class RedstoneInWaterListeners extends Listener
 				});
 			}
 			// api-version 1.14
-			else if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
+			else if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) {
 				enumSet = EnumSet.of(enumCheck("REDSTONE_TORCH"), new Material[] {
 						enumCheck("REDSTONE_WALL_TORCH"),
 						enumCheck("REDSTONE"),

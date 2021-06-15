@@ -65,7 +65,7 @@ public class BlocksChecker
 					matCheck == enumCheck("ACTIVATOR_RAIL") ||
 					matCheck == enumCheck("DETECTOR_RAIL") ||
 					matCheck == enumCheck("POWERED_RAIL");
-		} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
+		} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) {
 			return matCheck == enumCheck("LEGACY_RAILS") ||
 					matCheck == enumCheck("LEGACY_LADDER") ||
 					matCheck == enumCheck("LEGACY_ACTIVATOR_RAIL") ||
@@ -101,7 +101,7 @@ public class BlocksChecker
 	{
 		if (HideRails.version == Version.V1_12) {
 			return matCheck == enumCheck("IRON_FENCE");
-		} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
+		} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) {
 			return matCheck == enumCheck("LEGACY_IRON_FENCE") ||
 					// api-version 1.13
 					matCheck == enumCheck("IRON_BARS");
@@ -133,7 +133,7 @@ public class BlocksChecker
 				return matCheck == enumCheck("COMMAND");
 			else
 				return matCheck == enumCheck("COMMAND") || matCheck == enumCheck("COMMAND_CHAIN") || matCheck == enumCheck("COMMAND_REPEATING");
-		} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
+		} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) {
 			return matCheck == enumCheck("LEGACY_COMMAND") || matCheck == enumCheck("LEGACY_COMMAND_CHAIN") || matCheck == enumCheck("LEGACY_COMMAND_REPEATING") ||
 					// api-version 1.13
 					matCheck == enumCheck("COMMAND_BLOCK") || matCheck == enumCheck("CHAIN_COMMAND_BLOCK") || matCheck == enumCheck("REPEATING_COMMAND_BLOCK");
@@ -165,7 +165,7 @@ public class BlocksChecker
 					matCheck == enumCheck("REDSTONE_TORCH_OFF") || matCheck == enumCheck("REDSTONE_TORCH_ON") ||
 					matCheck == enumCheck("DIODE_BLOCK_OFF") || matCheck == enumCheck("DIODE_BLOCK_ON") ||
 					matCheck == enumCheck("LEVER");
-		} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
+		} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) {
 			return matCheck == enumCheck("LEGACY_REDSTONE_WIRE") || matCheck == enumCheck("LEGACY_REDSTONE") || matCheck == enumCheck("LEGACY_REDSTONE_BLOCK") ||
 					matCheck == enumCheck("LEGACY_REDSTONE_TORCH_OFF") || matCheck == enumCheck("LEGACY_REDSTONE_TORCH_ON") ||
 					matCheck == enumCheck("LEGACY_DIODE_BLOCK_OFF") || matCheck == enumCheck("LEGACY_DIODE_BLOCK_ON") ||
@@ -204,7 +204,7 @@ public class BlocksChecker
 			return matCheck == enumCheck("LEGACY_SIGN_POST") || matCheck == enumCheck("LEGACY_WALL_SIGN") ||
 					// api-version 1.13
 					matCheck == enumCheck("SIGN") || matCheck == enumCheck("WALL_SIGN");
-		} else if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
+		} else if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) {
 			return matCheck == enumCheck("LEGACY_SIGN_POST") || matCheck == enumCheck("LEGACY_WALL_SIGN") ||
 					// api-version 1.14
 					matCheck == enumCheck("OAK_SIGN") ||
@@ -416,27 +416,4 @@ public class BlocksChecker
 		return false;
 	}
 
-//	public static BlockReplacementType getBlockReplacementType(Player player, Block targetBlock)
-//	{
-//		BlockReplacementType blockType = null;
-//
-//		if (HideRailsManager.hr && isRail(targetBlock)) {
-//			blockType = BlockReplacementType.RAIL;
-//		} else if (HideRailsManager.hb && isIronBar(targetBlock)) {
-//			blockType = BlockReplacementType.IRON_BAR;
-//		} else if (HideRailsManager.hc && isCommandBlock(targetBlock)) {
-//			blockType = BlockReplacementType.COMMAND_BLOCK;
-//		} else if (HideRailsManager.hd && isRedstone(targetBlock)) {
-//			blockType = BlockReplacementType.REDSTONE;
-//		} else if (HideRailsManager.hs && isSign(targetBlock)) {
-//			blockType = BlockReplacementType.SIGN;
-//		}
-//		// If the Material is invalid
-//		else {
-//			MessagesManager.sendPluginMessage(player, Messages.RAIL_ERROR);
-//		}
-//
-//		System.err.println(blockType);
-//		return blockType;
-//	}
 }

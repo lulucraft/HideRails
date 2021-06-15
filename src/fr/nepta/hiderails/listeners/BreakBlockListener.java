@@ -7,6 +7,7 @@
 package fr.nepta.hiderails.listeners;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -65,7 +66,9 @@ public class BreakBlockListener extends Listener
 		if (BlocksChecker.isSolid(b)) {
 			// Check all hidden blocks around the broken block
 			if (!trashList.isEmpty()) {
-				for (Block block : trashList) {
+				Iterator<Block> it = trashList.iterator();
+				while (it.hasNext()) {
+					Block block = it.next();
 					if (!BlocksChecker.isSolid(block)) {
 						Location bLoc = block.getLocation();
 						HiddenRail hRail = HideRailsManager.getHiddenRail(bLoc);
@@ -83,8 +86,13 @@ public class BreakBlockListener extends Listener
 							// Disable interactChangeBlock for admins
 							BreakBlockListener.breakBlocks.add(p);
 
+							// Remove block to avoid ConcurrentModificationException
+							// when removing the block in the removeBlocks method
+							it.remove();
+
 							// Remove block around hidden block
 							HideRailsManager.removeBlocks(p, block, false, true);
+
 							// Show block around hidden broken blocks (enable the player to see the broken block)
 							//BukkitNMS.changeBlock(p, block.getType(), block.getData(), block.getX(), block.getY(), block.getZ());
 						}

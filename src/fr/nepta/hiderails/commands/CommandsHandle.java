@@ -23,7 +23,7 @@ public class CommandsHandle implements CommandExecutor
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		AbstractCommand a = null;
 
-		for (AbstractCommand command : AbstractCommand.commands) {
+		cmd:for (AbstractCommand command : AbstractCommand.commands) {
 			if (args.length == command.getArgsNumber()) {
 				String arg = args[0].toLowerCase();
 				if (command.getCommand().equals(arg)) {
@@ -33,7 +33,7 @@ public class CommandsHandle implements CommandExecutor
 					for (String commandAliase : command.getCommandsAliases()) {
 						if (commandAliase.equals(arg)) {
 							a = command;
-							break;
+							break cmd;
 						}
 					}
 				}

@@ -36,6 +36,7 @@ public class BukkitNMS
 	static final String VERSION;
 
 	/* General */
+	private static Class<?> player_connection_class;
 	private static Method handle_method;
 	private static Method sendPacket_method;
 	private static Method block_position_method;
@@ -47,7 +48,10 @@ public class BukkitNMS
 	private static Class<?> block_change_class;
 	private static Class<?> craftMagicNumbersClass;
 	private static Class<?> block_class;
+	private static Class<?> base_block_position_class;
+	private static Class<?> block_position_class;
 	private static Constructor<?> constructorBP;
+	private static Constructor<?> block_change_constructor;// Only for 1.17+
 	private static Method fromLegacyData_method;
 	private static Method craftMagicNumbers_method_with_data;
 	private static Method craftMagicNumbers_method_without_data;
@@ -61,6 +65,7 @@ public class BukkitNMS
 	private static Field block_field;
 
 	private static Class<?> packet_play_out_in_use_item;
+	private static Class<?> movingObjectPositionBlock_class;
 	private static Method moving_object_position_block_field;
 
 	/* PARTICLES */
@@ -74,8 +79,6 @@ public class BukkitNMS
 	private static Method readFileContent_method;
 	private static Method writeFileContent_method;
 
-	private static Class<?> base_block_position_class;
-
 
 	static {
 		/*
@@ -84,8 +87,8 @@ public class BukkitNMS
 		VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 		if (VERSION.contains("1_13")) HideRails.version = Version.V1_13;
 		else if (VERSION.contains("1_14")) HideRails.version = Version.V1_14;
-		else if (VERSION.contains("1_15")) HideRails.version = Version.V1_15;
-		else if (VERSION.contains("1_16")) HideRails.version = Version.V1_15;
+		else if (VERSION.contains("1_15") || VERSION.contains("1_16")) HideRails.version = Version.V1_15;
+		else if (VERSION.contains("1_17")) HideRails.version = Version.V1_17;
 		else HideRails.version = Version.V1_12;
 
 		if (HideRails.version == Version.V1_12 && VERSION.contains("1_8")) {
@@ -98,25 +101,83 @@ public class BukkitNMS
 		try {
 			// Replace : ((CraftPlayer) player).getHandle()
 			handle_method = NMSClass.getMethod(NMSClass.getOBCClass("entity.CraftPlayer"), "getHandle");
-			// Replace : ((CraftPlayer) player).getHandle().playerConnection
-			playerConnection_field = NMSClass.getField(NMSClass.getNMSClass("EntityPlayer"), "playerConnection");
 
-			// Replace : ((CraftPlayer) player).getHandle().playerConnection.networkManager
-			networkManager_field = NMSClass.getNMSClass("PlayerConnection").getDeclaredField("networkManager");
-			// Replace : ((CraftPlayer) player).getHandle().playerConnection.networkManager.channel
-			channel_field = NMSClass.getNMSClass("NetworkManager").getDeclaredField("channel");
+			if (HideRails.version == Version.V1_17) {
+				player_connection_class = NMSClass.getNMSClass("network.PlayerConnection");
 
-			// Replace : ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-			sendPacket_method = NMSClass.getMethod(NMSClass.getNMSClass("PlayerConnection"), "sendPacket", NMSClass.getNMSClass("Packet"));
+				// Replace : ((CraftPlayer) player).getHandle().c
+				playerConnection_field = NMSClass.getField(NMSClass.getNMSClass("level.EntityPlayer"), "b");
+
+				// Replace : ((CraftPlayer) player).getHandle().playerConnection.a
+				networkManager_field = player_connection_class.getDeclaredField("a");
+
+				// Replace : ((CraftPlayer) player).getHandle().playerConnection.networkManager.k
+				channel_field = NMSClass.getNMNClass("NetworkManager").getDeclaredField("k");
+
+				// Replace : ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+				sendPacket_method = NMSClass.getMethod(player_connection_class, "sendPacket", NMSClass.getNMNClass("protocol.Packet"));
+
+
+				// ----------------------------------------------------- BLOCKS ------------------------------------------------------ //
+				block_change_class = NMSClass.getNMNClass("protocol.game.PacketPlayOutBlockChange");
+				block_position_class = NMSClass.getNMCClass("BlockPosition");
+
+				block_field = NMSClass.getField(block_change_class, "b");
+
+				constructorBP = block_position_class.getConstructor(double.class, double.class, double.class);
+
+				block_change_constructor = block_change_class.getConstructor(block_position_class, NMSClass.getNMWClass("level.block.state.IBlockData"));
+
+				/* PacketPlayInUseItem */
+				packet_play_out_in_use_item = NMSClass.getNMNClass("protocol.game.PacketPlayInUseItem");
+				movingObjectPositionBlock_class = NMSClass.getNMWClass("phys.MovingObjectPositionBlock");
+				base_block_position_class = NMSClass.getNMCClass("BaseBlockPosition");
+				// ------------------------------------------------------------------------------------------------------------------- //
+
+				// ---------------------------------------------------- PARTICLES ---------------------------------------------------- //
+				packet_play_out_world_particles = NMSClass.getNMNClass("protocol.game.PacketPlayOutWorldParticles");
+				// ------------------------------------------------------------------------------------------------------------------- //
+
+			} else {
+				player_connection_class = NMSClass.getNMSClass("PlayerConnection");
+
+				// Replace : ((CraftPlayer) player).getHandle().playerConnection
+				playerConnection_field = NMSClass.getField(NMSClass.getNMSClass("EntityPlayer"), "playerConnection");
+
+				// Replace : ((CraftPlayer) player).getHandle().playerConnection.networkManager
+				networkManager_field = player_connection_class.getDeclaredField("networkManager");
+
+				// Replace : ((CraftPlayer) player).getHandle().playerConnection.networkManager.channel
+				channel_field = NMSClass.getNMSClass("NetworkManager").getDeclaredField("channel");
+
+				// Replace : ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+				sendPacket_method = NMSClass.getMethod(player_connection_class, "sendPacket", NMSClass.getNMSClass("Packet"));
+
+
+				// ----------------------------------------------------- BLOCKS ------------------------------------------------------ //
+				block_change_class = NMSClass.getNMSClass("PacketPlayOutBlockChange");
+				block_class = NMSClass.getNMSClass("Block");
+				block_position_class = NMSClass.getNMSClass("BlockPosition");
+
+				block_field = NMSClass.getField(block_change_class, "block");
+
+				constructorBP = block_position_class.getConstructor(double.class, double.class, double.class);
+
+				/* PacketPlayInUseItem */
+				packet_play_out_in_use_item = NMSClass.getNMSClass("PacketPlayInUseItem");
+				movingObjectPositionBlock_class = NMSClass.getNMSClass("MovingObjectPositionBlock");
+				base_block_position_class = NMSClass.getNMSClass("BaseBlockPosition");
+				// ------------------------------------------------------------------------------------------------------------------- //
+
+				// ---------------------------------------------------- PARTICLES ---------------------------------------------------- //
+				packet_play_out_world_particles = NMSClass.getNMSClass("PacketPlayOutWorldParticles");
+				// ------------------------------------------------------------------------------------------------------------------- //
+
+			}
+
 
 			// ----------------------------------------------------- BLOCKS ------------------------------------------------------ //
-			packet_play_out_in_use_item = NMSClass.getNMSClass("PacketPlayInUseItem");
-
-			block_change_class = NMSClass.getNMSClass("PacketPlayOutBlockChange");
 			craftMagicNumbersClass = NMSClass.getOBCClass("util.CraftMagicNumbers");
-			block_class = NMSClass.getNMSClass("Block");
-
-			constructorBP = NMSClass.getNMSClass("BlockPosition").getConstructor(double.class, double.class, double.class);
 
 			block_change_pos_field = NMSClass.getField(block_change_class, "a");
 			block_change_pos_field.setAccessible(true);
@@ -131,7 +192,7 @@ public class BukkitNMS
 
 				// Replace Block.setData(byte data);
 				setData_method = Block.class.getDeclaredMethod("setData", byte.class);
-			} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
+			} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) {
 				if (HideRails.version == Version.V1_14) {
 					// Get "IBlockData getBlockData()" method
 					//block_data_method = NMSClass.getMethod(block_class, "getBlockData", null);
@@ -144,17 +205,14 @@ public class BukkitNMS
 				craftMagicNumbers_method_with_data = NMSClass.getMethod(craftMagicNumbersClass, "getBlock", Material.class, byte.class);
 			}
 
-			block_field = NMSClass.getField(block_change_class, "block");
-
 
 			/* PacketPlayInUseItem */
 			// Replace method : MovingObjectPositionBlock c()
 			moving_object_position_block_field = NMSClass.getMethod(packet_play_out_in_use_item, "c", null);
 
 			// Replace method : BlockPosition getBlockPosition()
-			block_position_method = NMSClass.getNMSClass("MovingObjectPositionBlock").getDeclaredMethod("getBlockPosition", null);
+			block_position_method = movingObjectPositionBlock_class.getDeclaredMethod("getBlockPosition", null);
 
-			base_block_position_class = NMSClass.getNMSClass("BaseBlockPosition");
 			// Replace method : int getX()
 			get_x_base_block_position_method = base_block_position_class.getDeclaredMethod("getX", null);
 			// Replace method : int getY()
@@ -163,12 +221,11 @@ public class BukkitNMS
 			get_z_base_block_position_method = base_block_position_class.getDeclaredMethod("getZ", null);
 
 			// Replace method : EnumDirection getDirection()
-			get_direction_method = NMSClass.getNMSClass("MovingObjectPositionBlock").getDeclaredMethod("getDirection", null);
+			get_direction_method = movingObjectPositionBlock_class.getDeclaredMethod("getDirection", null);
 			// ------------------------------------------------------------------------------------------------------------------- //
 
 
 			// ---------------------------------------------------- PARTICLES ---------------------------------------------------- //
-			packet_play_out_world_particles = NMSClass.getNMSClass("PacketPlayOutWorldParticles");
 			if (HideRails.version == Version.V1_12 && !Version.V1_12.isOldVersion()) {
 				enum_particle_class = NMSClass.getNMSClass("EnumParticle");
 				try {
@@ -193,8 +250,11 @@ public class BukkitNMS
 
 
 			// -------------------------------------------------- CONFIGURATIONS ------------------------------------------------- //
-			if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) fileUtils_class = Class.forName("org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils");
-			else fileUtils_class = Class.forName("org.apache.commons.io.FileUtils");
+			if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17)
+				fileUtils_class = Class.forName("org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils");
+			else
+				fileUtils_class = Class.forName("org.apache.commons.io.FileUtils");
+
 			readFileContent_method = NMSClass.getMethod(fileUtils_class, "readFileToString", File.class, Charset.class); // params : File.class, Charset.class / return : String.class
 			writeFileContent_method = NMSClass.getMethod(fileUtils_class, "write", File.class, CharSequence.class, Charset.class); // params : File.class, CharSequence.class, Charset.class / return : void
 			// ------------------------------------------------------------------------------------------------------------------- //
@@ -265,15 +325,6 @@ public class BukkitNMS
 		Object block_data = null;
 		try {
 			/*
-			 * Instantiation of PacketPlayOutBlockChange packet
-			 */
-			packet = NMSClass.newInstance(block_change_class);
-
-			// Set blockChange location
-			Object blockPosition = NMSClass.newInstance(constructorBP, x, y, z);
-			block_change_pos_field.set(packet, blockPosition);
-
-			/*
 			 * Replace "CraftMagicNumbers.getBlock(material).fromLegacyData(data)"
 			 */
 			// Get final IBlockData
@@ -281,7 +332,7 @@ public class BukkitNMS
 				// Invoke Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
 				Object craftMagicNumber = NMSClass.invokeMethod(craftMagicNumbers_method_with_data, fromLegacyData_method, material);
 				block_data = NMSClass.invokeMethod(fromLegacyData_method, craftMagicNumber, data);
-			} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) {
+			} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) {
 				// Invoke Method "getBlock(Material material)" in CraftMagicNumbers Class : Replace CraftMagicNumbers.getBlock(material)
 				//Object craftMagicNumber = NMSClass.invokeMethod(craftMagicNumbers_method, null, material);
 
@@ -294,20 +345,30 @@ public class BukkitNMS
 				block_data = NMSClass.invokeMethod(craftMagicNumbers_method_with_data, null, material, data);
 			}
 
-			/*
-			 * Set "block" field in PacketPlayOutBlockChange Class ("packet.block")
-			 */
-			block_field.set(packet, block_data);
+			// Set blockChange location
+			Object blockPosition = NMSClass.newInstance(constructorBP, x, y, z);
 
-			/*
-			 * Send Packet to player
-			 */
+			// Instantiation of PacketPlayOutBlockChange packet
+			if (HideRails.version != Version.V1_17) {
+				packet = NMSClass.newInstance(block_change_class);
+
+				block_change_pos_field.set(packet, blockPosition);
+
+				// Set "block" field in PacketPlayOutBlockChange Class ("packet.block")
+				block_field.set(packet, block_data);
+			} else {
+				// Replace constructor : public net.minecraft.network.protocol.game.PacketPlayOutBlockChange(net.minecraft.core.BlockPosition, net.minecraft.world.level.block.state.IBlockData)
+				packet = NMSClass.newInstance(block_change_constructor, blockPosition, block_data);
+			}
+
+
+			// Send Packet to player
 			sendPacket(player, packet);
 		}
 		catch (InvocationTargetException e)
 		{
 			/* If material is LEGACY or invalid */
-			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_15) {
+			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) {
 				System.err.println("[HideRails] <ERROR> THE 'HiddenRails.yml' FILE THAT CONTAINS INVALID BLOCKS, YOU MUST UPDATE THE BLOCK'" + baseMatName + "' OR DELETE THE FILE!!");
 			} else if (HideRails.version == Version.V1_14) {
 				/* Try without data */
@@ -373,7 +434,7 @@ public class BukkitNMS
 			sendPacket(player, packet);
 		} else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14) {
 			player.spawnParticle(Particle.valueOf(((Enum<ParticleName_v1_13>) particleName).name().toUpperCase()), loc.getX(), loc.getY(), loc.getZ(), 0, 0d, 0d, 0d, amount);
-		} else if (HideRails.version == Version.V1_15) {
+		} else if (HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) {
 			player.spawnParticle(Particle.valueOf(((Enum<ParticleName_v1_15>) particleName).name().toUpperCase()), loc.getX(), loc.getY(), loc.getZ(), 0, 0d, 0d, 0d, amount);
 		}
 	}
@@ -608,7 +669,7 @@ public class BukkitNMS
 	 * @throws InvocationTargetException
 	 */
 	public static void setData(Block block, byte data) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		//Block.class.getDeclaredMethod("setData", byte.class).invoke(block, data);
+		// Replace : Block.class.getDeclaredMethod("setData", byte.class).invoke(block, data);
 		setData_method.invoke(block, data);
 	}
 }

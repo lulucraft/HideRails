@@ -75,7 +75,7 @@ public class MessagesManager
 		sender.sendMessage("§f§l § §6/hiderails unhide");
 		sender.sendMessage("§f§l § §6/hiderails hideselection §o\"block:data\"");
 		sender.sendMessage("§f§l § §6/hiderails unhideselection §o[\"block_type\"]\n");
-		sender.sendMessage("§f§l § §6/hiderails return");
+		sender.sendMessage("§f§l § §6/hiderails undo");
 		sender.sendMessage("§f§l § §6/hiderails display");
 		sender.sendMessage("§f§l § §6/hiderails selectionmessage");
 		sender.sendMessage("§f§l § §6/hiderails waterprotection §o\"world\" \"value\"");

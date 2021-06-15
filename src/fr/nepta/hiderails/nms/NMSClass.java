@@ -6,14 +6,81 @@
  */
 package fr.nepta.hiderails.nms;
 
+import static fr.nepta.hiderails.nms.BukkitNMS.VERSION;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import fr.nepta.hiderails.HideRails;
+import fr.nepta.hiderails.enums.Version;
+import fr.nepta.hiderails.exception.IncorrectMappingVersionException;
+
 public class NMSClass
 {
-	private final static String VERSION = BukkitNMS.VERSION;
+	/**
+	 * Get net.minecraft.network class
+	 * <br>Only for 1.17+
+	 * 
+	 * @param className
+	 * @return Class
+	 */
+	public static Class<?> getNMNClass(String className)
+	{
+		try {
+			if (HideRails.version == Version.V1_17) {
+				return Class.forName("net.minecraft.network." + className);				
+			} else {
+				throw new IncorrectMappingVersionException();//"Method incompatible with the current version"
+			}
+		} catch (IncorrectMappingVersionException | ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Get net.minecraft.world class
+	 * <br>Only for 1.17+
+	 * 
+	 * @param className
+	 * @return Class
+	 */
+	public static Class<?> getNMWClass(String className)
+	{
+		try {
+			if (HideRails.version == Version.V1_17) {
+				return Class.forName("net.minecraft.world." + className);				
+			} else {
+				throw new IncorrectMappingVersionException();//"Method incompatible with the current version"
+			}
+		} catch (IncorrectMappingVersionException | ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Get net.minecraft.core class
+	 * <br>Only for 1.17+
+	 * 
+	 * @param className
+	 * @return Class
+	 */
+	public static Class<?> getNMCClass(String className)
+	{
+		try {
+			if (HideRails.version == Version.V1_17) {
+				return Class.forName("net.minecraft.core." + className);				
+			} else {
+				throw new IncorrectMappingVersionException();//"Method incompatible with the current version"
+			}
+		} catch (IncorrectMappingVersionException | ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	/**
 	 * Get net.minecraft.server class
@@ -24,7 +91,11 @@ public class NMSClass
 	public static Class<?> getNMSClass(String className)
 	{
 		try {
-			return Class.forName("net.minecraft.server." + VERSION + "." + className);
+			if (HideRails.version == Version.V1_17) {
+				return Class.forName("net.minecraft.server." + className);				
+			} else {
+				return Class.forName("net.minecraft.server." + VERSION + "." + className);				
+			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;
@@ -51,7 +122,7 @@ public class NMSClass
 	/**
 	 * Get constructor of class
 	 * 
-	 * @param clazz -> class who contains constructor
+	 * @param clazz -> class that contains constructor
 	 * @param constructorParams -> parameters of constructor
 	 * @return Constructor
 	 * 

@@ -117,32 +117,6 @@ public class HideRailsManager
 		hd = config.getBoolean("hideRedstone");
 		hs = config.getBoolean("hideSigns");
 
-		//		TabComplete.BLOCK_TYPE.clear();
-		//		// Rails
-		//		if (hr) {
-		//			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("rail");
-		//			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("rail");
-		//		}
-		//		// Signs
-		//		if (hs) {
-		//			if (HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("sign");
-		//			else TabComplete.BLOCK_TYPE.add("sign");
-		//		}
-		//		// Redstone
-		//		if (hr) {
-		//			TabComplete.BLOCK_TYPE.add("redstone");
-		//		}
-		//		// Command blocks
-		//		if (hc) {
-		//			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("command");
-		//			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("command_block");
-		//		}
-		//		// Iron bars
-		//		if (hb) {
-		//			if (HideRails.version == Version.V1_12) TabComplete.BLOCK_TYPE.add("iron_fence");
-		//			if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14 || HideRails.version == Version.V1_15) TabComplete.BLOCK_TYPE.add("iron_bar");
-		//		}
-
 		update = config.getBoolean("adminsUpdateMessage");
 		hiddingBlocksParticles = config.getBoolean("hiddingBlocksParticles");
 		//		max_spam_nbr = config.getInt("maxSpamNumber");

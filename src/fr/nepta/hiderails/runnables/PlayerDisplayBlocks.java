@@ -68,7 +68,7 @@ public class PlayerDisplayBlocks extends BukkitRunnable
 								Location loc1 = loc.add(0, 0.3, 0);
 								if (HideRails.version == Version.V1_12) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_12.VILLAGER_ANGRY, 1, 1);
 								else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_13.VILLAGER_ANGRY, 1, 1);
-								else if (HideRails.version == Version.V1_15) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_15.VILLAGER_ANGRY, 1, 1);
+								else if (HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_15.VILLAGER_ANGRY, 1, 1);
 								loc1.subtract(0, 0.3, 0);
 							} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
 								e.printStackTrace();
