@@ -93,7 +93,7 @@ public class HideRails extends JavaPlugin
 
 		// Check updates
 		try {
-			new SpigotUpdater(this, 55158, false);
+			new SpigotUpdater(this, 55158, true);
 		} catch (IOException e) {
 			Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "[Updater] Resource not found ! Ressource non trouvee !");
 		}
