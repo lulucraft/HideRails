@@ -4,4 +4,4 @@ Plugin dédié aux serveurs d'attractions ou mini-jeux. Il permettant de masquer
 
 
 
-(Ancien projet simplement maintenu sur demande des utilisateurs, aucune mise à jour majeure depuis 2018)
+(Maintenu sur demande des utilisateurs depuis 2018)
