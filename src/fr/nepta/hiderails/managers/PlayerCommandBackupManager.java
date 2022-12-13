@@ -10,13 +10,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
-
-import com.sun.istack.internal.NotNull;
 
 import fr.nepta.hiderails.HideRails;
 import fr.nepta.hiderails.enums.BackupType;
@@ -34,7 +34,7 @@ public class PlayerCommandBackupManager
 	private static HashMap<Player, PlayerCommandBackup> playerCommandBackups = new HashMap<>();
 
 	// Get command backup of player
-	public static PlayerCommandBackup getPlayerCommandBackups(@NotNull Player player)
+	public static PlayerCommandBackup getPlayerCommandBackups(@Nonnull Player player)
 	{
 		for (Entry<Player, PlayerCommandBackup> backup : playerCommandBackups.entrySet()) {
 			if (backup.getKey().equals(player)) {
@@ -51,7 +51,7 @@ public class PlayerCommandBackupManager
 	 * @param player
 	 * @return BlocksBackup
 	 */
-	public static BlocksBackup getLatestBlocksBackup(@NotNull Player player)
+	public static BlocksBackup getLatestBlocksBackup(@Nonnull Player player)
 	{
 		PlayerCommandBackup backup = getPlayerCommandBackups(player);
 
@@ -74,7 +74,7 @@ public class PlayerCommandBackupManager
 	 * @param player
 	 * @param blockBackup
 	 */
-	public static void createNewBlocksBackup(@NotNull Player player, @NotNull BlocksBackup blockBackup)
+	public static void createNewBlocksBackup(@Nonnull Player player, @Nonnull BlocksBackup blockBackup)
 	{
 		PlayerCommandBackup backup = getPlayerCommandBackups(player);
 
@@ -91,7 +91,7 @@ public class PlayerCommandBackupManager
 	 * @param player
 	 */
 	@SuppressWarnings("deprecation")
-	public static void restoreBackup(@NotNull Player player)
+	public static void restoreBackup(@Nonnull Player player)
 	{
 		BlocksBackup backup = getLatestBlocksBackup(player);
 		Cuboid sel = backup.getHrSelection();

@@ -44,6 +44,7 @@ public class PlayerDisplayBlocks extends BukkitRunnable
 		{
 			Location pLoc = p.getLocation();
 			World pW = pLoc.getWorld();
+
 			for (HiddenRailsWorld hWorld : HideRailsManager.rails)
 			{
 				Iterator<HiddenRail> it = hWorld.getHiddenRails().iterator();
@@ -52,27 +53,28 @@ public class PlayerDisplayBlocks extends BukkitRunnable
 					HiddenRail rail = it.next();
 					Location railLoc = rail.getLocation();
 
-					if (pW.equals(railLoc.getWorld()))
+					if (!pW.equals(railLoc.getWorld())) {
+						continue;
+					}
+
+					if (pLoc.distance(railLoc) < 100)
 					{
-						if (pLoc.distance(railLoc) < 100)
-						{
-							Location loc = railLoc;
+						Location loc = railLoc;
 
-							// Remove deleted HiddenRails from selection (//set 0)
-							Block block = Bukkit.getWorld(loc.getWorld().getName()).getBlockAt(loc);
-							if (block != null && block.getType() == Material.AIR) {
-								it.remove();
-							}
+						// Remove deleted HiddenRails from selection (//set 0)
+						Block block = Bukkit.getWorld(loc.getWorld().getName()).getBlockAt(loc);
+						if (block != null && block.getType() == Material.AIR) {
+							it.remove();
+						}
 
-							try {
-								Location loc1 = loc.add(0, 0.3, 0);
-								if (HideRails.version == Version.V1_12) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_12.VILLAGER_ANGRY, 1, 1);
-								else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_13.VILLAGER_ANGRY, 1, 1);
-								else if (HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_15.VILLAGER_ANGRY, 1, 1);
-								loc1.subtract(0, 0.3, 0);
-							} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
-								e.printStackTrace();
-							}
+						try {
+							Location loc1 = loc.add(0, 0.3, 0);
+							if (HideRails.version == Version.V1_12) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_12.VILLAGER_ANGRY, 1, 1);
+							else if (HideRails.version == Version.V1_13 || HideRails.version == Version.V1_14) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_13.VILLAGER_ANGRY, 1, 1);
+							else if (HideRails.version == Version.V1_15 || HideRails.version == Version.V1_17) BukkitNMS.summonParticle(p, loc1, ParticleName_v1_15.VILLAGER_ANGRY, 1, 1);
+							loc1.subtract(0, 0.3, 0);
+						} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
+							e.printStackTrace();
 						}
 					}
 				}

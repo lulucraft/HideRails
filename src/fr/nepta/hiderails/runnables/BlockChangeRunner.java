@@ -32,63 +32,65 @@ public class BlockChangeRunner extends BukkitRunnable
 			String hWorldName = hWorld.getWorldName();
 			World world = HideRails.getInstance().getServer().getWorld(hWorldName);
 
-			if (world != null)
+			if (world == null) {
+				continue;
+			}
+
+			for (Player p : world.getPlayers())
 			{
-				for (Player p : world.getPlayers())
+				World pWorld = p.getWorld();
+
+				if (!pWorld.getName().equals(hWorldName) || HideRailsManager.isInPlayerWhoDisplayedBlocks(p)) {
+					// If the world where the player is, doesn't match with the one of HiddenRailsWorld
+					// or If the player has disabled the blocks hiding
+					continue;
+				}
+
+				for (HiddenRail rail : hWorld.getHiddenRails())
 				{
-					World pWorld = p.getWorld();
+					Location railLoc = rail.getLocation();
+					World railWorld = railLoc.getWorld();
 
-					if (pWorld.getName().equals(hWorldName))
+					if (railWorld == null || !railWorld.equals(pWorld)) {
+						// If the world where the player is, doesn't match with the one of hidden rail
+						continue;
+					}
+
+					if (world.getChunkAt(railLoc).isLoaded())
 					{
-						// If the player hasn't disabled the blocks hiding
-						if (!HideRailsManager.isInPlayerWhoDisplayedBlocks(p))
+						if (railLoc.distance(p.getLocation()) <= FileConfigurationManager.viewDistance)
 						{
-							for (HiddenRail rail : hWorld.getHiddenRails())
-							{
-								Location railLoc = rail.getLocation();
-								World railWorld = railLoc.getWorld();
+							MaterialData mats = new MaterialData(rail.getMaterial(), rail.getData());
+							Block block = Bukkit.getServer().getWorld(railWorld.getName()).getBlockAt(railLoc);
 
-								if (railWorld != null && railWorld.equals(pWorld))
-								{
-									if (world.getChunkAt(railLoc).isLoaded())
-									{
-										if (railLoc.distance(p.getLocation()) <= FileConfigurationManager.viewDistance)
-										{
-											MaterialData mats = new MaterialData(rail.getMaterial(), rail.getData());
-											Block block = Bukkit.getServer().getWorld(railWorld.getName()).getBlockAt(railLoc);
-
-											// If the iron bars hiding is enabled
-											if (BlocksChecker.isIronBar(block)) {
-												if (HideRailsManager.hb) {
-													BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), railLoc.getBlockX(), railLoc.getBlockY(), railLoc.getBlockZ());
-												}
-											}
-											// If the rails hiding is enabled
-											else if (BlocksChecker.isRail(block)) {
-												if (HideRailsManager.hr) {
-													BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), railLoc.getBlockX(), railLoc.getBlockY(), railLoc.getBlockZ());
-												}
-											}
-											// If the command blocks hiding is enabled
-											else if (BlocksChecker.isCommandBlock(block)) {
-												if (HideRailsManager.hc) {
-													BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), railLoc.getBlockX(), railLoc.getBlockY(), railLoc.getBlockZ());
-												}
-											}
-											// If the redstone hiding is enabled
-											else if (BlocksChecker.isRedstone(block)) {
-												if (HideRailsManager.hd) {
-													BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), railLoc.getBlockX(), railLoc.getBlockY(), railLoc.getBlockZ());
-												}
-											}
-											// If the signs hiding is enabled
-											else if (BlocksChecker.isSign(block)) {
-												if (HideRailsManager.hs) {
-													BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), railLoc.getBlockX(), railLoc.getBlockY(), railLoc.getBlockZ());
-												}
-											}
-										}
-									}
+							// If the iron bars hiding is enabled
+							if (BlocksChecker.isIronBar(block)) {
+								if (HideRailsManager.hb) {
+									BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), railLoc.getBlockX(), railLoc.getBlockY(), railLoc.getBlockZ());
+								}
+							}
+							// If the rails hiding is enabled
+							else if (BlocksChecker.isRail(block)) {
+								if (HideRailsManager.hr) {
+									BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), railLoc.getBlockX(), railLoc.getBlockY(), railLoc.getBlockZ());
+								}
+							}
+							// If the command blocks hiding is enabled
+							else if (BlocksChecker.isCommandBlock(block)) {
+								if (HideRailsManager.hc) {
+									BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), railLoc.getBlockX(), railLoc.getBlockY(), railLoc.getBlockZ());
+								}
+							}
+							// If the redstone hiding is enabled
+							else if (BlocksChecker.isRedstone(block)) {
+								if (HideRailsManager.hd) {
+									BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), railLoc.getBlockX(), railLoc.getBlockY(), railLoc.getBlockZ());
+								}
+							}
+							// If the signs hiding is enabled
+							else if (BlocksChecker.isSign(block)) {
+								if (HideRailsManager.hs) {
+									BukkitNMS.changeBlock(p, mats.getMat(), mats.getData(), railLoc.getBlockX(), railLoc.getBlockY(), railLoc.getBlockZ());
 								}
 							}
 						}

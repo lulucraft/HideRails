@@ -12,13 +12,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-
-import com.sun.istack.internal.NotNull;
 
 import fr.nepta.hiderails.HideRails;
 import fr.nepta.hiderails.enums.Messages;
@@ -31,7 +31,7 @@ public class BlocksChecker
 {
 	private final static BlockFace[] FACES = new BlockFace[]{ BlockFace.UP, BlockFace.DOWN, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST };
 
-	public static boolean isMaterial(@NotNull String input)
+	public static boolean isMaterial(@Nonnull String input)
 	{
 		if (input.contains(":")) {
 			String[] split = input.split(":");
@@ -47,7 +47,7 @@ public class BlocksChecker
 	 * @param block
 	 * @return
 	 */
-	public static boolean isRail(@NotNull Block block) {
+	public static boolean isRail(@Nonnull Block block) {
 		return isRail(block.getType());
 	}
 
@@ -87,7 +87,7 @@ public class BlocksChecker
 	 * @param block
 	 * @return is iron bar
 	 */
-	public static boolean isIronBar(@NotNull Block block) {
+	public static boolean isIronBar(@Nonnull Block block) {
 		return isIronBar(block.getType());
 	}
 
@@ -115,7 +115,7 @@ public class BlocksChecker
 	 * @param block
 	 * @return is command block
 	 */
-	public static boolean isCommandBlock(@NotNull Block block) {
+	public static boolean isCommandBlock(@Nonnull Block block) {
 		return isCommandBlock(block.getType());
 	}
 
@@ -147,7 +147,7 @@ public class BlocksChecker
 	 * @param block
 	 * @return is redstone
 	 */
-	public static boolean isRedstone(@NotNull Block block) {
+	public static boolean isRedstone(@Nonnull Block block) {
 		return isRedstone(block.getType());
 	}
 
@@ -186,7 +186,7 @@ public class BlocksChecker
 	 * @param block
 	 * @return block is a sign
 	 */
-	public static boolean isSign(@NotNull Block block) {
+	public static boolean isSign(@Nonnull Block block) {
 		return isSign(block.getType());
 	}
 
@@ -319,7 +319,7 @@ public class BlocksChecker
 	 * @param input
 	 * @return MaterialData
 	 */
-	public static MaterialData getMatData(Player p, @NotNull String input)
+	public static MaterialData getMatData(Player p, @Nonnull String input)
 	{
 		Material mat = null;
 		byte data = 0;

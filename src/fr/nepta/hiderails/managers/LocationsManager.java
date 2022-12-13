@@ -9,14 +9,14 @@ package fr.nepta.hiderails.managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-
-import com.sun.istack.internal.NotNull;
 
 import fr.nepta.hiderails.enums.BlockReplacementType;
 import fr.nepta.hiderails.utils.BlocksChecker;
@@ -99,7 +99,7 @@ public class LocationsManager {
 	 * @param loc
 	 * @return serialized location
 	 */
-	public static String serialize(@NotNull Location loc) {
+	public static String serialize(@Nonnull Location loc) {
 		String splitter = ",";
 		return loc.getWorld().getName() + splitter + loc.getX() + splitter + loc.getY() + splitter + loc.getZ();
 	}
@@ -110,7 +110,7 @@ public class LocationsManager {
 	 * @param loc
 	 * @return location
 	 */
-	protected static Location deserializeLoc(@NotNull String loc) {
+	protected static Location deserializeLoc(@Nonnull String loc) {
 		String[] split = loc.split(",");
 		String[] last = s(split);
 		World world = null;
@@ -136,19 +136,19 @@ public class LocationsManager {
 		return new Location(world, x, y, z, yaw, pitch);
 	}
 
-	protected static Material deserializeMatInSerializedLoc(@NotNull String loc) {
+	protected static Material deserializeMatInSerializedLoc(@Nonnull String loc) {
 		String[] split = loc.split(",");
 		String[] last = s(split);
 		return Material.getMaterial(last[1]);
 	}
 
-	protected static byte deserializeDataInSerializedLoc(@NotNull String loc) {
+	protected static byte deserializeDataInSerializedLoc(@Nonnull String loc) {
 		String[] split = loc.split(",");
 		String[] last = s(split);
 		return Byte.parseByte(last[2]);
 	}
 
-	private static String[] s(@NotNull String[] split) {
+	private static String[] s(@Nonnull String[] split) {
 		String[] last = null;
 
 		if (split.length > 5) {

@@ -9,6 +9,9 @@ package fr.nepta.hiderails.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -27,7 +30,7 @@ public class HideRailsSelectionChecker
 		return PlayerClaimDataManager.getPlayerClaimData(player);
 	}
 
-	private static List<Location> getAllBlocksLocationInHideRailsSelection(Cuboid selection)
+	private static List<Location> getAllBlocksLocationInHideRailsSelection(@Nonnull Cuboid selection)
 	{
 		Location p1 = selection.getVector1().toLocation(selection.getWorld()); // Minimum point of HideRails Selection
 		Location p2 = selection.getVector2().toLocation(selection.getWorld()); // Maximum point of HideRails Selection
@@ -48,7 +51,7 @@ public class HideRailsSelectionChecker
 		return railsLocsTemp;
 	}
 
-	public static List<Location> getAllValidRails(Cuboid selection, List<BlockReplacementType> types)
+	public static List<Location> getAllValidRails(@Nonnull Cuboid selection, @Nullable List<BlockReplacementType> types)
 	{
 		List<Location> railsLocsTemp = HideRailsSelectionChecker.getAllBlocksLocationInHideRailsSelection(selection);
 		List<Location> validRailsLocs = new ArrayList<>();

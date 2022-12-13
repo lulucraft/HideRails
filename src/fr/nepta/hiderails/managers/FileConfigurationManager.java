@@ -216,9 +216,9 @@ public class FileConfigurationManager
 		//
 
 
-//		/*
-//		* Init all config files
-//		*/
+		/*
+		 * Init all config files
+		 */
 		// Create config and load all messages
 		switch (language) {
 		case "FR":

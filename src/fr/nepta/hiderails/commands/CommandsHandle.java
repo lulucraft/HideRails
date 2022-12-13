@@ -23,7 +23,7 @@ public class CommandsHandle implements CommandExecutor
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		AbstractCommand a = null;
 
-		cmd:for (AbstractCommand command : AbstractCommand.commands) {
+		cmd: for (AbstractCommand command : AbstractCommand.commands) {
 			if (args.length == command.getArgsNumber()) {
 				String arg = args[0].toLowerCase();
 				if (command.getCommand().equals(arg)) {

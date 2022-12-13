@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,9 +26,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
-
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 
 import fr.nepta.hiderails.HideRails;
 import fr.nepta.hiderails.enums.BackupType;
@@ -336,7 +336,7 @@ public class HideRailsManager
 	 * @param single
 	 */
 	@SuppressWarnings("deprecation")
-	public static void removeBlocks(Player player, @NotNull Block targetBlock, boolean backup, boolean single)
+	public static void removeBlocks(Player player, @Nonnull Block targetBlock, boolean backup, boolean single)
 	{
 		if (!BlocksChecker.isRail(targetBlock) && !BlocksChecker.isIronBar(targetBlock) && !BlocksChecker.isCommandBlock(targetBlock) && !BlocksChecker.isRedstone(targetBlock) && !BlocksChecker.isSign(targetBlock)) {
 			MessagesManager.sendPluginMessage(player, Messages.RAIL_ERROR);
@@ -435,7 +435,7 @@ public class HideRailsManager
 		e(player, targetBlock, null, input, backup, single);
 	}
 
-	private static void e(Player player, @NotNull Block targetBlock, List<BlockReplacementType> types, String input, boolean backup, boolean single)
+	private static void e(Player player, @Nonnull Block targetBlock, List<BlockReplacementType> types, String input, boolean backup, boolean single)
 	{
 		MaterialData matData = BlocksChecker.getMatData(player, input);
 		Material mat = matData.getMat();
@@ -456,7 +456,7 @@ public class HideRailsManager
 	 * @param backup
 	 * @param single
 	 */
-	protected static void saveChangedBlocks(Player player, @NotNull Block targetBlock, List<BlockReplacementType> types, Material mat, byte data, boolean backup, boolean single)
+	protected static void saveChangedBlocks(Player player, @Nonnull Block targetBlock, List<BlockReplacementType> types, Material mat, byte data, boolean backup, boolean single)
 	{
 		List<Location> railsLocs = null;
 		if (!single)
@@ -540,7 +540,7 @@ public class HideRailsManager
 			hideSelectionBlocks(player, selection, mat, matData.getData(), backup, types);
 	}
 
-	private static void hideSelectionBlocks(Player player, @NotNull Cuboid selection, Material mat, byte data, boolean backup, List<BlockReplacementType> types)
+	private static void hideSelectionBlocks(Player player, @Nonnull Cuboid selection, Material mat, byte data, boolean backup, List<BlockReplacementType> types)
 	{
 		World world = selection.getWorld();
 		String worldName = world.getName(); // Name of blocks replacement world
@@ -617,7 +617,7 @@ public class HideRailsManager
 	 * @param types 
 	 */
 	@SuppressWarnings("deprecation")
-	public static void removeSelectionBlocks(Player player, @NotNull Cuboid selection, boolean backup, List<BlockReplacementType> types)
+	public static void removeSelectionBlocks(Player player, @Nonnull Cuboid selection, boolean backup, List<BlockReplacementType> types)
 	{
 		List<Location> railsLocs = HideRailsSelectionChecker.getAllValidRails(selection, types);
 
@@ -695,7 +695,7 @@ public class HideRailsManager
 	 * 
 	 * @param worldName
 	 */
-	public static void saveWorld(@NotNull String worldName)
+	public static void saveWorld(@Nonnull String worldName)
 	{
 		HiddenRailsWorld railsWorld = getWorldHiddenRails(worldName);
 		List<HiddenRail> railsList = new ArrayList<>();
