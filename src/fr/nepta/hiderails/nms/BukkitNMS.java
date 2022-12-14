@@ -208,20 +208,20 @@ public class BukkitNMS
 
 			/* PacketPlayInUseItem */
 			// Replace method : MovingObjectPositionBlock c()
-			moving_object_position_block_field = NMSClass.getMethod(packet_play_out_in_use_item, "c", (Class<?>) null);
+			moving_object_position_block_field = NMSClass.getMethod(packet_play_out_in_use_item, "c", (Class<?>[]) null);
 
 			// Replace method : BlockPosition getBlockPosition()
-			block_position_method = movingObjectPositionBlock_class.getDeclaredMethod("getBlockPosition", (Class<?>) null);
+			block_position_method = movingObjectPositionBlock_class.getDeclaredMethod("getBlockPosition", (Class<?>[]) null);
 
 			// Replace method : int getX()
-			get_x_base_block_position_method = base_block_position_class.getDeclaredMethod("getX", (Class<?>) null);
+			get_x_base_block_position_method = base_block_position_class.getDeclaredMethod("getX", (Class<?>[]) null);
 			// Replace method : int getY()
-			get_y_base_block_position_method = base_block_position_class.getDeclaredMethod("getY", (Class<?>) null);
+			get_y_base_block_position_method = base_block_position_class.getDeclaredMethod("getY", (Class<?>[]) null);
 			// Replace method : int getZ()
-			get_z_base_block_position_method = base_block_position_class.getDeclaredMethod("getZ", (Class<?>) null);
+			get_z_base_block_position_method = base_block_position_class.getDeclaredMethod("getZ", (Class<?>[]) null);
 
 			// Replace method : EnumDirection getDirection()
-			get_direction_method = movingObjectPositionBlock_class.getDeclaredMethod("getDirection", (Class<?>) null);
+			get_direction_method = movingObjectPositionBlock_class.getDeclaredMethod("getDirection", (Class<?>[]) null);
 			// ------------------------------------------------------------------------------------------------------------------- //
 
 
@@ -554,7 +554,7 @@ public class BukkitNMS
 	 * @throws IllegalAccessException 
 	 */
 	public static Object getMovingObjectPositionBlock(Object ppoiui) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		return NMSClass.invokeMethod(moving_object_position_block_field, ppoiui, (Class<?>) null);
+		return NMSClass.invokeMethod(moving_object_position_block_field, ppoiui, (Object[]) null);
 	}
 
 	/**
@@ -571,7 +571,7 @@ public class BukkitNMS
 	 * @throws SecurityException
 	 */
 	public static Object getBlockPosition(Object mopb) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		return block_position_method.invoke(mopb, (Class<?>) null);
+		return block_position_method.invoke(mopb, (Object[]) null);
 	}
 
 	// Lazy kikoolol method :D
@@ -600,7 +600,7 @@ public class BukkitNMS
 	 * @throws SecurityException
 	 */
 	public static int getXBlockPosition(Object blockPosition) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Object x = get_x_base_block_position_method.invoke(blockPosition, (Class<?>) null);
+		Object x = get_x_base_block_position_method.invoke(blockPosition, (Object[]) null);
 		return Integer.parseInt(x.toString());
 	}
 
@@ -617,7 +617,7 @@ public class BukkitNMS
 	 * @throws SecurityException
 	 */
 	public static int getYBlockPosition(Object blockPosition) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Object y = get_y_base_block_position_method.invoke(blockPosition, (Class<?>) null);
+		Object y = get_y_base_block_position_method.invoke(blockPosition, (Object[]) null);
 		return Integer.parseInt(y.toString());
 	}
 
@@ -634,7 +634,7 @@ public class BukkitNMS
 	 * @throws SecurityException
 	 */
 	public static int getZBlockPosition(Object blockPosition) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Object z = get_z_base_block_position_method.invoke(blockPosition, (Class<?>) null);
+		Object z = get_z_base_block_position_method.invoke(blockPosition, (Object[]) null);
 		return Integer.parseInt(z.toString());
 	}
 
@@ -649,7 +649,7 @@ public class BukkitNMS
 	 * @throws IllegalAccessException 
 	 */
 	public static EnumDirection getMovingObjectPositionBlockDirection(Object movingObjectPositionBlock) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Object dir = get_direction_method.invoke(movingObjectPositionBlock, (Class<?>) null);
+		Object dir = get_direction_method.invoke(movingObjectPositionBlock, (Object[]) null);
 		// Convert net.minecraft.server.EnumDirection to fr.nepta.hiderails.enums.EnumDirection
 		return EnumDirection.valueOf(dir.toString().toUpperCase());
 	}
